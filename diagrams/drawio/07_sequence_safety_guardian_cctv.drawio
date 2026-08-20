@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net" modified="2026-08-20T15:10:00.000Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" version="24.7.5" type="device">
+  <diagram id="diag_1" name="Sequence: Safety &amp; CCTV">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1550" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="sqs_dr" value="Driver App
+(CCTV &amp; GPS)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="60" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqs_p" value="Passenger App
+(Native)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="270" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqs_gw" value="Go API Gateway
+&amp; Router" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="480" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqs_safe" value="Go Safety &amp; Telemetry
+Engine" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="690" y="40" width="160" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqs_dev" value="Geofence Deviation
+Checker" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="910" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqs_s3" value="Encrypted S3
+Cloud Vault" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1120" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqs_g" value="Guardian App
+(Family Shield)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1330" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_1" value="1. POST /rides/{id}/start-ride" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_dr" target="sqs_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_2" value="2. ActivateRideSafety(rideID)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_gw" target="sqs_safe">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_3" value="3. Push: 'Family Ride Started' &amp; Driver Info" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_safe" target="sqs_g">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_4" value="4. Start In-Car CCTV Video Recording" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_safe" target="sqs_dr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_5" value="5. Stream Telemetry (lat, lng, speed)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_dr" target="sqs_safe">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_6" value="6. Stream Live Location to Family Map" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_safe" target="sqs_g">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_7" value="7. CheckDeviation(currentPt, polyline)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_safe" target="sqs_dev">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_8" value="8. Anomaly Detected (d_xt &gt; 300m for &gt;45s)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;dashed=1;endArrow=open;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_dev" target="sqs_safe">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_9" value="9. CRITICAL ALERT: Off-Route Warning" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_safe" target="sqs_g">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_10" value="10. Upload Encrypted CCTV Chunk (60s)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_dr" target="sqs_s3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_11" value="11. Destination Reached -&gt; POST /arrive" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_dr" target="sqs_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sms_12" value="12. Display Final Calculated Fare" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;dashed=1;endArrow=open;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqs_gw" target="sqs_p">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

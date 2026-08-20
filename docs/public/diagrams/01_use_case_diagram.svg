@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" width="100%" height="100%" style="background:#FFFFFF; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #181922; }
+      .subtitle { font-size: 12px; fill: #6B7280; font-weight: 500; }
+      .box { fill: #FFFFFF; stroke: #181922; stroke-width: 1.5; rx: 6px; }
+      .box-pkg { fill: #FAFAFA; stroke: #2B2D3C; stroke-width: 1.5; stroke-dasharray: 4 4; rx: 8px; }
+      .box-highlight { fill: #FFF8E1; stroke: #F59E0B; stroke-width: 2; rx: 6px; }
+      .box-alert { fill: #FFE8E8; stroke: #E5252A; stroke-width: 2; rx: 6px; }
+      .hdr-box { fill: #181922; }
+      .hdr-text { fill: #FFFFFF; font-size: 12px; font-weight: 700; }
+      .lbl { font-size: 11px; fill: #181922; font-weight: 600; }
+      .txt { font-size: 10px; fill: #374151; }
+      .txt-bold { font-size: 10px; fill: #181922; font-weight: 700; }
+      .txt-pk { font-size: 10px; fill: #E5252A; font-weight: 700; }
+      .txt-fk { font-size: 10px; fill: #D97706; font-weight: 600; }
+      .line { stroke: #181922; stroke-width: 1.5; fill: none; }
+      .line-dashed { stroke: #6B7280; stroke-width: 1.2; stroke-dasharray: 4 4; fill: none; }
+      .line-gold { stroke: #F59E0B; stroke-width: 2; fill: none; }
+      .line-red { stroke: #E5252A; stroke-width: 2; fill: none; }
+      .actor-head { fill: #FFFFFF; stroke: #181922; stroke-width: 2; }
+      .actor-body { stroke: #181922; stroke-width: 2; }
+      .badge-gold { fill: #F59E0B; }
+      .badge-red { fill: #E5252A; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#181922" />
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#F59E0B" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#E5252A" />
+    </marker>
+  </defs>
+
+  <!-- Banner Header -->
+  <rect x="0" y="0" width="1200" height="55" fill="#181922" />
+  <rect x="0" y="52" width="1200" height="3" fill="#F59E0B" />
+  <text x="24" y="34" fill="#FFFFFF" font-size="18" font-weight="800">YAMATO TAXI ARCHITECTURE</text>
+  <text x="1176" y="34" fill="#F59E0B" font-size="13" font-weight="700" text-anchor="end">01_USE_CASE_MODEL</text>
+
+  <!-- Diagram Body Canvas -->
+  <g transform="translate(0, 60)">
+    
+    <rect x="220" y="20" width="760" height="720" class="box-pkg" />
+    <text x="240" y="50" class="title">Taxi Application Platform Boundary (UML 2.5)</text>
+
+    <rect x="240" y="70" width="350" height="180" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1" rx="4"/>
+    <text x="255" y="92" class="txt-bold">1. Authentication &amp; Profile</text>
+    
+    <rect x="610" y="70" width="350" height="280" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1" rx="4"/>
+    <text x="625" y="92" class="txt-bold">3. Ride Safety &amp; Guardian Mode</text>
+
+    <rect x="240" y="270" width="350" height="260" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1" rx="4"/>
+    <text x="255" y="292" class="txt-bold">2. Booking &amp; Dispatch Engine</text>
+
+    <rect x="240" y="550" width="720" height="170" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1" rx="4"/>
+    <text x="255" y="572" class="txt-bold">4. Payment &amp; Financial Settlement</text>
+
+    <!-- Actors Left -->
+    <circle cx="90" cy="140" r="18" class="actor-head"/>
+    <line x1="90" y1="158" x2="90" y2="205" class="actor-body"/>
+    <line x1="65" y1="175" x2="115" y2="175" class="actor-body"/>
+    <line x1="90" y1="205" x2="70" y2="245" class="actor-body"/>
+    <line x1="90" y1="205" x2="110" y2="245" class="actor-body"/>
+    <text x="90" y="268" font-size="12" font-weight="700" fill="#181922" text-anchor="middle">Passenger</text>
+
+    <circle cx="90" cy="380" r="18" class="actor-head"/>
+    <line x1="90" y1="398" x2="90" y2="445" class="actor-body"/>
+    <line x1="65" y1="415" x2="115" y2="415" class="actor-body"/>
+    <line x1="90" y1="445" x2="70" y2="485" class="actor-body"/>
+    <line x1="90" y1="445" x2="110" y2="485" class="actor-body"/>
+    <text x="90" y="508" font-size="12" font-weight="700" fill="#181922" text-anchor="middle">Driver</text>
+
+    <!-- Actors Right -->
+    <circle cx="1090" cy="140" r="18" class="actor-head"/>
+    <line x1="1090" y1="158" x2="1090" y2="205" class="actor-body"/>
+    <line x1="1065" y1="175" x2="1115" y2="175" class="actor-body"/>
+    <line x1="1090" y1="205" x2="1070" y2="245" class="actor-body"/>
+    <line x1="1090" y1="205" x2="1110" y2="245" class="actor-body"/>
+    <text x="1090" y="268" font-size="12" font-weight="700" fill="#181922" text-anchor="middle">Family Guardian</text>
+
+    <circle cx="1090" cy="580" r="18" class="actor-head"/>
+    <line x1="1090" y1="598" x2="1090" y2="645" class="actor-body"/>
+    <line x1="1065" y1="615" x2="1115" y2="615" class="actor-body"/>
+    <line x1="1090" y1="645" x2="1070" y2="685" class="actor-body"/>
+    <line x1="1090" y1="645" x2="1110" y2="685" class="actor-body"/>
+    <text x="1090" y="708" font-size="12" font-weight="700" fill="#181922" text-anchor="middle">Payment Gateway</text>
+
+    <ellipse cx="320" cy="130" rx="65" ry="20" class="box"/>
+    <text x="320" y="134" class="lbl" text-anchor="middle">UC-01: Register/OTP</text>
+
+    <ellipse cx="490" cy="130" rx="70" ry="20" class="box"/>
+    <text x="490" y="134" class="lbl" text-anchor="middle">UC-03: Favorite Places</text>
+
+    <ellipse cx="400" cy="195" rx="80" ry="20" class="box-highlight"/>
+    <text x="400" y="199" class="lbl" text-anchor="middle">UC-04: Family Guardians</text>
+
+    <ellipse cx="330" cy="330" rx="70" ry="20" class="box"/>
+    <text x="330" y="334" class="lbl" text-anchor="middle">UC-06: Set Pickup/Dest</text>
+
+    <ellipse cx="490" cy="330" rx="70" ry="20" class="box"/>
+    <text x="490" y="334" class="lbl" text-anchor="middle">UC-08: Add Extra Stops</text>
+
+    <ellipse cx="330" cy="400" rx="70" ry="20" class="box-highlight"/>
+    <text x="330" y="404" class="lbl" text-anchor="middle">UC-10: Call Taxi Now</text>
+
+    <ellipse cx="490" cy="400" rx="70" ry="20" class="box"/>
+    <text x="490" y="404" class="lbl" text-anchor="middle">UC-11: 15s Cascading</text>
+
+    <ellipse cx="410" cy="470" rx="75" ry="20" class="box"/>
+    <text x="410" y="474" class="lbl" text-anchor="middle">UC-14: In-App Chat</text>
+
+    <ellipse cx="780" cy="130" rx="80" ry="22" class="box-highlight"/>
+    <text x="780" y="134" class="lbl" text-anchor="middle">UC-16: Live Family Track</text>
+
+    <ellipse cx="780" cy="195" rx="85" ry="22" class="box-alert"/>
+    <text x="780" y="199" class="lbl" text-anchor="middle">UC-17: Route Deviation Alert</text>
+
+    <ellipse cx="780" cy="265" rx="85" ry="22" class="box"/>
+    <text x="780" y="269" class="lbl" text-anchor="middle">UC-18: CCTV Video Cloud</text>
+
+    <ellipse cx="360" cy="620" rx="80" ry="22" class="box"/>
+    <text x="360" y="624" class="lbl" text-anchor="middle">UC-21: Cash Settlement</text>
+
+    <ellipse cx="580" cy="620" rx="85" ry="22" class="box-highlight"/>
+    <text x="580" y="624" class="lbl" text-anchor="middle">UC-23: E-Wallet DeepLink</text>
+
+    <ellipse cx="800" cy="620" rx="80" ry="22" class="box"/>
+    <text x="800" y="624" class="lbl" text-anchor="middle">UC-26: Driver Payout</text>
+
+    <line x1="120" y1="160" x2="255" y2="130" class="line"/>
+    <line x1="120" y1="180" x2="320" y2="195" class="line"/>
+    <line x1="120" y1="200" x2="260" y2="330" class="line"/>
+    <line x1="120" y1="220" x2="260" y2="400" class="line"/>
+    <line x1="120" y1="240" x2="495" y2="620" class="line"/>
+    <line x1="120" y1="400" x2="335" y2="470" class="line"/>
+    <line x1="120" y1="420" x2="695" y2="265" class="line"/>
+    <line x1="120" y1="440" x2="720" y2="620" class="line"/>
+    <line x1="1060" y1="160" x2="860" y2="130" class="line-gold"/>
+    <line x1="1060" y1="180" x2="865" y2="195" class="line-red"/>
+    <line x1="1060" y1="600" x2="665" y2="620" class="line"/>
+    <line x1="1060" y1="620" x2="880" y2="620" class="line"/>
+    
+  </g>
+</svg>

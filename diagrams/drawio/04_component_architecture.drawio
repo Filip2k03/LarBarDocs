@@ -1,0 +1,155 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net" modified="2026-08-20T15:10:00.000Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" version="24.7.5" type="device">
+  <diagram id="diag_1" name="Component Architecture">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1650" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="tier_1" value="&lt;b&gt;1. Client Tier (Native iOS Swift &amp; Android Kotlin)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#000000;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="40" width="1500" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_app_p" value="&lt;b&gt;Passenger Native App&lt;/b&gt;
+- Core App Shell &amp; Booking UI
+- Dynamic Plugin Manager
+- Deep-Link Payment Handler" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_1" vertex="1">
+          <mxGeometry x="90" y="80" width="360" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_app_d" value="&lt;b&gt;Driver Native App&lt;/b&gt;
+- Digital Meter &amp; Turn-by-Turn
+- CameraX / AVFoundation CCTV
+- High-Frequency GPS Streamer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_1" vertex="1">
+          <mxGeometry x="610" y="80" width="380" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_app_g" value="&lt;b&gt;Guardian Safety Plugin Package&lt;/b&gt;
+- On-Demand Installable Module
+- Live Family Telemetry Streamer
+- Cross-Track Deviation Alarm" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_1" vertex="1">
+          <mxGeometry x="1130" y="80" width="360" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="tier_2" value="&lt;b&gt;2. Edge &amp; API Gateway Tier&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#000000;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="240" width="1500" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_gw" value="&lt;b&gt;Go API Gateway &amp; Reverse Proxy&lt;/b&gt;
+- TLS 1.3 Termination | JWT Auth Claims | Rate Limiting | WebSocket Connection Multiplexing" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_2" vertex="1">
+          <mxGeometry x="90" y="280" width="1420" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="tier_3" value="&lt;b&gt;3. Go Backend Core Application Tier (Clean Architecture)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#000000;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="410" width="1500" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_s_auth" value="&lt;b&gt;Auth &amp; User Service&lt;/b&gt;
+- Profiles &amp; Drivers
+- Family Guardians" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_3" vertex="1">
+          <mxGeometry x="90" y="460" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_s_disp" value="&lt;b&gt;Dispatch Engine&lt;/b&gt;
+- Multi-Stop Fare Calc
+- Spatial Matchmaker
+- 15s Cascading Pool" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_3" vertex="1">
+          <mxGeometry x="370" y="460" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_s_rt" value="&lt;b&gt;Real-Time &amp; Telemetry Hub&lt;/b&gt;
+- WebSocket Hub
+- In-App Chat Router
+- GPS Stream Worker" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_3" vertex="1">
+          <mxGeometry x="670" y="460" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_s_safe" value="&lt;b&gt;Safety &amp; Plugin Hub&lt;/b&gt;
+- Deviation Engine
+- Plugin Manifest CDN
+- SHA-256 Cloud Vault" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_3" vertex="1">
+          <mxGeometry x="970" y="460" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_s_bill" value="&lt;b&gt;Payment &amp; Wallet Service&lt;/b&gt;
+- KBZPay/AYAPay Handler
+- Webhook HMAC Verifier
+- Driver Wallet Ledger" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_3" vertex="1">
+          <mxGeometry x="1270" y="460" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="tier_4" value="&lt;b&gt;4. Persistence, Cache &amp; Storage Tier&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#000000;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="690" width="1500" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_db" value="&lt;b&gt;PostgreSQL 16 + PostGIS&lt;/b&gt;
+- Master Relational Schema
+- Spatial Query Indexes (GIST)
+- Double-Entry Wallet Ledger" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_4" vertex="1">
+          <mxGeometry x="130" y="730" width="360" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_cache" value="&lt;b&gt;Redis 7 Cluster&lt;/b&gt;
+- Spatial Index (GEOADD/GEORADIUS)
+- Pub/Sub Telemetry Broker
+- Distributed Locks (Redlock)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_4" vertex="1">
+          <mxGeometry x="610" y="730" width="380" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_s3" value="&lt;b&gt;Encrypted S3 Media Vault&lt;/b&gt;
+- CCTV Video Chunks &amp; Digests
+- Dynamic Plugin Split Modules
+- Digital Payment Receipts" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_4" vertex="1">
+          <mxGeometry x="1130" y="730" width="360" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="tier_5" value="&lt;b&gt;5. External Integrations Tier&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#000000;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="890" width="1500" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_ext_map" value="&lt;b&gt;Routing Engine&lt;/b&gt;
+(OSRM / Mapbox)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_5" vertex="1">
+          <mxGeometry x="130" y="940" width="360" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_ext_pay" value="&lt;b&gt;Payment Gateways&lt;/b&gt;
+(KBZPay / AYAPay / Wave)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_5" vertex="1">
+          <mxGeometry x="610" y="940" width="380" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cp_ext_push" value="&lt;b&gt;Push Notifications&lt;/b&gt;
+(Apple APNs / Google FCM)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="tier_5" vertex="1">
+          <mxGeometry x="1130" y="940" width="360" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_1" value="HTTPS / WSS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.15;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_app_p" target="cp_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_2" value="HTTPS / WSS / gRPC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_app_d" target="cp_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_3" value="Dynamic Sync" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.85;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_app_g" target="cp_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_gw" target="cp_s_auth">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_gw" target="cp_s_disp">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_gw" target="cp_s_rt">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.7;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_gw" target="cp_s_safe">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.9;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_gw" target="cp_s_bill">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_9" value="Persist Master" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_s_auth" target="cp_db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_10" value="Spatial Match" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_s_disp" target="cp_cache">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_11" value="Stream Coords" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_s_rt" target="cp_cache">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_12" value="Vault CCTV &amp; Plugins" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_s_safe" target="cp_s3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_13" value="Atomic Ledger" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.8;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_s_bill" target="cp_db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_14" value="Routing Polyline" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.2;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_s_disp" target="cp_ext_map">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_15" value="Webhook / PreOrder" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.8;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_s_bill" target="cp_ext_pay">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce_16" value="Emergency Push" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.8;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cp_s_safe" target="cp_ext_push">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

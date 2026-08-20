@@ -1,0 +1,150 @@
+/**
+ * Red & Gold Design System Custom CSS for VitePress
+ * Imperial Crimson (#E5252A) & Royal Gold (#F59E0B / #D97706) Theme
+ */
+
+:root {
+  /* Red Scale (100 - 900) */
+  --color-red-100: #FFE8E8;
+  --color-red-200: #FFC2C2;
+  --color-red-300: #FF8F8F;
+  --color-red-400: #F85A5A;
+  --color-red-500: #E5252A; /* Primary Brand Red */
+  --color-red-600: #C41419;
+  --color-red-700: #9E0D11;
+  --color-red-800: #74070A;
+  --color-red-900: #480204;
+
+  /* Gold Scale (100 - 900) */
+  --color-gold-100: #FFF8E1;
+  --color-gold-200: #FFECB3;
+  --color-gold-300: #FFE082;
+  --color-gold-400: #FFCA28;
+  --color-gold-500: #F59E0B; /* Royal Gold CTA */
+  --color-gold-600: #D97706;
+  --color-gold-700: #B45309;
+  --color-gold-800: #78350F;
+  --color-gold-900: #451A03;
+
+  /* Neutrals */
+  --color-dark-bg: #0E0F14;
+  --color-dark-surface: #181922;
+  --color-dark-border: #2B2D3C;
+
+  /* VitePress Theme Overrides */
+  --vp-c-brand-1: #E5252A;
+  --vp-c-brand-2: #C41419;
+  --vp-c-brand-3: #9E0D11;
+  --vp-c-brand-soft: rgba(229, 37, 42, 0.14);
+
+  --vp-c-warning-1: #F59E0B;
+  --vp-c-warning-2: #D97706;
+  --vp-c-warning-3: #B45309;
+  --vp-c-warning-soft: rgba(245, 158, 11, 0.15);
+
+  --vp-button-brand-bg: #E5252A;
+  --vp-button-brand-hover-bg: #C41419;
+  --vp-button-brand-active-bg: #9E0D11;
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #E5252A 30%, #F59E0B);
+  --vp-home-hero-image-filter: drop-shadow(0 0 40px rgba(229, 37, 42, 0.3));
+}
+
+.dark {
+  --vp-c-bg: #0E0F14;
+  --vp-c-bg-alt: #14151D;
+  --vp-c-bg-soft: #1B1D28;
+  --vp-c-border: #2B2D3C;
+}
+
+/* Custom Red & Gold UI Badges & Buttons */
+.badge-red {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background-color: var(--color-red-100);
+  color: var(--color-red-700);
+  font-weight: 700;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-red-300);
+}
+
+.badge-gold {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background-color: var(--color-gold-100);
+  color: var(--color-gold-800);
+  font-weight: 700;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-gold-400);
+}
+
+.btn-gold-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+  background: linear-gradient(135deg, #FFD54F, #F59E0B);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none !important;
+}
+
+.btn-gold-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45);
+  background: linear-gradient(135deg, #FFE082, #D97706);
+}
+
+.btn-red-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #F85A5A, #E5252A);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(229, 37, 42, 0.35);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none !important;
+}
+
+.btn-red-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(229, 37, 42, 0.5);
+  background: linear-gradient(135deg, #E5252A, #C41419);
+}
+
+/* Color Swatch Card */
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.swatch-card {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.swatch-color {
+  height: 55px;
+  width: 100%;
+}
+
+.swatch-info {
+  padding: 8px;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}

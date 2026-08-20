@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="100%" height="100%" style="background:#FFFFFF; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #181922; }
+      .subtitle { font-size: 12px; fill: #6B7280; font-weight: 500; }
+      .box { fill: #FFFFFF; stroke: #181922; stroke-width: 1.5; rx: 6px; }
+      .box-pkg { fill: #FAFAFA; stroke: #2B2D3C; stroke-width: 1.5; stroke-dasharray: 4 4; rx: 8px; }
+      .box-highlight { fill: #FFF8E1; stroke: #F59E0B; stroke-width: 2; rx: 6px; }
+      .box-alert { fill: #FFE8E8; stroke: #E5252A; stroke-width: 2; rx: 6px; }
+      .hdr-box { fill: #181922; }
+      .hdr-text { fill: #FFFFFF; font-size: 12px; font-weight: 700; }
+      .lbl { font-size: 11px; fill: #181922; font-weight: 600; }
+      .txt { font-size: 10px; fill: #374151; }
+      .txt-bold { font-size: 10px; fill: #181922; font-weight: 700; }
+      .txt-pk { font-size: 10px; fill: #E5252A; font-weight: 700; }
+      .txt-fk { font-size: 10px; fill: #D97706; font-weight: 600; }
+      .line { stroke: #181922; stroke-width: 1.5; fill: none; }
+      .line-dashed { stroke: #6B7280; stroke-width: 1.2; stroke-dasharray: 4 4; fill: none; }
+      .line-gold { stroke: #F59E0B; stroke-width: 2; fill: none; }
+      .line-red { stroke: #E5252A; stroke-width: 2; fill: none; }
+      .actor-head { fill: #FFFFFF; stroke: #181922; stroke-width: 2; }
+      .actor-body { stroke: #181922; stroke-width: 2; }
+      .badge-gold { fill: #F59E0B; }
+      .badge-red { fill: #E5252A; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#181922" />
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#F59E0B" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#E5252A" />
+    </marker>
+  </defs>
+
+  <!-- Banner Header -->
+  <rect x="0" y="0" width="1200" height="55" fill="#181922" />
+  <rect x="0" y="52" width="1200" height="3" fill="#F59E0B" />
+  <text x="24" y="34" fill="#FFFFFF" font-size="18" font-weight="800">YAMATO TAXI ARCHITECTURE</text>
+  <text x="1176" y="34" fill="#F59E0B" font-size="13" font-weight="700" text-anchor="end">05_CLASS_DOMAIN_ARCHITECTURE</text>
+
+  <!-- Diagram Body Canvas -->
+  <g transform="translate(0, 60)">
+    
+    <rect x="40" y="20" width="340" height="180" class="box"/>
+    <rect x="40" y="20" width="340" height="24" class="hdr-box"/>
+    <text x="210" y="37" class="hdr-text" text-anchor="middle">Ride (Domain Entity)</text>
+    <text x="50" y="60" class="txt-bold">+ ID: UUID</text>
+    <text x="50" y="78" class="txt-bold">+ PassengerID: UUID</text>
+    <text x="50" y="96" class="txt-bold">+ DriverID: *UUID</text>
+    <text x="50" y="114" class="txt-bold">+ Status: RideStatus</text>
+    <line x1="40" y1="125" x2="380" y2="125" class="line"/>
+    <text x="50" y="145" class="txt">+ AddWaypoint(GeoPoint): error</text>
+    <text x="50" y="165" class="txt">+ TransitionTo(RideStatus): error</text>
+
+    <rect x="420" y="20" width="340" height="180" class="box-highlight"/>
+    <rect x="420" y="20" width="340" height="24" class="badge-gold"/>
+    <text x="590" y="37" fill="#181922" font-size="12" font-weight="700" text-anchor="middle">SafetySession (Domain Entity)</text>
+    <text x="430" y="60" class="txt-bold">+ RideID: UUID</text>
+    <text x="430" y="78" class="txt-bold">+ GuardianActive: bool</text>
+    <text x="430" y="96" class="txt-bold">+ CCTVActive: bool</text>
+    <line x1="420" y1="125" x2="760" y2="125" class="line"/>
+    <text x="430" y="145" class="txt">+ CheckCrossTrack(GeoPoint): bool</text>
+    <text x="430" y="165" class="txt">+ TriggerEmergencyAlarm(): error</text>
+
+    <rect x="800" y="20" width="360" height="180" class="box"/>
+    <rect x="800" y="20" width="360" height="24" class="hdr-box"/>
+    <text x="980" y="37" class="hdr-text" text-anchor="middle">DriverWallet (Domain Entity)</text>
+    <text x="810" y="60" class="txt-bold">+ DriverID: UUID</text>
+    <text x="810" y="78" class="txt-bold">+ Balance: Money</text>
+    <text x="810" y="96" class="txt-bold">+ PendingBalance: Money</text>
+    <line x1="800" y1="125" x2="1160" y2="125" class="line"/>
+    <text x="810" y="145" class="txt">+ Credit(Money): error</text>
+    <text x="810" y="165" class="txt">+ RequestPayout(Money): error</text>
+
+    <rect x="40" y="240" width="540" height="200" class="box-pkg"/>
+    <text x="60" y="265" class="txt-bold">&lt;&lt;interface&gt;&gt; RideUseCase (Go Application Port)</text>
+    <text x="60" y="295" class="txt">+ RequestRide(ctx, req): (Ride, error)</text>
+    <text x="60" y="325" class="txt">+ DispatchNextCandidate(ctx, rideID): error</text>
+    <text x="60" y="355" class="txt">+ AcceptRideOffer(ctx, rideID, driverID): error</text>
+    <text x="60" y="385" class="txt">+ CompleteRide(ctx, rideID): error</text>
+
+    <rect x="620" y="240" width="540" height="200" class="box-pkg"/>
+    <text x="640" y="265" class="txt-bold">&lt;&lt;interface&gt;&gt; SafetyUseCase (Go Application Port)</text>
+    <text x="640" y="295" class="txt">+ StreamDriverTelemetry(ctx, rideID, pt): error</text>
+    <text x="640" y="325" class="txt">+ ActivateGuardianStream(ctx, rideID): error</text>
+    <text x="640" y="355" class="txt">+ UploadCCTVChunk(ctx, rideID, chunk): error</text>
+    <text x="640" y="385" class="txt">+ TerminateSafetySession(ctx, rideID): error</text>
+    
+  </g>
+</svg>

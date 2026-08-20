@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net" modified="2026-08-20T15:10:00.000Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" version="24.7.5" type="device">
+  <diagram id="diag_1" name="State Machine: Ride Lifecycle">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="st_s" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="60" y="100" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_draft" value="&lt;b&gt;DRAFT&lt;/b&gt;
+Selecting stops &amp; fare preview" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="140" y="80" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_search" value="&lt;b&gt;SEARCHING&lt;/b&gt;
+Evaluating nearest drivers" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="420" y="80" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_disp" value="&lt;b&gt;DISPATCHED&lt;/b&gt;
+15s Offer countdown timer" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="700" y="80" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_acc" value="&lt;b&gt;ACCEPTED / ARRIVING&lt;/b&gt;
+En route to pickup &amp; chat open" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="980" y="80" width="220" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_pickup" value="&lt;b&gt;ARRIVED_AT_PICKUP&lt;/b&gt;
+Chat closed / boarding taxi" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="980" y="220" width="220" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_transit" value="&lt;b&gt;IN_TRANSIT&lt;/b&gt;
+Guardian Live &amp; CCTV Active" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="700" y="220" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_dest" value="&lt;b&gt;ARRIVED_DESTINATION&lt;/b&gt;
+Final fare computed &amp; shown" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="420" y="220" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_pay" value="&lt;b&gt;PAYMENT_PROCESSING&lt;/b&gt;
+Cash / Cashless verification" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="140" y="220" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_comp" value="&lt;b&gt;COMPLETED&lt;/b&gt;
+Safety teardown &amp; receipts" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="140" y="360" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="st_e" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="420" y="375" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_1" value="Open Screen" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_s" target="st_draft">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_2" value="Tap 'Call Now'" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_draft" target="st_search">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_3" value="Candidate Found" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_search" target="st_disp">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_4" value="Reject / Timeout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="st_disp" target="st_search">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_5" value="Driver Accepts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_disp" target="st_acc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_6" value="Arrive Pickup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_acc" target="st_pickup">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_7" value="Start Ride" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_pickup" target="st_transit">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_8" value="Arrive Destination" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_transit" target="st_dest">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_9" value="Select Method" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_dest" target="st_pay">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_10" value="Payment Confirmed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_pay" target="st_comp">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ste_11" value="Archive Trip" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="st_comp" target="st_e">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

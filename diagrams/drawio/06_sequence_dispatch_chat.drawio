@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net" modified="2026-08-20T15:10:00.000Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" version="24.7.5" type="device">
+  <diagram id="diag_1" name="Sequence: Dispatch &amp; Chat">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1550" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="sq_p" value="Passenger App
+(Native)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="60" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sq_gw" value="Go API Gateway
+&amp; Reverse Proxy" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="270" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sq_disp" value="Go Dispatch
+Engine" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="480" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sq_redis" value="Redis Cluster
+(Spatial/PubSub)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="690" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sq_chat" value="Go WebSocket
+Chat Service" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="900" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sq_dr1" value="Driver 1
+(Candidate)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1110" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sq_dr2" value="Driver 2
+(Assigned)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1320" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_1" value="1. POST /estimate (Pickup, Dest, Stops)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_p" target="sq_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_2" value="2. Return Estimated Fare &amp; Polyline" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;dashed=1;endArrow=open;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_gw" target="sq_p">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_3" value="3. POST /rides/request ('Call Now')" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_p" target="sq_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_4" value="4. CreateRideOrder(SEARCHING)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_gw" target="sq_disp">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_5" value="5. GEORADIUS 3km nearby drivers" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_disp" target="sq_redis">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_6" value="6. Ranked Drivers: [Driver1, Driver2]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;dashed=1;endArrow=open;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_redis" target="sq_disp">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_7" value="7. Push Offer (15s Countdown)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_disp" target="sq_dr1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_8" value="8. Driver 1 Rejects / Timeout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;dashed=1;endArrow=open;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_dr1" target="sq_disp">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_9" value="9. Cascade Offer to Driver 2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_disp" target="sq_dr2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_10" value="10. Driver 2 Accepts Ride" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_dr2" target="sq_disp">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_11" value="11. Push: Driver Assigned &amp; ETA" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_disp" target="sq_p">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_12" value="12. Open WebSocket Room" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_disp" target="sq_chat">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_13" value="13. Send Message ('Near gate')" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_p" target="sq_chat">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_14" value="14. Deliver Message ('Near gate')" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_chat" target="sq_dr2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sm_15" value="15. Driver Arrived Pickup -&gt; Close Chat" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sq_dr2" target="sq_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

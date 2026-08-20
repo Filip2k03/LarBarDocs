@@ -1,0 +1,126 @@
+{
+  "global": {
+    "color": {
+      "red": {
+        "100": { "value": "#FFE8E8", "type": "color", "description": "Soft tint background, error surface" },
+        "200": { "value": "#FFC2C2", "type": "color", "description": "Subtle border, alert outline" },
+        "300": { "value": "#FF8F8F", "type": "color", "description": "Secondary alert, badge fill" },
+        "400": { "value": "#F85A5A", "type": "color", "description": "Hover state for secondary red buttons" },
+        "500": { "value": "#E5252A", "type": "color", "description": "Primary Brand Red, SOS Button, Active Accent" },
+        "600": { "value": "#C41419", "type": "color", "description": "Primary button hover, critical alert header" },
+        "700": { "value": "#9E0D11", "type": "color", "description": "Active pressed state, dark accent text" },
+        "800": { "value": "#74070A", "type": "color", "description": "Deep red container background" },
+        "900": { "value": "#480204", "type": "color", "description": "Darkest crimson base, dark mode surface" }
+      },
+      "gold": {
+        "100": { "value": "#FFF8E1", "type": "color", "description": "Warm tint highlight, VIP banner surface" },
+        "200": { "value": "#FFECB3", "type": "color", "description": "Subtle gold border, premium tags" },
+        "300": { "value": "#FFE082", "type": "color", "description": "Secondary gold badge, disabled gold CTA" },
+        "400": { "value": "#FFCA28", "type": "color", "description": "Amber star rating, luminous highlight" },
+        "500": { "value": "#F59E0B", "type": "color", "description": "Royal Gold Primary CTA, Ride Confirm, Luxury Tier" },
+        "600": { "value": "#D97706", "type": "color", "description": "Gold button hover, high-contrast text" },
+        "700": { "value": "#B45309", "type": "color", "description": "Gold button active/press state" },
+        "800": { "value": "#78350F", "type": "color", "description": "Deep bronze text on gold backgrounds" },
+        "900": { "value": "#451A03", "type": "color", "description": "Darkest gold bronze, deep card container" }
+      },
+      "neutral": {
+        "100": { "value": "#FFFFFF", "type": "color" },
+        "200": { "value": "#F3F4F6", "type": "color" },
+        "300": { "value": "#E5E7EB", "type": "color" },
+        "400": { "value": "#9CA3AF", "type": "color" },
+        "500": { "value": "#6B7280", "type": "color" },
+        "600": { "value": "#4B5563", "type": "color" },
+        "700": { "value": "#282836", "type": "color" },
+        "800": { "value": "#181922", "type": "color" },
+        "900": { "value": "#0E0F14", "type": "color" }
+      }
+    },
+    "typography": {
+      "display": {
+        "fontFamily": { "value": "Inter, -apple-system, sans-serif" },
+        "fontSize": { "value": "32px" },
+        "fontWeight": { "value": "800" },
+        "lineHeight": { "value": "40px" },
+        "letterSpacing": { "value": "-0.02em" }
+      },
+      "h1": {
+        "fontFamily": { "value": "Inter, -apple-system, sans-serif" },
+        "fontSize": { "value": "24px" },
+        "fontWeight": { "value": "700" },
+        "lineHeight": { "value": "32px" }
+      },
+      "h2": {
+        "fontFamily": { "value": "Inter, -apple-system, sans-serif" },
+        "fontSize": { "value": "20px" },
+        "fontWeight": { "value": "700" },
+        "lineHeight": { "value": "28px" }
+      },
+      "body": {
+        "fontFamily": { "value": "Inter, -apple-system, sans-serif" },
+        "fontSize": { "value": "15px" },
+        "fontWeight": { "value": "400" },
+        "lineHeight": { "value": "22px" }
+      },
+      "caption": {
+        "fontFamily": { "value": "Inter, -apple-system, sans-serif" },
+        "fontSize": { "value": "12px" },
+        "fontWeight": { "value": "500" },
+        "lineHeight": { "value": "16px" }
+      }
+    },
+    "button": {
+      "primaryRed": {
+        "default": {
+          "background": { "value": "{color.red.500}" },
+          "textColor": { "value": "#FFFFFF" },
+          "borderRadius": { "value": "10px" },
+          "padding": { "value": "14px 24px" },
+          "boxShadow": { "value": "0 4px 14px rgba(229, 37, 42, 0.35)" }
+        },
+        "hover": {
+          "background": { "value": "{color.red.600}" },
+          "transform": { "value": "translateY(-2px)" },
+          "boxShadow": { "value": "0 6px 20px rgba(229, 37, 42, 0.50)" }
+        },
+        "active": {
+          "background": { "value": "{color.red.700}" },
+          "transform": { "value": "scale(0.98)" }
+        },
+        "disabled": {
+          "background": { "value": "{color.red.200}" },
+          "textColor": { "value": "{color.red.400}" },
+          "cursor": { "value": "not-allowed" }
+        }
+      },
+      "royalGold": {
+        "default": {
+          "background": { "value": "linear-gradient(135deg, {color.gold.400}, {color.gold.500})" },
+          "textColor": { "value": "#181922" },
+          "borderRadius": { "value": "10px" },
+          "fontWeight": { "value": "700" },
+          "boxShadow": { "value": "0 4px 14px rgba(245, 158, 11, 0.35)" }
+        },
+        "hover": {
+          "background": { "value": "linear-gradient(135deg, {color.gold.300}, {color.gold.600})" },
+          "transform": { "value": "translateY(-2px)" },
+          "boxShadow": { "value": "0 6px 20px rgba(245, 158, 11, 0.50)" }
+        },
+        "active": {
+          "background": { "value": "{color.gold.700}" },
+          "transform": { "value": "scale(0.98)" }
+        }
+      }
+    },
+    "animation": {
+      "duration": {
+        "fast": { "value": "150ms" },
+        "normal": { "value": "250ms" },
+        "slow": { "value": "400ms" }
+      },
+      "easing": {
+        "standard": { "value": "cubic-bezier(0.4, 0.0, 0.2, 1)" },
+        "bounce": { "value": "cubic-bezier(0.34, 1.56, 0.64, 1)" }
+      }
+    }
+  }
+}

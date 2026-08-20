@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net" modified="2026-08-20T15:10:00.000Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" version="24.7.5" type="device">
+  <diagram id="diag_1" name="Sequence: Payment &amp; Payout">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1550" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="sqp_p" value="Passenger App
+(Native)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="60" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqp_dr" value="Driver App
+(Native)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="270" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqp_gw" value="Go API Gateway
+&amp; Router" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="480" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqp_pay" value="Go Payment &amp; Wallet
+Service" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="690" y="40" width="160" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqp_wallet" value="E-Wallet App
+(KPay/AYAPay)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="910" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqp_bank" value="Payment Gateway
+Webhook Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1120" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqp_g" value="Guardian App
+(Family Shield)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="1330" y="40" width="150" height="800" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_1" value="1. POST /payments/initiate-cashless" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_p" target="sqp_gw">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_2" value="2. CreatePreOrder(amount, orderID)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_gw" target="sqp_pay">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_3" value="3. Return DeepLink ('kbzpay://pay?...')" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;dashed=1;endArrow=open;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_pay" target="sqp_p">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_4" value="4. OS Deep-Link Jump to Wallet" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_p" target="sqp_wallet">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_5" value="5. Authorize PIN / Biometrics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_wallet" target="sqp_bank">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_6" value="6. Webhook Callback (HMAC Signature)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_bank" target="sqp_pay">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_7" value="7. Deep-Link Jump Back to Taxi App" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_wallet" target="sqp_p">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_8" value="8. Credit Driver Wallet Balance" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_pay" target="sqp_dr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_9" value="9. Push: 'Safely Arrived' &amp; Deactivate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_pay" target="sqp_g">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_10" value="10. GET /drivers/sales/today" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_dr" target="sqp_pay">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_11" value="11. Return Sales Summary &amp; Earnings" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;dashed=1;endArrow=open;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_pay" target="sqp_dr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_12" value="12. POST /drivers/wallet/transfer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_dr" target="sqp_pay">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_13" value="13. Disburse Funds via Gateway API" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;endArrow=classic;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_pay" target="sqp_bank">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="smp_14" value="14. Payout Success &amp; Balance Updated" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;dashed=1;endArrow=open;strokeColor=#000000;strokeWidth=1.2;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sqp_pay" target="sqp_dr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

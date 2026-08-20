@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net" modified="2026-08-20T15:10:00.000Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" version="24.7.5" type="device">
+  <diagram id="diag_1" name="State Machine: Driver Status">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="sd_s" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="60" y="100" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_off" value="&lt;b&gt;OFFLINE&lt;/b&gt;
+Logged out / Shift closed" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="140" y="80" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_avail" value="&lt;b&gt;AVAILABLE&lt;/b&gt;
+Streaming GPS &amp; Ready for Rides" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="420" y="80" width="230" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_break" value="&lt;b&gt;BREAK_TIME&lt;/b&gt;
+Toggled pause on dispatch" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="730" y="80" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_duty" value="&lt;b&gt;ON_ANOTHER_DUTY&lt;/b&gt;
+Off-platform task engaged" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="730" y="180" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_offer" value="&lt;b&gt;OFFER_RECEIVED&lt;/b&gt;
+15s Countdown Decision" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="420" y="220" width="230" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_enroute" value="&lt;b&gt;HEADING_TO_PICKUP&lt;/b&gt;
+Chat &amp; Navigation Active" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="140" y="220" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_trip" value="&lt;b&gt;ON_TRIP_PROTECTED&lt;/b&gt;
+CCTV Recording &amp; GPS Logging" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="140" y="340" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_sales" value="&lt;b&gt;SALES_SUMMARY&lt;/b&gt;
+Viewing orders &amp; balance" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="420" y="340" width="230" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sd_transfer" value="&lt;b&gt;TRANSFER_SALES&lt;/b&gt;
+Payout to E-Wallet" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontStyle=1;fontSize=11;" parent="1" vertex="1">
+          <mxGeometry x="730" y="340" width="210" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_1" value="Driver Login" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_s" target="sd_off">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_2" value="Start Shift" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_off" target="sd_avail">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_3" value="Toggle Break" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_avail" target="sd_break">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_4" value="Resume" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sd_break" target="sd_avail">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_5" value="Toggle Duty" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_avail" target="sd_duty">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_6" value="Resume" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_duty" target="sd_avail">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_7" value="Ride Matched" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_avail" target="sd_offer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_8" value="Reject/Timeout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_offer" target="sd_avail">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_9" value="Accept Offer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_offer" target="sd_enroute">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_10" value="Start Ride" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_enroute" target="sd_trip">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_11" value="Trip Finished" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_trip" target="sd_sales">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_12" value="Transfer Sales" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_sales" target="sd_transfer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_13" value="Payout Done" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_transfer" target="sd_sales">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="sde_14" value="Return" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="sd_sales" target="sd_avail">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

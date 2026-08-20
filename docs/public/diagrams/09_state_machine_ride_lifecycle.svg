@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="100%" height="100%" style="background:#FFFFFF; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #181922; }
+      .subtitle { font-size: 12px; fill: #6B7280; font-weight: 500; }
+      .box { fill: #FFFFFF; stroke: #181922; stroke-width: 1.5; rx: 6px; }
+      .box-pkg { fill: #FAFAFA; stroke: #2B2D3C; stroke-width: 1.5; stroke-dasharray: 4 4; rx: 8px; }
+      .box-highlight { fill: #FFF8E1; stroke: #F59E0B; stroke-width: 2; rx: 6px; }
+      .box-alert { fill: #FFE8E8; stroke: #E5252A; stroke-width: 2; rx: 6px; }
+      .hdr-box { fill: #181922; }
+      .hdr-text { fill: #FFFFFF; font-size: 12px; font-weight: 700; }
+      .lbl { font-size: 11px; fill: #181922; font-weight: 600; }
+      .txt { font-size: 10px; fill: #374151; }
+      .txt-bold { font-size: 10px; fill: #181922; font-weight: 700; }
+      .txt-pk { font-size: 10px; fill: #E5252A; font-weight: 700; }
+      .txt-fk { font-size: 10px; fill: #D97706; font-weight: 600; }
+      .line { stroke: #181922; stroke-width: 1.5; fill: none; }
+      .line-dashed { stroke: #6B7280; stroke-width: 1.2; stroke-dasharray: 4 4; fill: none; }
+      .line-gold { stroke: #F59E0B; stroke-width: 2; fill: none; }
+      .line-red { stroke: #E5252A; stroke-width: 2; fill: none; }
+      .actor-head { fill: #FFFFFF; stroke: #181922; stroke-width: 2; }
+      .actor-body { stroke: #181922; stroke-width: 2; }
+      .badge-gold { fill: #F59E0B; }
+      .badge-red { fill: #E5252A; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#181922" />
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#F59E0B" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#E5252A" />
+    </marker>
+  </defs>
+
+  <!-- Banner Header -->
+  <rect x="0" y="0" width="1200" height="55" fill="#181922" />
+  <rect x="0" y="52" width="1200" height="3" fill="#F59E0B" />
+  <text x="24" y="34" fill="#FFFFFF" font-size="18" font-weight="800">YAMATO TAXI ARCHITECTURE</text>
+  <text x="1176" y="34" fill="#F59E0B" font-size="13" font-weight="700" text-anchor="end">09_STATE_MACHINE_RIDE_LIFECYCLE</text>
+
+  <!-- Diagram Body Canvas -->
+  <g transform="translate(0, 60)">
+    
+    <circle cx="100" cy="180" r="16" fill="#181922"/>
+    <rect x="180" y="150" width="160" height="60" class="box"/><text x="260" y="185" class="lbl" text-anchor="middle">DRAFT</text>
+    <rect x="400" y="150" width="160" height="60" class="box"/><text x="480" y="185" class="lbl" text-anchor="middle">SEARCHING</text>
+    <rect x="620" y="150" width="160" height="60" class="box-highlight"/><text x="700" y="185" class="lbl" text-anchor="middle">DISPATCHED (15s)</text>
+    <rect x="840" y="150" width="160" height="60" class="box"/><text x="920" y="185" class="lbl" text-anchor="middle">ARRIVING PICKUP</text>
+    
+    <rect x="840" y="300" width="160" height="60" class="box-highlight"/><text x="920" y="335" class="lbl" text-anchor="middle">IN_TRANSIT (Safety)</text>
+    <rect x="620" y="300" width="160" height="60" class="box"/><text x="700" y="335" class="lbl" text-anchor="middle">ARRIVED DESTINATION</text>
+    <rect x="400" y="300" width="160" height="60" class="box"/><text x="480" y="335" class="lbl" text-anchor="middle">PAYMENT_PENDING</text>
+    <rect x="180" y="300" width="160" height="60" class="box"/><text x="260" y="335" class="lbl" text-anchor="middle">COMPLETED</text>
+    <circle cx="100" cy="330" r="16" fill="#181922"/><circle cx="100" cy="330" r="20" fill="none" stroke="#181922" stroke-width="2"/>
+
+    <line x1="116" y1="180" x2="180" y2="180" class="line" marker-end="url(#arrow)"/>
+    <line x1="340" y1="180" x2="400" y2="180" class="line" marker-end="url(#arrow)"/>
+    <line x1="560" y1="180" x2="620" y2="180" class="line" marker-end="url(#arrow)"/>
+    <line x1="780" y1="180" x2="840" y2="180" class="line" marker-end="url(#arrow)"/>
+    <line x1="920" y1="210" x2="920" y2="300" class="line" marker-end="url(#arrow)"/>
+    <line x1="840" y1="330" x2="780" y2="330" class="line" marker-end="url(#arrow)"/>
+    <line x1="620" y1="330" x2="560" y2="330" class="line" marker-end="url(#arrow)"/>
+    <line x1="400" y1="330" x2="340" y2="330" class="line" marker-end="url(#arrow)"/>
+    <line x1="180" y1="330" x2="120" y2="330" class="line" marker-end="url(#arrow)"/>
+    
+  </g>
+</svg>
