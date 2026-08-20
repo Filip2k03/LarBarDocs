@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="52" width="390" height="50" fill="#181922" fill-opacity="0.8"/>
+  <text x="24" y="83" fill="#F59E0B" font-size="18" font-weight="800">LarBar</text>
+  <text x="195" y="83" fill="#FFFFFF" font-size="15" font-weight="700" text-anchor="middle">ခရီးစဥ်မှာယူခြင်း (Ride Booking)</text>
+  <circle cx="360" cy="77" r="14" fill="#282836"/>
+  <text x="360" y="82" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Live Map Preview Area -->
+    <rect x="16" y="112" width="358" height="240" rx="20" fill="#181922" stroke="#282836"/>
+    <!-- Mock Map Grid Lines -->
+    <path d="M 30 200 Q 150 160 350 220" stroke="#282836" stroke-width="6" fill="none"/>
+    <path d="M 120 120 L 120 340" stroke="#282836" stroke-width="4" fill="none"/>
+    <path d="M 260 120 L 260 340" stroke="#282836" stroke-width="4" fill="none"/>
+
+    <!-- Map Route Polyline (Gold) -->
+    <path d="M 80 280 L 180 210 L 300 170" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+    <!-- Pickup & Dest Pins -->
+    <circle cx="80" cy="280" r="8" fill="#10B981" stroke="#FFFFFF" stroke-width="2"/>
+    <text x="95" y="284" fill="#FFFFFF" font-size="11" font-weight="600">Sule Square</text>
+
+    <circle cx="180" cy="210" r="6" fill="#F59E0B" stroke="#FFFFFF" stroke-width="1.5"/>
+    <text x="195" y="214" fill="#FFE082" font-size="10">Stop 1: Bogyoke</text>
+
+    <circle cx="300" cy="170" r="8" fill="#E5252A" stroke="#FFFFFF" stroke-width="2"/>
+    <text x="300" y="155" fill="#FFFFFF" font-size="11" font-weight="600" text-anchor="middle">Junction City</text>
+
+    <!-- Moving Taxi Icon -->
+    <rect x="130" y="228" width="28" height="16" rx="4" fill="#F59E0B"/>
+    <text x="144" y="240" fill="#181922" font-size="9" font-weight="800" text-anchor="middle">🚖 3m</text>
+
+    <!-- Multi-Stop Input Card -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="364" width="358" height="170" rx="16" fill="#181922" stroke="#282836"/>
+      <circle cx="40" cy="396" r="6" fill="#10B981"/>
+      <text x="58" y="400" fill="#FFFFFF" font-size="13" font-weight="600">Sule Square, Downtown</text>
+
+      <line x1="40" y1="406" x2="40" y2="430" stroke="#484856" stroke-width="2" stroke-dasharray="2 2"/>
+      
+      <circle cx="40" cy="438" r="5" fill="#F59E0B"/>
+      <text x="58" y="442" fill="#FFE082" font-size="12">Waypoint: Bogyoke Aung San Market</text>
+      <text x="350" y="442" fill="#F85A5A" font-size="12" text-anchor="end">✕</text>
+
+      <line x1="40" y1="448" x2="40" y2="472" stroke="#484856" stroke-width="2" stroke-dasharray="2 2"/>
+
+      <circle cx="40" cy="480" r="6" fill="#E5252A"/>
+      <text x="58" y="484" fill="#FFFFFF" font-size="13" font-weight="600">Junction City Mall</text>
+
+      <line x1="30" y1="502" x2="360" y2="502" stroke="#282836" stroke-width="1"/>
+      <text x="58" y="522" fill="#F59E0B" font-size="12" font-weight="600">+ အပိုမှတ်တိုင် ထည့်သွင်းမည် (Add Extra Stop)</text>
+    </g>
+
+    <!-- Vehicle Selection Options -->
+    <rect x="16" y="546" width="358" height="66" rx="14" fill="#242533" stroke="#F59E0B" stroke-width="2"/>
+    <text x="36" y="575" fill="#FFFFFF" font-size="14" font-weight="700">🚗 Standard Taxi (4 Seats)</text>
+    <text x="36" y="596" fill="#9CA3AF" font-size="11">Toyota Fielder / Probox • 3 mins away</text>
+    <text x="354" y="582" fill="#F59E0B" font-size="16" font-weight="800" text-anchor="end">2,800 MMK</text>
+
+    <rect x="16" y="622" width="358" height="62" rx="14" fill="#181922" stroke="#282836"/>
+    <text x="36" y="650" fill="#FFFFFF" font-size="14" font-weight="600">👑 Royal Gold VIP Sedan</text>
+    <text x="36" y="670" fill="#9CA3AF" font-size="11">Crown / Alphard • Leather &amp; AC • 2 mins</text>
+    <text x="354" y="658" fill="#FFFFFF" font-size="15" font-weight="700" text-anchor="end">4,500 MMK</text>
+
+    <!-- Payment & Booking Button -->
+    <rect x="16" y="694" width="358" height="42" rx="10" fill="#181922" stroke="#282836"/>
+    <text x="36" y="720" fill="#FFFFFF" font-size="12">💳 Payment: <tspan fill="#38BDF8" font-weight="700">KBZPay Direct</tspan></text>
+    <text x="354" y="720" fill="#F59E0B" font-size="11" text-anchor="end">Change ❯</text>
+
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="746" width="358" height="56" rx="14" fill="url(#gold-grad)"/>
+      <text x="195" y="780" fill="#181922" font-size="16" font-weight="800" text-anchor="middle">ခရီးစဥ် ခေါ်ယူမည် (CONFIRM RIDE)</text>
+    </g>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>

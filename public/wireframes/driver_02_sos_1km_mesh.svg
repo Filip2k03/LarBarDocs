@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="52" width="390" height="50" fill="#181922" fill-opacity="0.8"/>
+  <text x="24" y="83" fill="#F59E0B" font-size="18" font-weight="800">LarBar</text>
+  <text x="195" y="83" fill="#FFFFFF" font-size="15" font-weight="700" text-anchor="middle">၁ကီလိုမီတာ အရေးပေါ် အကူအညီ (SOS Mesh)</text>
+  <circle cx="360" cy="77" r="14" fill="#282836"/>
+  <text x="360" y="82" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Code Red Alert Banner -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="112" width="358" height="110" rx="18" fill="url(#red-grad)"/>
+      <text x="195" y="146" fill="#FFFFFF" font-size="18" font-weight="900" text-anchor="middle">🚨 CODE RED: DRIVER IN DISTRESS</text>
+      <text x="195" y="172" fill="#FFFFFF" font-size="13" font-weight="600" text-anchor="middle">Fellow Driver Needs Immediate Assistance!</text>
+      <text x="195" y="196" fill="#FFE8E8" font-size="11" text-anchor="middle">Location: 240 meters away (30s ago)</text>
+    </g>
+
+    <!-- Radar Proximity Intercept Map View -->
+    <rect x="16" y="234" width="358" height="280" rx="18" fill="#181922" stroke="#E5252A" stroke-width="2"/>
+    <circle cx="195" cy="374" r="90" fill="none" stroke="#E5252A" stroke-width="1.5" stroke-dasharray="4 4"/>
+    
+    <!-- Your Position -->
+    <circle cx="120" cy="420" r="10" fill="#10B981" stroke="#FFFFFF" stroke-width="2"/>
+    <text x="120" y="445" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">You</text>
+
+    <!-- Intercept Vector -->
+    <path d="M 120 420 L 250 320" stroke="#E5252A" stroke-width="3" stroke-dasharray="4 2"/>
+
+    <!-- Victim Position -->
+    <circle cx="250" cy="320" r="14" fill="#E5252A" stroke="#FFFFFF" stroke-width="3"/>
+    <text x="250" y="325" fill="#FFFFFF" font-size="12" font-weight="900" text-anchor="middle">🚨</text>
+    <text x="250" y="300" fill="#F85A5A" font-size="12" font-weight="800" text-anchor="middle">U Kyaw Swar (240m)</text>
+
+    <!-- Distress Details Card -->
+    <rect x="16" y="526" width="358" height="150" rx="16" fill="#181922" stroke="#282836"/>
+    <text x="36" y="556" fill="#FFFFFF" font-size="14" font-weight="700">Driver: U Kyaw Swar</text>
+    <text x="36" y="578" fill="#9CA3AF" font-size="12">Vehicle: <tspan fill="#FFFFFF">White Toyota Probox (License: 4B-9102)</tspan></text>
+    <text x="36" y="600" fill="#9CA3AF" font-size="12">Location: <tspan fill="#FFFFFF">Corner of Anawrahta &amp; Sule Pagoda Rd</tspan></text>
+    <text x="36" y="622" fill="#9CA3AF" font-size="12">Trigger: <tspan fill="#F85A5A" font-weight="700">Physical Passenger Attack Alert</tspan></text>
+    <text x="36" y="644" fill="#9CA3AF" font-size="12">Protecting CCTV: <tspan fill="#10B981" font-weight="600">LIVE BUFFER RECORDED</tspan></text>
+
+    <!-- Intercept Action Buttons -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="690" width="358" height="54" rx="14" fill="url(#red-grad)"/>
+      <text x="195" y="724" fill="#FFFFFF" font-size="15" font-weight="800" text-anchor="middle">ကူညီရန် သွားမည် (I AM RESPONDING / EN ROUTE)</text>
+    </g>
+
+    <rect x="16" y="754" width="358" height="44" rx="12" fill="#242533" stroke="#282836"/>
+    <text x="195" y="781" fill="#9CA3AF" font-size="13" text-anchor="middle">ရဲစခန်း တိုက်ရိုက်ခေါ်ဆိုမည် (CALL POLICE 199)</text>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>

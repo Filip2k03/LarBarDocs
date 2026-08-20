@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="52" width="390" height="50" fill="#181922" fill-opacity="0.8"/>
+  <text x="24" y="83" fill="#F59E0B" font-size="18" font-weight="800">LarBar</text>
+  <text x="195" y="83" fill="#FFFFFF" font-size="15" font-weight="700" text-anchor="middle">ယာဥ်မောင်း မိသားစု အကာအကွယ် (Driver Family)</text>
+  <circle cx="360" cy="77" r="14" fill="#282836"/>
+  <text x="360" y="82" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Driver Family Guardian Status Card -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="112" width="358" height="130" rx="18" fill="#181922" stroke="#10B981" stroke-width="2"/>
+      <text x="36" y="144" fill="#10B981" font-size="13" font-weight="700">🟢 STATUS: ON-DUTY (WORKING)</text>
+      <text x="36" y="170" fill="#FFFFFF" font-size="17" font-weight="800">Driver: Ko Aung Kyaw (Husband)</text>
+      <text x="36" y="194" fill="#9CA3AF" font-size="12">Vehicle: Toyota Fielder (3A-8492)</text>
+      <text x="36" y="216" fill="#38BDF8" font-size="12">🔋 Phone Battery: 86% • 📶 5G Signal: Strong</text>
+    </g>
+
+    <!-- Real-Time Shift Tracking Map -->
+    <rect x="16" y="254" width="358" height="340" rx="18" fill="#181922" stroke="#282836"/>
+    
+    <!-- Road Polylines -->
+    <path d="M 40 380 L 160 380 L 280 480" stroke="#282836" stroke-width="6" fill="none"/>
+    <path d="M 160 270 L 160 550" stroke="#282836" stroke-width="6" fill="none"/>
+
+    <!-- Driver Vehicle Marker -->
+    <circle cx="160" cy="380" r="16" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2"/>
+    <text x="160" y="386" fill="#181922" font-size="12" font-weight="900" text-anchor="middle">🚖</text>
+    <text x="160" y="356" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Pyay Road (38 km/h)</text>
+
+    <rect x="36" y="520" width="318" height="54" rx="10" fill="#0E0F14" stroke="#282836"/>
+    <text x="56" y="542" fill="#FFFFFF" font-size="11">Current Shift Duration: <tspan fill="#F59E0B" font-weight="700">4 hours 20 mins</tspan></text>
+    <text x="56" y="560" fill="#9CA3AF" font-size="10">Last GPS Ping: 1 second ago (Accuracy: 2.8m)</text>
+
+    <!-- Emergency DND Siren Alarm Remote Trigger -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="610" width="358" height="60" rx="16" fill="url(#red-grad)"/>
+      <text x="195" y="646" fill="#FFFFFF" font-size="15" font-weight="800" text-anchor="middle">🚨 အရေးပေါ် အချက်ပြသံ မြည်စေမည် (SOS SIREN)</text>
+    </g>
+
+    <!-- Direct Contact Husband -->
+    <rect x="16" y="682" width="358" height="50" rx="14" fill="url(#gold-grad)"/>
+    <text x="195" y="713" fill="#181922" font-size="14" font-weight="800" text-anchor="middle">📞 ခင်ပွန်းထံ ဖုန်းတိုက်ရိုက်ခေါ်ဆိုမည်</text>
+
+    <text x="195" y="760" fill="#9CA3AF" font-size="11" text-anchor="middle">Driver Guardian Family Mesh Shield • DND Override Active</text>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>

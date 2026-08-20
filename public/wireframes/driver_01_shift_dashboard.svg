@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="52" width="390" height="50" fill="#181922" fill-opacity="0.8"/>
+  <text x="24" y="83" fill="#F59E0B" font-size="18" font-weight="800">LarBar</text>
+  <text x="195" y="83" fill="#FFFFFF" font-size="15" font-weight="700" text-anchor="middle">ယာဥ်မောင်း ပင်မစာမျက်နှာ (Driver Home)</text>
+  <circle cx="360" cy="77" r="14" fill="#282836"/>
+  <text x="360" y="82" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Shift Mode Toggle Card -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="112" width="358" height="96" rx="18" fill="#181922" stroke="#10B981" stroke-width="2"/>
+      <circle cx="48" cy="160" r="18" fill="#10B981"/>
+      <text x="48" y="166" fill="#181922" font-size="14" font-weight="800" text-anchor="middle">✓</text>
+
+      <text x="80" y="152" fill="#FFFFFF" font-size="16" font-weight="700">အလုပ်ဆင်းနေသည် (ON DUTY)</text>
+      <text x="80" y="174" fill="#10B981" font-size="12">Online • Ready to receive ride dispatches</text>
+
+      <rect x="290" y="142" width="64" height="34" rx="17" fill="#10B981"/>
+      <circle cx="334" cy="159" r="13" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Today Sales & Earnings HUD -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="222" width="358" height="150" rx="18" fill="#181922" stroke="#282836"/>
+      <text x="36" y="252" fill="#9CA3AF" font-size="12">ယနေ့ ရရှိငွေ (Today's Earnings)</text>
+      <text x="36" y="290" fill="#F59E0B" font-size="30" font-weight="900">48,500 <tspan font-size="16">MMK</tspan></text>
+
+      <line x1="36" y1="310" x2="354" y2="310" stroke="#282836" stroke-width="1"/>
+
+      <text x="36" y="342" fill="#FFFFFF" font-size="12">Completed Trips: <tspan font-weight="700">12</tspan></text>
+      <text x="180" y="342" fill="#FFFFFF" font-size="12">Hours Online: <tspan font-weight="700">5.4h</tspan></text>
+      <text x="354" y="342" fill="#10B981" font-size="12" font-weight="700" text-anchor="end">⭐ 4.96</text>
+    </g>
+
+    <!-- Quick Actions Grid -->
+    <rect x="16" y="386" width="172" height="90" rx="14" fill="#181922" stroke="#282836"/>
+    <text x="36" y="420" fill="#F59E0B" font-size="20">💳</text>
+    <text x="36" y="445" fill="#FFFFFF" font-size="13" font-weight="700">ငွေထုတ်ယူမည်</text>
+    <text x="36" y="462" fill="#9CA3AF" font-size="10">KBZPay / Wave Transfer</text>
+
+    <rect x="202" y="386" width="172" height="90" rx="14" fill="#181922" stroke="#282836"/>
+    <text x="222" y="420" fill="#10B981" font-size="20">📹</text>
+    <text x="222" y="445" fill="#FFFFFF" font-size="13" font-weight="700">CCTV Protecting</text>
+    <text x="222" y="462" fill="#10B981" font-size="10">Active • 1080p Stream</text>
+
+    <!-- Driver Emergency SOS Panic Button -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="492" width="358" height="90" rx="18" fill="url(#red-grad)"/>
+      <text x="40" y="534" fill="#FFFFFF" font-size="28">🚨</text>
+      <text x="80" y="532" fill="#FFFFFF" font-size="16" font-weight="800">အရေးပေါ် အကူအညီတောင်းရန်</text>
+      <text x="80" y="555" fill="#FFE8E8" font-size="12">1km - 3km Fellow Driver SOS Broadcast</text>
+    </g>
+
+    <!-- Recent Rides History List -->
+    <rect x="16" y="598" width="358" height="190" rx="16" fill="#181922" stroke="#282836"/>
+    <text x="36" y="628" fill="#FFFFFF" font-size="14" font-weight="700">လတ်တလော ခရီးစဥ်များ (Recent Trips)</text>
+
+    <rect x="28" y="642" width="334" height="60" rx="10" fill="#242533"/>
+    <text x="44" y="666" fill="#FFFFFF" font-size="12" font-weight="600">Sule ➔ Junction City</text>
+    <text x="44" y="686" fill="#9CA3AF" font-size="10">2:45 PM • Cashless (KBZPay)</text>
+    <text x="346" y="675" fill="#10B981" font-size="14" font-weight="700" text-anchor="end">+2,800 MMK</text>
+
+    <rect x="28" y="712" width="334" height="60" rx="10" fill="#242533"/>
+    <text x="44" y="736" fill="#FFFFFF" font-size="12" font-weight="600">Hledan ➔ Inya Lake</text>
+    <text x="44" y="756" fill="#9CA3AF" font-size="10">1:15 PM • Cash</text>
+    <text x="346" y="745" fill="#10B981" font-size="14" font-weight="700" text-anchor="end">+3,500 MMK</text>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>
