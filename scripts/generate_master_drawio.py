@@ -894,6 +894,50 @@ def build_guardian_plugin_tab(root):
 
 
 # =============================================================================
+# TAB 12: DRIVER SOS MESH & DRIVER FAMILY GUARDIAN ARCHITECTURE
+# =============================================================================
+def build_driver_sos_tab(root):
+    c_style = "rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;"
+    sub_style = "swimlane;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#000000;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;"
+    alert_box = "swimlane;whiteSpace=wrap;html=1;fillColor=#FFF0F0;strokeColor=#E5252A;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;"
+    gold_box = "swimlane;whiteSpace=wrap;html=1;fillColor=#FFFDF0;strokeColor=#F59E0B;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;"
+    edge_p = "edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;"
+    edge_alert = "edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#E5252A;strokeWidth=2;fontSize=10;fontColor=#E5252A;jumpStyle=arc;jumpSize=6;"
+    edge_gold = "edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#F59E0B;strokeWidth=2;fontSize=10;fontColor=#B45309;jumpStyle=arc;jumpSize=6;"
+
+    # 1. Driver Panic Trigger Node
+    add_cell(root, "ds_driver_node", "<b>1. Victim Driver in Distress (Driver App)</b>", alert_box, 50, 40, 420, 680)
+    add_cell(root, "ds_trig_1", "<b>Multi-Mode Panic Triggers</b>\n- Triple Volume/Power Button Key Tap\n- Floating SOS Shield Long-Press (2s)\n- Bluetooth Steering Wheel Beacon\n- &gt;3.5G Collision Impact Detection", c_style, 80, 80, 360, 95, parent="ds_driver_node")
+    add_cell(root, "ds_trig_2", "<b>High-Frequency Telemetry Emitter</b>\n- 1-Second GPS Breadcrumbs (Lat, Lng, Heading, Speed)\n- Local 1080p In-Car CCTV Audio/Video Buffer Lock", c_style, 80, 200, 360, 85, parent="ds_driver_node")
+    add_cell(root, "ds_trig_3", "<b>Covert Emergency Mode HUD</b>\n- Silent Screen Dimming Option\n- Continuous Live Microphone Broadcast", c_style, 80, 310, 360, 75, parent="ds_driver_node")
+    add_cell(root, "ds_trig_4", "<b>Driver Guardian Plugin Client</b>\n- On-Demand Module (`:plugin_driver_guardian`)\n- Direct P2P Telemetry Uplink to Family", c_style, 80, 410, 360, 80, parent="ds_driver_node")
+
+    # 2. Go Backend Emergency Engine & Redis Spatial Matcher
+    add_cell(root, "ds_backend_node", "<b>2. Go Real-Time Emergency Engine & Redis Spatial Hub</b>", sub_style, 530, 40, 440, 680)
+    add_cell(root, "ds_be_hub", "<b>Emergency Incident Coordinator</b>\n- Creates `SOS_INCIDENT` Record in PostgreSQL\n- Locks Incident Cryptographic SHA-256 Audit Log", c_style, 560, 80, 380, 85, parent="ds_backend_node")
+    add_cell(root, "ds_be_tier1", "<b>Tier 1 Dispatcher (1.0 km Immediate Radius)</b>\n- `GEORADIUS drivers:available {lng} {lat} 1.0 km`\n- WebSocket Critical Audio Cue Broadcast", c_style, 560, 190, 380, 85, parent="ds_backend_node")
+    add_cell(root, "ds_be_esc", "<b>30-Second Escalation Scheduler</b>\n- Checks Responder Acknowledgments (&lt; 2 Responders)\n- Auto-Cascades to Tier 2 (3.0 km Extended Radius)", c_style, 560, 300, 380, 85, parent="ds_backend_node")
+    add_cell(root, "ds_be_ert", "<b>Police & Rapid Response (ERT) Gateway</b>\n- Automated Police Dispatch Webhook\n- High-Priority Emergency Call Relay", c_style, 560, 410, 380, 80, parent="ds_backend_node")
+
+    # 3. Responders & Family Guardian
+    add_cell(root, "ds_resp_node", "<b>3. Fellow Driver Mesh & Family Guardian Shield</b>", gold_box, 1030, 40, 440, 680)
+    add_cell(root, "ds_mesh_1km", "<b>Tier 1 Fellow Drivers (Within 1.0 km)</b>\n- Instant Alert: 'Driver U Aung Kyaw Needs Help!'\n- Exact Distance, Plate (3A-8492) & Driving Directions\n- 1-Tap 'I Am Responding / En Route' Button", c_style, 1060, 80, 380, 95, parent="ds_resp_node")
+    add_cell(root, "ds_mesh_3km", "<b>Tier 2 Extended Drivers (Within 3.0 km)</b>\n- Broadcasts to 50 Nearby Online Drivers\n- Perimeter Interception Routing", c_style, 1060, 200, 380, 85, parent="ds_resp_node")
+    add_cell(root, "ds_fam_guard", "<b>Driver Family Guardian (Spouse / Parents)</b>\n- DND Override Siren Sound Alarm\n- Real-Time Live Location on Family Map\n- 1-Tap Emergency Police/Dispatch Contact", c_style, 1060, 310, 380, 95, parent="ds_resp_node")
+    add_cell(root, "ds_ert_unit", "<b>LarBar Rapid Response Team (ERT)</b>\n- Real-Time Fleet Security Dashboard HUD", c_style, 1060, 430, 380, 60, parent="ds_resp_node")
+
+    # Connectors
+    add_edge(root, "dse_1", "1. Trigger Panic Event", edge_alert, "ds_trig_1", "ds_be_hub", exit_xy=(1, 0.5), entry_xy=(0, 0.5))
+    add_edge(root, "dse_2", "2. 1.0km Spatial Search", edge_p, "ds_be_hub", "ds_be_tier1", exit_xy=(0.5, 1), entry_xy=(0.5, 0))
+    add_edge(root, "dse_3", "3. Tier 1 Alert (1km)", edge_alert, "ds_be_tier1", "ds_mesh_1km", exit_xy=(1, 0.5), entry_xy=(0, 0.5))
+    add_edge(root, "dse_4", "4. Direct Family Push (DND Override)", edge_gold, "ds_be_hub", "ds_fam_guard", exit_xy=(1, 0.8), entry_xy=(0, 0.5))
+    add_edge(root, "dse_5", "5. 30s Escalation Trigger", edge_p, "ds_be_tier1", "ds_be_esc", exit_xy=(0.5, 1), entry_xy=(0.5, 0))
+    add_edge(root, "dse_6", "6. Tier 2 Alert (3km)", edge_alert, "ds_be_esc", "ds_mesh_3km", exit_xy=(1, 0.5), entry_xy=(0, 0.5))
+    add_edge(root, "dse_7", "7. Escalate to Police & ERT", edge_alert, "ds_be_esc", "ds_be_ert", exit_xy=(0.5, 1), entry_xy=(0.5, 0))
+    add_edge(root, "dse_8", "8. Police/ERT Dispatched", edge_p, "ds_be_ert", "ds_ert_unit", exit_xy=(1, 0.5), entry_xy=(0, 0.5))
+
+
+# =============================================================================
 # EXPORT ALL ENGINES
 # =============================================================================
 def generate_all():
@@ -911,6 +955,7 @@ def generate_all():
         ("09_State_Machine_Ride_Lifecycle", build_state_ride_tab, 1300, 800),
         ("10_State_Machine_Driver_Status", build_state_driver_tab, 1100, 800),
         ("11_Guardian_Plugin_Module_Architecture", build_guardian_plugin_tab, 1850, 800),
+        ("12_Driver_SOS_Mesh_Guardian_Architecture", build_driver_sos_tab, 1600, 850),
     ]
 
     for idx, (tname, tfn, tw, th) in enumerate(tabs):
@@ -944,6 +989,7 @@ def generate_all():
         ("09_state_machine_ride_lifecycle.drawio", build_state_ride_tab, "State Machine: Ride Lifecycle", 1300, 800),
         ("10_state_machine_driver_status.drawio", build_state_driver_tab, "State Machine: Driver Status", 1100, 800),
         ("11_guardian_plugin_module_architecture.drawio", build_guardian_plugin_tab, "Guardian Plugin Module Architecture", 1850, 800),
+        ("12_driver_sos_mesh_guardian_architecture.drawio", build_driver_sos_tab, "Driver SOS Mesh & Guardian Architecture", 1600, 850),
     ]
 
     for fname, fn, tname, tw, th in standalone_files:
@@ -964,3 +1010,4 @@ def generate_all():
 
 if __name__ == "__main__":
     generate_all()
+

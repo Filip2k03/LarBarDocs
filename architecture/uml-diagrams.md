@@ -117,3 +117,14 @@ Every diagram in the Yamato Taxi Engine is rendered in high-resolution vector fo
 
 - 📥 [Download Standalone .drawio File](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/11_guardian_plugin_module_architecture.drawio)
 - 🖼️ [View Fullscreen Vector SVG](/diagrams/11_guardian_plugin_module_architecture.svg)
+
+---
+
+## 12. Driver SOS Mesh & Family Guardian Architecture
+<span class="badge-red">Page 12</span> • 1km ➔ 3km Tiered Driver Mesh Alert, Covert Panic Triggers & Family Siren HUD
+
+![12 Driver SOS Mesh Guardian](/diagrams/12_driver_sos_mesh_guardian.svg)
+
+- 📥 [Download Standalone .drawio File](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/12_driver_sos_mesh_guardian_architecture.drawio)
+- 🖼️ [View Fullscreen Vector SVG](/diagrams/12_driver_sos_mesh_guardian.svg)
+

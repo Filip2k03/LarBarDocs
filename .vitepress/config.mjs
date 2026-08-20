@@ -17,6 +17,7 @@ export default defineConfig({
       { text: 'Architecture', link: '/architecture/overview' },
       { text: 'UML Diagrams', link: '/architecture/uml-diagrams' },
       { text: 'Guardian Plugin', link: '/features/guardian-plugin' },
+      { text: 'Driver SOS & Mesh', link: '/features/driver-sos-and-family-guardian' },
       { text: 'Design System', link: '/design/design-system' },
       { text: 'DevOps & VPS', link: '/devops/vps-deployment' }
     ],
@@ -44,6 +45,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Guardian Dynamic Plugin Module', link: '/features/guardian-plugin' },
+          { text: 'Driver SOS & Family Guardian', link: '/features/driver-sos-and-family-guardian' },
           { text: 'Driver Protecting Mode & CCTV', link: '/features/driver-protecting-cctv' },
           { text: 'Intelligent 15s Cascading Dispatch', link: '/features/dispatch-engine' },
           { text: 'E-Wallets & Driver Payouts', link: '/features/payments-and-settlement' }

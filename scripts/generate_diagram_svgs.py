@@ -665,6 +665,84 @@ def generate_11_guardian_plugin():
     """
     return svg_wrapper(c, w, h, "11_Guardian_Plugin_Module_Architecture")
 
+def generate_12_driver_sos():
+    w, h = 1350, 720
+    c = """
+    <!-- Column 1: Victim Driver Node -->
+    <rect x="30" y="20" width="400" height="620" class="box-alert"/>
+    <rect x="30" y="20" width="400" height="30" class="badge-red"/>
+    <text x="230" y="40" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">1. DRIVER IN DISTRESS (DRIVER APP)</text>
+
+    <rect x="50" y="70" width="360" height="75" class="box"/>
+    <text x="230" y="98" class="lbl" text-anchor="middle">Multi-Mode Panic Triggers</text>
+    <text x="230" y="118" class="txt" text-anchor="middle">Triple Volume Key / Long-Press / BLE Beacon</text>
+    <text x="230" y="132" class="txt" text-anchor="middle">&gt;3.5G Collision Impact Detection</text>
+
+    <rect x="50" y="165" width="360" height="75" class="box"/>
+    <text x="230" y="193" class="lbl" text-anchor="middle">High-Frequency Telemetry Emitter</text>
+    <text x="230" y="213" class="txt" text-anchor="middle">1-Second Real-Time GPS Breadcrumbs</text>
+    <text x="230" y="227" class="txt" text-anchor="middle">In-Car CCTV 1080p Video Buffer Lock</text>
+
+    <rect x="50" y="260" width="360" height="75" class="box-highlight"/>
+    <text x="230" y="288" class="lbl" text-anchor="middle">Driver Family Guardian Plugin</text>
+    <text x="230" y="308" class="txt" text-anchor="middle">On-Demand Module (`:plugin_driver_guardian`)</text>
+    <text x="230" y="322" class="txt" text-anchor="middle">Direct P2P Link to Spouse / Parents</text>
+
+    <!-- Column 2: Go Backend Emergency Engine & Redis Spatial Hub -->
+    <rect x="470" y="20" width="410" height="620" class="box-pkg"/>
+    <rect x="470" y="20" width="410" height="30" class="hdr-box"/>
+    <text x="675" y="40" class="hdr-text" text-anchor="middle">2. GO EMERGENCY HUB &amp; REDIS SPATIAL</text>
+
+    <rect x="490" y="70" width="370" height="75" class="box"/>
+    <text x="675" y="98" class="lbl" text-anchor="middle">Incident Coordinator &amp; Audit Log</text>
+    <text x="675" y="118" class="txt" text-anchor="middle">Creates `SOS_INCIDENT` in PostgreSQL</text>
+    <text x="675" y="132" class="txt" text-anchor="middle">SHA-256 Tamper-Proof Cryptographic Lock</text>
+
+    <rect x="490" y="165" width="370" height="75" class="box-alert"/>
+    <text x="675" y="193" class="lbl" text-anchor="middle">Tier 1: 1.0 km Immediate Radius</text>
+    <text x="675" y="213" class="txt" text-anchor="middle">GEORADIUS drivers:available 1.0km</text>
+    <text x="675" y="227" class="txt" text-anchor="middle">Instant WebSocket Critical Alarm Broadcast</text>
+
+    <rect x="490" y="260" width="370" height="75" class="box"/>
+    <text x="675" y="288" class="lbl" text-anchor="middle">30s Escalation Engine (Tier 2: 3.0 km)</text>
+    <text x="675" y="308" class="txt" text-anchor="middle">Auto-Cascades if &lt; 2 Responders Acknowledge</text>
+    <text x="675" y="322" class="txt" text-anchor="middle">Police Webhook &amp; LarBar Rapid Response</text>
+
+    <!-- Column 3: Fellow Driver Mesh & Family Guardian -->
+    <rect x="920" y="20" width="400" height="620" class="box-highlight"/>
+    <rect x="920" y="20" width="400" height="30" class="badge-gold"/>
+    <text x="1120" y="40" fill="#181922" font-size="12" font-weight="700" text-anchor="middle">3. DRIVER MESH &amp; FAMILY GUARDIAN</text>
+
+    <rect x="940" y="70" width="360" height="75" class="box-alert"/>
+    <text x="1120" y="98" class="lbl" text-anchor="middle">Fellow Drivers (Within 1.0 km)</text>
+    <text x="1120" y="118" class="txt" text-anchor="middle">Plate: 3A-8492 | Distance: 250m ahead</text>
+    <text x="1120" y="132" class="txt" text-anchor="middle">1-Tap 'I Am Responding / En Route' Action</text>
+
+    <rect x="940" y="165" width="360" height="75" class="box"/>
+    <text x="1120" y="193" class="lbl" text-anchor="middle">Extended Drivers (Within 3.0 km)</text>
+    <text x="1120" y="213" class="txt" text-anchor="middle">Tier 2 Broadcast to 50 Online Drivers</text>
+    <text x="1120" y="227" class="txt" text-anchor="middle">Perimeter Interception Routing</text>
+
+    <rect x="940" y="260" width="360" height="75" class="box-highlight"/>
+    <text x="1120" y="288" class="lbl" text-anchor="middle">Driver Family Guardian (Spouse / Parents)</text>
+    <text x="1120" y="308" class="txt" text-anchor="middle">DND Override Siren Alarm Sound</text>
+    <text x="1120" y="322" class="txt" text-anchor="middle">Real-Time Live Map &amp; Direct Navigation</text>
+
+    <rect x="940" y="355" width="360" height="50" class="box"/>
+    <text x="1120" y="380" class="lbl" text-anchor="middle">Police &amp; LarBar Rapid Response Team</text>
+    <text x="1120" y="395" class="txt" text-anchor="middle">Fleet Security Dashboard HUD</text>
+
+    <!-- Connectors -->
+    <line x1="410" y1="107" x2="490" y2="107" class="line-red" marker-end="url(#arrow-red)"/>
+    <line x1="675" y1="145" x2="675" y2="165" class="line" marker-end="url(#arrow)"/>
+    <line x1="860" y1="202" x2="940" y2="107" class="line-red" marker-end="url(#arrow-red)"/>
+    <line x1="675" y1="240" x2="675" y2="260" class="line" marker-end="url(#arrow)"/>
+    <line x1="860" y1="297" x2="940" y2="202" class="line-red" marker-end="url(#arrow-red)"/>
+    <line x1="410" y1="297" x2="940" y2="297" class="line-gold" marker-end="url(#arrow-gold)"/>
+    <line x1="860" y1="315" x2="940" y2="380" class="line" marker-end="url(#arrow)"/>
+    """
+    return svg_wrapper(c, w, h, "12_Driver_SOS_Mesh_Guardian_Architecture")
+
 def generate_all_svgs():
     svg_generators = [
         ("01_use_case_diagram.svg", generate_01_use_case),
@@ -678,6 +756,7 @@ def generate_all_svgs():
         ("09_state_machine_ride_lifecycle.svg", generate_09_state_ride),
         ("10_state_machine_driver_status.svg", generate_10_state_driver),
         ("11_guardian_plugin_module_architecture.svg", generate_11_guardian_plugin),
+        ("12_driver_sos_mesh_guardian.svg", generate_12_driver_sos),
     ]
 
     for fname, gen in svg_generators:
@@ -689,3 +768,4 @@ def generate_all_svgs():
 
 if __name__ == "__main__":
     generate_all_svgs()
+
