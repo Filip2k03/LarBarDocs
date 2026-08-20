@@ -1,18 +1,15 @@
-# Node Dependencies
+# Dependencies
 node_modules/
-docs/node_modules/
 
-# VitePress Build & Cache
+# VitePress Build Outputs & Cache
 .vitepress/dist/
 .vitepress/cache/
-docs/.vitepress/dist/
-docs/.vitepress/cache/
 
-# OS & Temp Files
+# System / Binary Files
 .DS_Store
 Thumbs.db
+*.numbers
+*.pdf
 *.log
-
-# Env
 .env
 .env.local
