@@ -21,11 +21,11 @@ All specifications and system design diagrams have been generated conforming str
    - Imperial Crimson Red (`#E5252A`) and Royal Gold (`#F59E0B`) 100-900 color scales, typography hierarchy, button states, and CSS transitions.
 
 4. 🎨 **Interactive Draw.io (`.drawio`) Architecture Files**:
-   - 🌟 **[`taxi_master_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/taxi_master_architecture.drawio)**: **Master multi-page Draw.io file with 12 interactive tabs (including Driver SOS & Guardian Plugins)**!
-   - 🌟 **[`taxi_master_all_in_one.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/taxi_master_all_in_one.drawio)**: **Diagrams folder multi-page file (12 tabs)**.
+   - 🌟 **[`taxi_master_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/taxi_master_architecture.drawio)**: **Master multi-page Draw.io file with 13 interactive tabs (including Hetzner 3-Server & Driver SOS)**!
+   - 🌟 **[`taxi_master_all_in_one.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/taxi_master_all_in_one.drawio)**: **Diagrams folder multi-page file (13 tabs)**.
    - [`01_use_case_diagram.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/01_use_case_diagram.drawio): UML 2.5 Use Case model with actors, boundary & sub-packages.
    - [`02_system_process_flowchart.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/02_system_process_flowchart.drawio): 5-column cross-functional process flowchart.
-   - [`03_database_erd_schema.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/03_database_erd_schema.drawio): Relational database schema with 16 connected tables and primary/foreign keys.
+   - [`03_database_erd_schema.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/03_database_erd_schema.drawio): Relational database schema with 18 connected tables and primary/foreign keys.
    - [`04_component_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/04_component_architecture.drawio): 5-tier component & microservices architecture.
    - [`05_class_domain_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/05_class_domain_architecture.drawio): UML 2.5 domain classes, Go interfaces & ViewModels.
    - [`06_sequence_dispatch_chat.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/06_sequence_dispatch_chat.drawio): UML 2.5 Sequence: Booking, cascading dispatch & chat.
@@ -35,19 +35,20 @@ All specifications and system design diagrams have been generated conforming str
    - [`10_state_machine_driver_status.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/10_state_machine_driver_status.drawio): UML 2.5 State Machine: Driver status & shift lifecycle.
    - 🛡️ **[`11_guardian_plugin_module_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/11_guardian_plugin_module_architecture.drawio)**: **Passenger Guardian On-Demand Dynamic Plugin Package Architecture**.
    - 🚨 **[`12_driver_sos_mesh_guardian_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/12_driver_sos_mesh_guardian_architecture.drawio)**: **Driver SOS 1km ➔ 3km Mesh & Driver Family Guardian Architecture**.
+   - ☁️ **[`13_hetzner_3server_livemap_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/13_hetzner_3server_livemap_architecture.drawio)**: **Hetzner 3-Server Production & Live Map Topology**.
 
 ---
 
 ## 🚀 Key System Features
 
-- **Driver Emergency SOS & Mesh Assistance**: Instant panic trigger broadcasts to fellow drivers within **1.0 km** (Tier 1), escalating to **3.0 km** (Tier 2) and rapid police response (ERT).
-- **Driver Family Guardian Plugin**: On-demand module enabling spouses/parents to detect live GPS, shift status, and receive DND-override siren alarms on SOS.
-- **Passenger Guardian Plugin Module**: Lightweight core app (~18MB) with dynamic download of Guardian Safety Package (~3.8MB) via Play Feature Delivery.
-- **Multi-Stop Route & Dynamic Metering**: Support for multiple waypoints with route optimization and dynamic fare calculations.
-- **Intelligent Dispatch Engine**: Geo-radius searching in Redis with automatic 15-second driver cascading upon rejection/timeout.
-- **Driver Protecting Mode**: Hardware-integrated in-car CCTV video recording, GPS telemetry logging, and SHA-256 cloud archiving.
-- **Hybrid Payment Engine**: Cash confirmation and Cashless e-wallets (KBZPay, AYAPay, WavePay) with mobile app deep-linking and HMAC webhook verification.
-- **Driver Financial Settlement**: Daily sales summary, real-time wallet ledger, and on-demand fund transfer/payout.
-- **VPS Deployment & Cost Strategy**: Optimized 5-tier server separation with Hetzner ($31-$122/mo), Hostinger ($26/mo), or DigitalOcean ($77-$356/mo).
+- 🇲🇲 **Myanmar Localization & Payments**: Pyidaungsu Unicode typography, KBZPay, WavePay, AYAPay deep-linking, NRC/Ka-Kha-Na driver KYC verification, and Yangon municipal motorbike restriction routing.
+- ☁️ **Hetzner 3-Server & Live Map Engine (~$62.40/mo)**: Dedicated separation of Server 1 (Go API + Caddy), Server 2 (Self-hosted OSRM Myanmar + TileServer GL + Redis), and Server 3 (PostgreSQL 16 + PostGIS + MinIO S3 Vault).
+- 🚨 **Driver Emergency SOS & Mesh Assistance**: Instant panic trigger broadcasts to fellow drivers within **1.0 km** (Tier 1), escalating to **3.0 km** (Tier 2) and rapid police response (ERT).
+- 👨‍👩‍👧 **Driver Family Guardian Plugin**: On-demand module enabling spouses/parents to detect live GPS, shift status, and receive DND-override siren alarms on SOS.
+- 🛡️ **Passenger Guardian Plugin Module**: Lightweight core app (~18MB) with dynamic download of Guardian Safety Package (~3.8MB) via Play Feature Delivery.
+- 🛣️ **Multi-Stop Route & Dynamic Metering**: Support for multiple waypoints with route optimization and dynamic fare calculations in Myanmar Kyat (MMK).
+- ⚡ **Intelligent Dispatch Engine**: Geo-radius searching in Redis with automatic 15-second driver cascading upon rejection/timeout.
+- 📹 **Driver Protecting Mode**: Hardware-integrated in-car CCTV video recording, GPS telemetry logging, and SHA-256 cloud archiving.
+- 💳 **Driver Financial Settlement**: Daily sales summary, real-time wallet ledger, and on-demand fund transfer/payout via KBZPay/WavePay.
 
 

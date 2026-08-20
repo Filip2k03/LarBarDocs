@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net" modified="2026-08-20T15:10:00.000Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" version="24.7.5" type="device">
+  <diagram id="diag_1" name="Hetzner 3-Server Live Map Architecture">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="h3_s1" value="&lt;b&gt;SERVER 1: API &amp; REVERSE PROXY GATEWAY (10.0.0.1 - Hetzner CPX31)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF0F0;strokeColor=#E5252A;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="50" y="40" width="450" height="680" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_caddy" value="&lt;b&gt;Caddy 2 Reverse Proxy (Auto TLS 1.3)&lt;/b&gt;
+- Ports 80 &amp; 443 Public Listeners
+- Let's Encrypt / ZeroSSL Automated Issuance
+- IP Rate Limiting &amp; DDoS Shield" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s1" vertex="1">
+          <mxGeometry x="80" y="80" width="390" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_go_core" value="&lt;b&gt;Go Backend Engine Core (`larbar-core-api`)&lt;/b&gt;
+- JWT Authentication &amp; RBAC Authorization
+- 15s Cascading Dispatch Coordinator
+- Driver Emergency SOS Tier 1/2 Engine
+- FCM / APNs Push Relay for Myanmar Telcos" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s1" vertex="1">
+          <mxGeometry x="80" y="195" width="390" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_ws_gateway" value="&lt;b&gt;Real-Time WebSocket Gateway&lt;/b&gt;
+- 60fps Bidirectional Telemetry Gateway
+- Passenger &amp; Driver In-Trip Chat Relay" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s1" vertex="1">
+          <mxGeometry x="80" y="335" width="390" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_pay_hub" value="&lt;b&gt;Myanmar E-Wallet Hub&lt;/b&gt;
+- KBZPay, WavePay, AYAPay Webhook Verifier
+- Double-Entry Driver Wallet Accounting" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s1" vertex="1">
+          <mxGeometry x="80" y="445" width="390" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_s2" value="&lt;b&gt;SERVER 2: LIVE MAP &amp; SPATIAL ENGINE (10.0.0.2 - Hetzner CPX41)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFFDF0;strokeColor=#F59E0B;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="560" y="40" width="450" height="680" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_tileserver" value="&lt;b&gt;TileServer GL (Self-Hosted OSM Tiles)&lt;/b&gt;
+- High-Speed Vector MBTiles Renderer
+- Zero Third-Party Map API Charges
+- Myanmar Unicode Townships &amp; POIs" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s2" vertex="1">
+          <mxGeometry x="590" y="80" width="390" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_osrm" value="&lt;b&gt;OSRM Myanmar Routing Machine (Port 5000)&lt;/b&gt;
+- Compiled `myanmar-latest.osrm` (MLD Algorithm)
+- Turn-by-Turn Directions &amp; ETA Engine
+- Yangon Downtown One-Way Grid &amp; Toll Support
+- Yangon Motorbike Exclusion Geofencing" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s2" vertex="1">
+          <mxGeometry x="590" y="205" width="390" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_redis" value="&lt;b&gt;Redis 7 Spatial Cluster (Port 6379)&lt;/b&gt;
+- In-Memory `GEORADIUS` 1.0km - 3.0km Search
+- 1-Second Driver Breadcrumb Buffer
+- Emergency SOS Pub/Sub Intercept Stream" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s2" vertex="1">
+          <mxGeometry x="590" y="350" width="390" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_s3" value="&lt;b&gt;SERVER 3: POSTGIS DB &amp; STORAGE VAULT (10.0.0.3 - Hetzner CPX31)&lt;/b&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#000000;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="1070" y="40" width="450" height="680" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_postgis" value="&lt;b&gt;PostgreSQL 16 + PostGIS 3.4 Spatial DB&lt;/b&gt;
+- 18 Connected Production Relational Tables
+- GIST Spatial Coordinates Indexing (`EPSG:4326`)
+- Monthly Partitioned Telemetry &amp; History" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s3" vertex="1">
+          <mxGeometry x="1100" y="80" width="390" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_minio" value="&lt;b&gt;MinIO S3 Video &amp; Asset Storage Vault&lt;/b&gt;
+- In-Car CCTV 1080p Video Chunk Archive
+- SHA-256 Tamper-Proof Cryptographic Hash
+- Dynamic Plugin Split APK / Framework CDN" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s3" vertex="1">
+          <mxGeometry x="1100" y="205" width="390" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3_backup" value="&lt;b&gt;Hetzner Storage Box (1 TB Remote Box)&lt;/b&gt;
+- Automated Hourly Encrypted `pg_dump`
+- Immutable 30-Day Snapshot Retention" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s3" vertex="1">
+          <mxGeometry x="1100" y="340" width="390" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3e_1" value="1. Reverse Proxy to Core" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="h3_caddy" target="h3_go_core">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3e_2" value="2. Route &amp; Distance Matrix (Port 5000)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#F59E0B;strokeWidth=2;fontSize=10;fontColor=#B45309;jumpStyle=arc;jumpSize=6;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" edge="1" parent="1" source="h3_go_core" target="h3_osrm">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3e_3" value="3. Driver Spatial Query (Port 6379)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#F59E0B;strokeWidth=2;fontSize=10;fontColor=#B45309;jumpStyle=arc;jumpSize=6;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="h3_go_core" target="h3_redis">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3e_4" value="4. Transactional State (Port 5432)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;" edge="1" parent="1" source="h3_go_core" target="h3_postgis">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3e_5" value="5. Archive CCTV Chunks (Port 9000)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=1;exitY=0.6;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" edge="1" parent="1" source="h3_go_core" target="h3_minio">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="h3e_6" value="6. Hourly DB Backup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="h3_postgis" target="h3_backup">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

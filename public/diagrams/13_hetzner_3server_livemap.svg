@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1350 720" width="100%" height="100%" style="background:#FFFFFF; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <style>
+      .title { font-size: 18px; font-weight: 800; fill: #181922; }
+      .subtitle { font-size: 12px; fill: #6B7280; font-weight: 500; }
+      .box { fill: #FFFFFF; stroke: #181922; stroke-width: 1.5; rx: 6px; }
+      .box-pkg { fill: #FAFAFA; stroke: #2B2D3C; stroke-width: 1.5; stroke-dasharray: 4 4; rx: 8px; }
+      .box-highlight { fill: #FFF8E1; stroke: #F59E0B; stroke-width: 2; rx: 6px; }
+      .box-alert { fill: #FFE8E8; stroke: #E5252A; stroke-width: 2; rx: 6px; }
+      .hdr-box { fill: #181922; }
+      .hdr-text { fill: #FFFFFF; font-size: 12px; font-weight: 700; }
+      .lbl { font-size: 11px; fill: #181922; font-weight: 600; }
+      .txt { font-size: 10px; fill: #374151; }
+      .txt-bold { font-size: 10px; fill: #181922; font-weight: 700; }
+      .txt-pk { font-size: 10px; fill: #E5252A; font-weight: 700; }
+      .txt-fk { font-size: 10px; fill: #D97706; font-weight: 600; }
+      .line { stroke: #181922; stroke-width: 1.5; fill: none; }
+      .line-dashed { stroke: #6B7280; stroke-width: 1.2; stroke-dasharray: 4 4; fill: none; }
+      .line-gold { stroke: #F59E0B; stroke-width: 2; fill: none; }
+      .line-red { stroke: #E5252A; stroke-width: 2; fill: none; }
+      .actor-head { fill: #FFFFFF; stroke: #181922; stroke-width: 2; }
+      .actor-body { stroke: #181922; stroke-width: 2; }
+      .badge-gold { fill: #F59E0B; }
+      .badge-red { fill: #E5252A; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#181922" />
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#F59E0B" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#E5252A" />
+    </marker>
+  </defs>
+
+  <!-- Banner Header -->
+  <rect x="0" y="0" width="1350" height="55" fill="#181922" />
+  <rect x="0" y="52" width="1350" height="3" fill="#F59E0B" />
+  <text x="24" y="34" fill="#FFFFFF" font-size="18" font-weight="800">YAMATO TAXI ARCHITECTURE</text>
+  <text x="1326" y="34" fill="#F59E0B" font-size="13" font-weight="700" text-anchor="end">13_HETZNER_3SERVER_LIVEMAP_ARCHITECTURE</text>
+
+  <!-- Diagram Body Canvas -->
+  <g transform="translate(0, 60)">
+    
+    <!-- Server 1: Edge & API Gateway -->
+    <rect x="30" y="20" width="400" height="620" class="box-alert"/>
+    <rect x="30" y="20" width="400" height="30" class="badge-red"/>
+    <text x="230" y="40" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">SERVER 1: API &amp; GATEWAY (10.0.0.1 - CPX31)</text>
+
+    <rect x="50" y="70" width="360" height="75" class="box"/>
+    <text x="230" y="98" class="lbl" text-anchor="middle">Caddy 2 Reverse Proxy (Auto TLS 1.3)</text>
+    <text x="230" y="118" class="txt" text-anchor="middle">Ports 80 &amp; 443 Public Listeners</text>
+    <text x="230" y="132" class="txt" text-anchor="middle">Let's Encrypt SSL &amp; DDoS Rate Limit</text>
+
+    <rect x="50" y="165" width="360" height="95" class="box"/>
+    <text x="230" y="193" class="lbl" text-anchor="middle">Go Core API Engine (`larbar-core-api`)</text>
+    <text x="230" y="213" class="txt" text-anchor="middle">JWT Auth &amp; 15s Cascading Dispatch</text>
+    <text x="230" y="227" class="txt" text-anchor="middle">Driver Emergency SOS Tier 1/2 Engine</text>
+    <text x="230" y="241" class="txt" text-anchor="middle">FCM / APNs Myanmar Telco Push Gateway</text>
+
+    <rect x="50" y="280" width="360" height="75" class="box"/>
+    <text x="230" y="308" class="lbl" text-anchor="middle">60fps Real-Time WebSocket Gateway</text>
+    <text x="230" y="328" class="txt" text-anchor="middle">Live Telemetry &amp; In-Trip Chat Relay</text>
+
+    <!-- Server 2: Live Map & Spatial Routing Engine -->
+    <rect x="470" y="20" width="410" height="620" class="box-highlight"/>
+    <rect x="470" y="20" width="410" height="30" class="badge-gold"/>
+    <text x="675" y="40" fill="#181922" font-size="12" font-weight="700" text-anchor="middle">SERVER 2: LIVE MAP &amp; OSRM (10.0.0.2 - CPX41)</text>
+
+    <rect x="490" y="70" width="370" height="85" class="box"/>
+    <text x="675" y="98" class="lbl" text-anchor="middle">TileServer GL (Self-Hosted OSM Tiles)</text>
+    <text x="675" y="118" class="txt" text-anchor="middle">Vector MBTiles for Myanmar Map View</text>
+    <text x="675" y="132" class="txt" text-anchor="middle">Zero Third-Party Map API Charges</text>
+
+    <rect x="490" y="175" width="370" height="100" class="box"/>
+    <text x="675" y="203" class="lbl" text-anchor="middle">OSRM Myanmar Router (Port 5000)</text>
+    <text x="675" y="223" class="txt" text-anchor="middle">Compiled `myanmar-latest.osrm` (MLD)</text>
+    <text x="675" y="237" class="txt" text-anchor="middle">Yangon Downtown 1-Way Grid &amp; Tolls</text>
+    <text x="675" y="251" class="txt" text-anchor="middle">Yangon Municipal Motorbike Exclusion</text>
+
+    <rect x="490" y="295" width="370" height="85" class="box"/>
+    <text x="675" y="323" class="lbl" text-anchor="middle">Redis 7 Spatial Cluster (Port 6379)</text>
+    <text x="675" y="343" class="txt" text-anchor="middle">GEORADIUS 1km - 3km Driver Matching</text>
+    <text x="675" y="357" class="txt" text-anchor="middle">1-Second Live GPS Breadcrumb Buffer</text>
+
+    <!-- Server 3: PostGIS DB & Storage Vault -->
+    <rect x="920" y="20" width="400" height="620" class="box-pkg"/>
+    <rect x="920" y="20" width="400" height="30" class="hdr-box"/>
+    <text x="1120" y="40" class="hdr-text" text-anchor="middle">SERVER 3: POSTGIS &amp; VAULT (10.0.0.3)</text>
+
+    <rect x="940" y="70" width="360" height="85" class="box"/>
+    <text x="1120" y="98" class="lbl" text-anchor="middle">PostgreSQL 16 + PostGIS 3.4 (Port 5432)</text>
+    <text x="1120" y="118" class="txt" text-anchor="middle">18 Production Relational Tables</text>
+    <text x="1120" y="132" class="txt" text-anchor="middle">GIST Spatial Indexes (EPSG:4326)</text>
+
+    <rect x="940" y="175" width="360" height="85" class="box"/>
+    <text x="1120" y="203" class="lbl" text-anchor="middle">MinIO S3 Video Vault (Port 9000)</text>
+    <text x="1120" y="223" class="txt" text-anchor="middle">In-Car CCTV 1080p Video Archive</text>
+    <text x="1120" y="237" class="txt" text-anchor="middle">SHA-256 Tamper-Proof Cryptographic Log</text>
+
+    <rect x="940" y="280" width="360" height="75" class="box"/>
+    <text x="1120" y="308" class="lbl" text-anchor="middle">Hetzner Remote Storage Box (1 TB)</text>
+    <text x="1120" y="328" class="txt" text-anchor="middle">Hourly Encrypted `pg_dump` Backups</text>
+
+    <!-- Connectors over Private VPC (10.0.0.0/24) -->
+    <line x1="410" y1="210" x2="490" y2="210" class="line-gold" marker-end="url(#arrow-gold)"/>
+    <line x1="410" y1="240" x2="490" y2="330" class="line-gold" marker-end="url(#arrow-gold)"/>
+    <line x1="410" y1="180" x2="940" y2="110" class="line" marker-end="url(#arrow)"/>
+    <line x1="410" y1="260" x2="940" y2="215" class="line" marker-end="url(#arrow)"/>
+    <line x1="1120" y1="160" x2="1120" y2="280" class="line" marker-end="url(#arrow)"/>
+    
+  </g>
+</svg>

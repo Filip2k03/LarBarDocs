@@ -18,8 +18,9 @@ export default defineConfig({
       { text: 'UML Diagrams', link: '/architecture/uml-diagrams' },
       { text: 'Guardian Plugin', link: '/features/guardian-plugin' },
       { text: 'Driver SOS & Mesh', link: '/features/driver-sos-and-family-guardian' },
+      { text: 'Myanmar 🇲🇲', link: '/features/myanmar-localization-and-payments' },
       { text: 'Design System', link: '/design/design-system' },
-      { text: 'DevOps & VPS', link: '/devops/vps-deployment' }
+      { text: 'Hetzner 3-Server', link: '/devops/hetzner-3server-production' }
     ],
     sidebar: [
       {
@@ -46,6 +47,7 @@ export default defineConfig({
         text: '🛡️ Core Features & Safety',
         collapsed: false,
         items: [
+          { text: 'Myanmar 🇲🇲 Localization & Compliance', link: '/features/myanmar-localization-and-payments' },
           { text: 'Guardian Dynamic Plugin Module', link: '/features/guardian-plugin' },
           { text: 'Driver SOS & Family Guardian', link: '/features/driver-sos-and-family-guardian' },
           { text: 'Driver Protecting Mode & CCTV', link: '/features/driver-protecting-cctv' },
@@ -66,6 +68,7 @@ export default defineConfig({
         text: '☁️ DevOps, VPS & Cloud Infrastructure',
         collapsed: false,
         items: [
+          { text: 'Hetzner 3-Server & Live Map Setup', link: '/devops/hetzner-3server-production' },
           { text: 'Server Separation Architecture', link: '/devops/vps-deployment' },
           { text: 'VPS Provider Benchmark & Costs', link: '/devops/vps-cost-calculator' },
           { text: 'Production Deployment Guide', link: '/devops/production-setup' }

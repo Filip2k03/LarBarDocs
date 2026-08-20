@@ -8,16 +8,29 @@ We evaluated the top three cloud VPS providers for hosting the LarBar Taxi Platf
 
 | Provider | Strengths | Weaknesses | Best Fit For |
 |---|---|---|---|
-| 🥇 **Hetzner Cloud** | **Highest CPU performance/price ratio**, unmetered 20TB traffic, blazing fast NVMe SSDs, private VPC networks. | Data centers mostly in Germany, Finland, and USA (Falkenstein/Helsinki/Ashburn/Hillsboro). | **Production Scale (Top Recommendation)** |
+| 🥇 **Hetzner Cloud** | **Highest CPU performance/price ratio**, unmetered 20TB traffic per node, blazing fast NVMe SSDs, private VPC networks. | Data centers in Germany, Finland, USA (Falkenstein/Helsinki/Ashburn/Hillsboro). Use Cloudflare CDN in front. | **Production Scale (Top Recommendation)** |
 | 🥈 **Hostinger KVM** | **Lowest entry price**, multiple regional locations (Singapore, India, USA, Europe), straightforward UI. | Slower disk I/O on lower tiers, fewer advanced cloud networking features. | **Starter MVP / Low-Budget Prototype** |
 | 🥉 **DigitalOcean** | **Extensive global regions (including Singapore)**, managed databases, 1-click Kubernetes, excellent developer tooling. | Highest cost per vCPU/RAM ratio among the three. | **Fast Regional Deployment in Asia** |
 
 ---
 
-## 💵 Monthly Cost Budget Scenarios
+## 💵 Dedicated Hetzner 3-Server Production Budget (Recommended)
+
+| Server Role | Server Specification | Hetzner Cloud Model | Monthly Cost (€) | Monthly Cost (USD) |
+|---|---|---|---|---|
+| **Server 1: API Gateway & Go Core** | 4 vCPU AMD EPYC, 8 GB RAM, 160 GB NVMe | **CPX31** | €13.50 / mo | ~$14.70 / mo |
+| **Server 2: Live Map, OSRM & Redis** | 8 vCPU AMD EPYC, 16 GB RAM, 240 GB NVMe | **CPX41** | €26.50 / mo | ~$28.90 / mo |
+| **Server 3: PostGIS DB & Storage Vault** | 4 vCPU AMD EPYC, 8 GB RAM, 160 GB NVMe + 1TB Storage Box | **CPX31 + BX11** | €13.50 + €3.80 | ~$18.80 / mo |
+| **Private VPC Network (10.0.0.0/24)** | High-speed 10Gbps isolated cloud network | **Included Free** | **€0.00** | **$0.00** |
+| **Outbound Traffic (20 TB / server)** | Unlimited inbound + 60 TB total outbound | **Included Free** | **€0.00** | **$0.00** |
+| **TOTAL ESTIMATED MONTHLY** | — | — | **~€57.30 / mo** | **~$62.40 / mo** |
+
+---
+
+## 💵 Alternative Scenarios Comparison
 
 ### 🥉 Scenario A: Starter / MVP Tier (1,000 - 5,000 rides/day)
-*Suitable for initial soft launch and testing.*
+*Suitable for initial soft launch and prototype testing.*
 
 | Component | Node Spec | Provider Option 1: Hetzner | Provider Option 2: Hostinger | Provider Option 3: DigitalOcean |
 |---|---|---|---|---|
@@ -29,8 +42,7 @@ We evaluated the top three cloud VPS providers for hosting the LarBar Taxi Platf
 
 ---
 
-### 🥇 Scenario B: Production Growth Tier (20,000 - 50,000 rides/day)
-*Dedicated server separation with high concurrency.*
+### 🥇 Scenario B: 5-Node High-Availability Scale Tier (50,000+ rides/day)
 
 | Server Role | Node Specification | Hetzner Cloud (Recommended) | DigitalOcean |
 |---|---|---|---|
@@ -45,6 +57,6 @@ We evaluated the top three cloud VPS providers for hosting the LarBar Taxi Platf
 
 ## 💡 Recommendation Summary
 
-1. **For Maximum Value & Performance**: Choose **Hetzner Cloud** (~$122/mo for full 5-server production separation).
-2. **For Initial MVP / Budget Testing**: Start with **Hostinger KVM** (~$26-$35/mo single or dual VPS).
-3. **If Low-Latency Server in Singapore is Mandatory**: Choose **DigitalOcean (Singapore Region)** or **Hetzner with Cloudflare CDN Edge Proxying**.
+1. **Top Production Recommendation**: Deploy the **Hetzner 3-Server Architecture** (**~$62.40/month**) for dedicated API, Live Map (OSRM + TileServer), and PostGIS database isolation.
+2. **For Initial MVP / Budget Testing**: Start with **Hostinger KVM** (~$26/month single or dual VPS).
+3. **If Singapore Edge Latency is Critical**: Route traffic through **Cloudflare CDN (Singapore Edge)** pointing to Hetzner origin servers with Argo Smart Routing.

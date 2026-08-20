@@ -743,6 +743,78 @@ def generate_12_driver_sos():
     """
     return svg_wrapper(c, w, h, "12_Driver_SOS_Mesh_Guardian_Architecture")
 
+def generate_13_hetzner_3server():
+    w, h = 1350, 720
+    c = """
+    <!-- Server 1: Edge & API Gateway -->
+    <rect x="30" y="20" width="400" height="620" class="box-alert"/>
+    <rect x="30" y="20" width="400" height="30" class="badge-red"/>
+    <text x="230" y="40" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">SERVER 1: API &amp; GATEWAY (10.0.0.1 - CPX31)</text>
+
+    <rect x="50" y="70" width="360" height="75" class="box"/>
+    <text x="230" y="98" class="lbl" text-anchor="middle">Caddy 2 Reverse Proxy (Auto TLS 1.3)</text>
+    <text x="230" y="118" class="txt" text-anchor="middle">Ports 80 &amp; 443 Public Listeners</text>
+    <text x="230" y="132" class="txt" text-anchor="middle">Let's Encrypt SSL &amp; DDoS Rate Limit</text>
+
+    <rect x="50" y="165" width="360" height="95" class="box"/>
+    <text x="230" y="193" class="lbl" text-anchor="middle">Go Core API Engine (`larbar-core-api`)</text>
+    <text x="230" y="213" class="txt" text-anchor="middle">JWT Auth &amp; 15s Cascading Dispatch</text>
+    <text x="230" y="227" class="txt" text-anchor="middle">Driver Emergency SOS Tier 1/2 Engine</text>
+    <text x="230" y="241" class="txt" text-anchor="middle">FCM / APNs Myanmar Telco Push Gateway</text>
+
+    <rect x="50" y="280" width="360" height="75" class="box"/>
+    <text x="230" y="308" class="lbl" text-anchor="middle">60fps Real-Time WebSocket Gateway</text>
+    <text x="230" y="328" class="txt" text-anchor="middle">Live Telemetry &amp; In-Trip Chat Relay</text>
+
+    <!-- Server 2: Live Map & Spatial Routing Engine -->
+    <rect x="470" y="20" width="410" height="620" class="box-highlight"/>
+    <rect x="470" y="20" width="410" height="30" class="badge-gold"/>
+    <text x="675" y="40" fill="#181922" font-size="12" font-weight="700" text-anchor="middle">SERVER 2: LIVE MAP &amp; OSRM (10.0.0.2 - CPX41)</text>
+
+    <rect x="490" y="70" width="370" height="85" class="box"/>
+    <text x="675" y="98" class="lbl" text-anchor="middle">TileServer GL (Self-Hosted OSM Tiles)</text>
+    <text x="675" y="118" class="txt" text-anchor="middle">Vector MBTiles for Myanmar Map View</text>
+    <text x="675" y="132" class="txt" text-anchor="middle">Zero Third-Party Map API Charges</text>
+
+    <rect x="490" y="175" width="370" height="100" class="box"/>
+    <text x="675" y="203" class="lbl" text-anchor="middle">OSRM Myanmar Router (Port 5000)</text>
+    <text x="675" y="223" class="txt" text-anchor="middle">Compiled `myanmar-latest.osrm` (MLD)</text>
+    <text x="675" y="237" class="txt" text-anchor="middle">Yangon Downtown 1-Way Grid &amp; Tolls</text>
+    <text x="675" y="251" class="txt" text-anchor="middle">Yangon Municipal Motorbike Exclusion</text>
+
+    <rect x="490" y="295" width="370" height="85" class="box"/>
+    <text x="675" y="323" class="lbl" text-anchor="middle">Redis 7 Spatial Cluster (Port 6379)</text>
+    <text x="675" y="343" class="txt" text-anchor="middle">GEORADIUS 1km - 3km Driver Matching</text>
+    <text x="675" y="357" class="txt" text-anchor="middle">1-Second Live GPS Breadcrumb Buffer</text>
+
+    <!-- Server 3: PostGIS DB & Storage Vault -->
+    <rect x="920" y="20" width="400" height="620" class="box-pkg"/>
+    <rect x="920" y="20" width="400" height="30" class="hdr-box"/>
+    <text x="1120" y="40" class="hdr-text" text-anchor="middle">SERVER 3: POSTGIS &amp; VAULT (10.0.0.3)</text>
+
+    <rect x="940" y="70" width="360" height="85" class="box"/>
+    <text x="1120" y="98" class="lbl" text-anchor="middle">PostgreSQL 16 + PostGIS 3.4 (Port 5432)</text>
+    <text x="1120" y="118" class="txt" text-anchor="middle">18 Production Relational Tables</text>
+    <text x="1120" y="132" class="txt" text-anchor="middle">GIST Spatial Indexes (EPSG:4326)</text>
+
+    <rect x="940" y="175" width="360" height="85" class="box"/>
+    <text x="1120" y="203" class="lbl" text-anchor="middle">MinIO S3 Video Vault (Port 9000)</text>
+    <text x="1120" y="223" class="txt" text-anchor="middle">In-Car CCTV 1080p Video Archive</text>
+    <text x="1120" y="237" class="txt" text-anchor="middle">SHA-256 Tamper-Proof Cryptographic Log</text>
+
+    <rect x="940" y="280" width="360" height="75" class="box"/>
+    <text x="1120" y="308" class="lbl" text-anchor="middle">Hetzner Remote Storage Box (1 TB)</text>
+    <text x="1120" y="328" class="txt" text-anchor="middle">Hourly Encrypted `pg_dump` Backups</text>
+
+    <!-- Connectors over Private VPC (10.0.0.0/24) -->
+    <line x1="410" y1="210" x2="490" y2="210" class="line-gold" marker-end="url(#arrow-gold)"/>
+    <line x1="410" y1="240" x2="490" y2="330" class="line-gold" marker-end="url(#arrow-gold)"/>
+    <line x1="410" y1="180" x2="940" y2="110" class="line" marker-end="url(#arrow)"/>
+    <line x1="410" y1="260" x2="940" y2="215" class="line" marker-end="url(#arrow)"/>
+    <line x1="1120" y1="160" x2="1120" y2="280" class="line" marker-end="url(#arrow)"/>
+    """
+    return svg_wrapper(c, w, h, "13_Hetzner_3Server_LiveMap_Architecture")
+
 def generate_all_svgs():
     svg_generators = [
         ("01_use_case_diagram.svg", generate_01_use_case),
@@ -757,6 +829,7 @@ def generate_all_svgs():
         ("10_state_machine_driver_status.svg", generate_10_state_driver),
         ("11_guardian_plugin_module_architecture.svg", generate_11_guardian_plugin),
         ("12_driver_sos_mesh_guardian.svg", generate_12_driver_sos),
+        ("13_hetzner_3server_livemap.svg", generate_13_hetzner_3server),
     ]
 
     for fname, gen in svg_generators:
@@ -768,4 +841,5 @@ def generate_all_svgs():
 
 if __name__ == "__main__":
     generate_all_svgs()
+
 

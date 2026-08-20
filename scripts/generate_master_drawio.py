@@ -938,6 +938,45 @@ def build_driver_sos_tab(root):
 
 
 # =============================================================================
+# TAB 13: HETZNER 3-SERVER & LIVE MAP PRODUCTION ARCHITECTURE
+# =============================================================================
+def build_hetzner_3server_tab(root):
+    c_style = "rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;"
+    sub_style = "swimlane;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#000000;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;"
+    gold_box = "swimlane;whiteSpace=wrap;html=1;fillColor=#FFFDF0;strokeColor=#F59E0B;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;"
+    red_box = "swimlane;whiteSpace=wrap;html=1;fillColor=#FFF0F0;strokeColor=#E5252A;strokeWidth=2;fontColor=#000000;startSize=26;horizontal=1;fontStyle=1;fontSize=12;"
+    edge_p = "edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#000000;strokeWidth=1.5;fontSize=10;fontColor=#000000;jumpStyle=arc;jumpSize=6;"
+    edge_gold = "edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;orthogonalLoop=1;html=1;strokeColor=#F59E0B;strokeWidth=2;fontSize=10;fontColor=#B45309;jumpStyle=arc;jumpSize=6;"
+
+    # 1. Server 1: Edge Gateway & Go Core
+    add_cell(root, "h3_s1", "<b>SERVER 1: API & REVERSE PROXY GATEWAY (10.0.0.1 - Hetzner CPX31)</b>", red_box, 50, 40, 450, 680)
+    add_cell(root, "h3_caddy", "<b>Caddy 2 Reverse Proxy (Auto TLS 1.3)</b>\n- Ports 80 & 443 Public Listeners\n- Let's Encrypt / ZeroSSL Automated Issuance\n- IP Rate Limiting & DDoS Shield", c_style, 80, 80, 390, 85, parent="h3_s1")
+    add_cell(root, "h3_go_core", "<b>Go Backend Engine Core (`larbar-core-api`)</b>\n- JWT Authentication & RBAC Authorization\n- 15s Cascading Dispatch Coordinator\n- Driver Emergency SOS Tier 1/2 Engine\n- FCM / APNs Push Relay for Myanmar Telcos", c_style, 80, 195, 390, 110, parent="h3_s1")
+    add_cell(root, "h3_ws_gateway", "<b>Real-Time WebSocket Gateway</b>\n- 60fps Bidirectional Telemetry Gateway\n- Passenger & Driver In-Trip Chat Relay", c_style, 80, 335, 390, 80, parent="h3_s1")
+    add_cell(root, "h3_pay_hub", "<b>Myanmar E-Wallet Hub</b>\n- KBZPay, WavePay, AYAPay Webhook Verifier\n- Double-Entry Driver Wallet Accounting", c_style, 80, 445, 390, 85, parent="h3_s1")
+
+    # 2. Server 2: Live Map & Spatial Routing Engine
+    add_cell(root, "h3_s2", "<b>SERVER 2: LIVE MAP & SPATIAL ENGINE (10.0.0.2 - Hetzner CPX41)</b>", gold_box, 560, 40, 450, 680)
+    add_cell(root, "h3_tileserver", "<b>TileServer GL (Self-Hosted OSM Tiles)</b>\n- High-Speed Vector MBTiles Renderer\n- Zero Third-Party Map API Charges\n- Myanmar Unicode Townships & POIs", c_style, 590, 80, 390, 95, parent="h3_s2")
+    add_cell(root, "h3_osrm", "<b>OSRM Myanmar Routing Machine (Port 5000)</b>\n- Compiled `myanmar-latest.osrm` (MLD Algorithm)\n- Turn-by-Turn Directions & ETA Engine\n- Yangon Downtown One-Way Grid & Toll Support\n- Yangon Motorbike Exclusion Geofencing", c_style, 590, 205, 390, 115, parent="h3_s2")
+    add_cell(root, "h3_redis", "<b>Redis 7 Spatial Cluster (Port 6379)</b>\n- In-Memory `GEORADIUS` 1.0km - 3.0km Search\n- 1-Second Driver Breadcrumb Buffer\n- Emergency SOS Pub/Sub Intercept Stream", c_style, 590, 350, 390, 100, parent="h3_s2")
+
+    # 3. Server 3: PostGIS DB & Storage Vault
+    add_cell(root, "h3_s3", "<b>SERVER 3: POSTGIS DB & STORAGE VAULT (10.0.0.3 - Hetzner CPX31)</b>", sub_style, 1070, 40, 450, 680)
+    add_cell(root, "h3_postgis", "<b>PostgreSQL 16 + PostGIS 3.4 Spatial DB</b>\n- 18 Connected Production Relational Tables\n- GIST Spatial Coordinates Indexing (`EPSG:4326`)\n- Monthly Partitioned Telemetry & History", c_style, 1100, 80, 390, 95, parent="h3_s3")
+    add_cell(root, "h3_minio", "<b>MinIO S3 Video & Asset Storage Vault</b>\n- In-Car CCTV 1080p Video Chunk Archive\n- SHA-256 Tamper-Proof Cryptographic Hash\n- Dynamic Plugin Split APK / Framework CDN", c_style, 1100, 205, 390, 105, parent="h3_s3")
+    add_cell(root, "h3_backup", "<b>Hetzner Storage Box (1 TB Remote Box)</b>\n- Automated Hourly Encrypted `pg_dump`\n- Immutable 30-Day Snapshot Retention", c_style, 1100, 340, 390, 85, parent="h3_s3")
+
+    # Connectors over Private VPC (10.0.0.0/24)
+    add_edge(root, "h3e_1", "1. Reverse Proxy to Core", edge_p, "h3_caddy", "h3_go_core", exit_xy=(0.5, 1), entry_xy=(0.5, 0))
+    add_edge(root, "h3e_2", "2. Route & Distance Matrix (Port 5000)", edge_gold, "h3_go_core", "h3_osrm", exit_xy=(1, 0.4), entry_xy=(0, 0.4))
+    add_edge(root, "h3e_3", "3. Driver Spatial Query (Port 6379)", edge_gold, "h3_go_core", "h3_redis", exit_xy=(1, 0.8), entry_xy=(0, 0.5))
+    add_edge(root, "h3e_4", "4. Transactional State (Port 5432)", edge_p, "h3_go_core", "h3_postgis", exit_xy=(1, 0.2), entry_xy=(0, 0.2))
+    add_edge(root, "h3e_5", "5. Archive CCTV Chunks (Port 9000)", edge_p, "h3_go_core", "h3_minio", exit_xy=(1, 0.6), entry_xy=(0, 0.4))
+    add_edge(root, "h3e_6", "6. Hourly DB Backup", edge_p, "h3_postgis", "h3_backup", exit_xy=(0.5, 1), entry_xy=(0.5, 0))
+
+
+# =============================================================================
 # EXPORT ALL ENGINES
 # =============================================================================
 def generate_all():
@@ -956,6 +995,7 @@ def generate_all():
         ("10_State_Machine_Driver_Status", build_state_driver_tab, 1100, 800),
         ("11_Guardian_Plugin_Module_Architecture", build_guardian_plugin_tab, 1850, 800),
         ("12_Driver_SOS_Mesh_Guardian_Architecture", build_driver_sos_tab, 1600, 850),
+        ("13_Hetzner_3Server_LiveMap_Architecture", build_hetzner_3server_tab, 1600, 850),
     ]
 
     for idx, (tname, tfn, tw, th) in enumerate(tabs):
@@ -990,6 +1030,7 @@ def generate_all():
         ("10_state_machine_driver_status.drawio", build_state_driver_tab, "State Machine: Driver Status", 1100, 800),
         ("11_guardian_plugin_module_architecture.drawio", build_guardian_plugin_tab, "Guardian Plugin Module Architecture", 1850, 800),
         ("12_driver_sos_mesh_guardian_architecture.drawio", build_driver_sos_tab, "Driver SOS Mesh & Guardian Architecture", 1600, 850),
+        ("13_hetzner_3server_livemap_architecture.drawio", build_hetzner_3server_tab, "Hetzner 3-Server Live Map Architecture", 1600, 850),
     ]
 
     for fname, fn, tname, tw, th in standalone_files:
@@ -1010,4 +1051,5 @@ def generate_all():
 
 if __name__ == "__main__":
     generate_all()
+
 

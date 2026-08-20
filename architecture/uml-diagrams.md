@@ -128,3 +128,14 @@ Every diagram in the Yamato Taxi Engine is rendered in high-resolution vector fo
 - 📥 [Download Standalone .drawio File](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/12_driver_sos_mesh_guardian_architecture.drawio)
 - 🖼️ [View Fullscreen Vector SVG](/diagrams/12_driver_sos_mesh_guardian.svg)
 
+---
+
+## 13. Hetzner 3-Server & Live Map Production Architecture
+<span class="badge-gold">Page 13</span> • 3-Node Dedicated VPS Topology, Self-Hosted OSRM Router, TileServer GL & S3 Vault
+
+![13 Hetzner 3-Server Live Map](/diagrams/13_hetzner_3server_livemap.svg)
+
+- 📥 [Download Standalone .drawio File](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/13_hetzner_3server_livemap_architecture.drawio)
+- 🖼️ [View Fullscreen Vector SVG](/diagrams/13_hetzner_3server_livemap.svg)
+
+
