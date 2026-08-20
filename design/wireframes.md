@@ -77,3 +77,51 @@ The user journey is structured into clean screen templates using the Red & Gold 
 │ [ 🟡 ARRIVE AT DESTINATION ]                          │
 └────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 🚨 4. Fellow Driver Screen: 1km SOS Proximity Mesh Alert
+
+```text
+┌────────────────────────────────────────────────────────┐
+│ 🚨 CODE RED: FELLOW DRIVER DISTRESS ALERT              │
+├────────────────────────────────────────────────────────┤
+│ ⚠️ Driver: U Kyaw Swar (Fellow Driver - 240m away)      │
+│ 🚗 Vehicle: White Toyota Probox (License: 4B-9102)     │
+│ 📍 Location: Corner of Anawrahta & Sule Pagoda Rd      │
+│ 🕒 Triggered: 12 seconds ago | Status: CRITICAL ATTACK │
+├────────────────────────────────────────────────────────┤
+│                                                        │
+│            [ PROXIMITY INTERCEPT RADAR ]               │
+│                                                        │
+│    Your Vehicle (You) ══════ 240m ══════► 🚨 (Victim) │
+│                                                        │
+├────────────────────────────────────────────────────────┤
+│ [ 🔴 I AM RESPONDING / EN ROUTE ]  [ 📞 CALL POLICE ]  │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 👨‍👩‍👧 5. Driver Family Guardian Shield (Spouse / Parents View)
+
+```text
+┌────────────────────────────────────────────────────────┐
+│ [< Back]        👨‍👩‍👧 Driver Family Guardian Shield       │
+├────────────────────────────────────────────────────────┤
+│ 🟢 Status: ON-DUTY (Shift: 4h 15m)                     │
+│ 👤 Driver: Ko Aung (Husband)                           │
+│ 🔋 Battery: 84% | 📶 5G Signal: EXCELLENT               │
+│ 📹 In-Car CCTV: PROTECTING MODE ACTIVE                 │
+├────────────────────────────────────────────────────────┤
+│                                                        │
+│           [ 60fps REAL-TIME DRIVER TRACKING ]          │
+│                                                        │
+│   🚖 Moving at 38 km/h on Pyay Road                    │
+│   Last GPS Ping: 1s ago (Accuracy: 3m)                 │
+│                                                        │
+├────────────────────────────────────────────────────────┤
+│ [ 🚨 TRIGGER EMERGENCY SOS ]    [ 📞 CALL HUSBAND ]   │
+└────────────────────────────────────────────────────────┘
+```
+

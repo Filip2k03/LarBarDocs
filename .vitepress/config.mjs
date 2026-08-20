@@ -27,7 +27,9 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Getting Started', link: '/guide/getting-started' },
-          { text: 'Tech Stack & Standards', link: '/guide/tech-stack' }
+          { text: 'Tech Stack & Standards', link: '/guide/tech-stack' },
+          { text: 'Native Mobile Architecture', link: '/guide/mobile-architecture' },
+          { text: 'REST & WebSocket API Reference', link: '/guide/api-reference' }
         ]
       },
       {
