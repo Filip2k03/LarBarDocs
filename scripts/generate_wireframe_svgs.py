@@ -675,14 +675,77 @@ def gen_guardian_03_pairing_qr():
     """
     return screen_frame(content, "မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)")
 
+def gen_plugin_addons_store():
+    content = """
+    <!-- Add-Ons & Plugins Marketplace Header -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="110" width="358" height="100" rx="18" fill="#181922" stroke="#F59E0B" stroke-width="2"/>
+      <text x="36" y="142" fill="#F59E0B" font-size="13" font-weight="800">🧩 ON-DEMAND ADD-ONS STORE</text>
+      <text x="36" y="168" fill="#FFFFFF" font-size="16" font-weight="900">အပိုဆောင်း လုပ်ဆောင်ချက်များ</text>
+      <text x="36" y="190" fill="#9CA3AF" font-size="11">Base App: 18MB • Download only what you need (~3.8MB)</text>
+    </g>
+
+    <!-- Plugin 1: Guardian Safety Shield (INSTALLED) -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="222" width="358" height="150" rx="16" fill="#181922" stroke="#10B981" stroke-width="1.5"/>
+      <circle cx="48" cy="254" r="18" fill="#10B981" fill-opacity="0.2"/>
+      <text x="48" y="260" fill="#10B981" font-size="16" text-anchor="middle">🛡️</text>
+
+      <text x="76" y="250" fill="#FFFFFF" font-size="14" font-weight="800">Guardian Family Safety Shield</text>
+      <text x="76" y="268" fill="#10B981" font-size="11">● INSTALLED &amp; ACTIVE • v1.4.0 (3.8 MB)</text>
+      <text x="36" y="296" fill="#9CA3AF" font-size="11">60fps live route telemetry, cross-track deviation warnings, DND-override siren alarms.</text>
+
+      <rect x="36" y="318" width="160" height="34" rx="8" fill="#242533" stroke="#282836"/>
+      <text x="116" y="339" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Open Settings ⚙️</text>
+
+      <rect x="294" y="240" width="56" height="28" rx="14" fill="#10B981"/>
+      <circle cx="336" cy="254" r="11" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Plugin 2: In-Car CCTV Protecting Mode (AVAILABLE DOWNLOAD) -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="384" width="358" height="150" rx="16" fill="#181922" stroke="#282836"/>
+      <circle cx="48" cy="416" r="18" fill="#E5252A" fill-opacity="0.2"/>
+      <text x="48" y="422" fill="#E5252A" font-size="16" text-anchor="middle">📹</text>
+
+      <text x="76" y="412" fill="#FFFFFF" font-size="14" font-weight="800">In-Car CCTV Video Sentinel</text>
+      <text x="76" y="430" fill="#F59E0B" font-size="11">Available for Drivers • Size: 3.2 MB</text>
+      <text x="36" y="458" fill="#9CA3AF" font-size="11">1080p continuous loop recording, SHA-256 cloud rolling buffer &amp; G-sensor collision lock.</text>
+
+      <rect x="36" y="480" width="318" height="36" rx="10" fill="url(#gold-grad)"/>
+      <text x="195" y="503" fill="#181922" font-size="12" font-weight="900" text-anchor="middle">ဒေါင်းလုဒ်ရယူမည် (DOWNLOAD &amp; INSTALL ~3.2MB)</text>
+    </g>
+
+    <!-- Plugin 3: Silent Audio Sentinel (AVAILABLE DOWNLOAD) -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="546" width="358" height="150" rx="16" fill="#181922" stroke="#282836"/>
+      <circle cx="48" cy="578" r="18" fill="#38BDF8" fill-opacity="0.2"/>
+      <text x="48" y="584" fill="#38BDF8" font-size="16" text-anchor="middle">🎙️</text>
+
+      <text x="76" y="574" fill="#FFFFFF" font-size="14" font-weight="800">Silent Voice Panic Sentinel</text>
+      <text x="76" y="592" fill="#38BDF8" font-size="11">Passenger &amp; Driver Safety • Size: 2.4 MB</text>
+      <text x="36" y="620" fill="#9CA3AF" font-size="11">On-device acoustic distress keyword detector ("Help", "ကယ်ပါ") with cloud audio vault.</text>
+
+      <rect x="36" y="642" width="318" height="36" rx="10" fill="url(#gold-grad)"/>
+      <text x="195" y="665" fill="#181922" font-size="12" font-weight="900" text-anchor="middle">ဒေါင်းလုဒ်ရယူမည် (DOWNLOAD &amp; INSTALL ~2.4MB)</text>
+    </g>
+
+    <!-- Storage Manager Footer -->
+    <rect x="16" y="710" width="358" height="60" rx="14" fill="#242533" stroke="#282836"/>
+    <text x="36" y="736" fill="#FFFFFF" font-size="11">💾 App Storage Usage: <tspan fill="#10B981" font-weight="700">21.8 MB Total</tspan></text>
+    <text x="36" y="754" fill="#9CA3AF" font-size="10">Clean Cache &amp; Manage Add-On Storage Space</text>
+    <text x="354" y="744" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="end">Manage ❯</text>
+    """
+    return screen_frame(content, "အပိုဆောင်း စနစ်များ (Add-Ons Store)")
+
 # =============================================================================
-# MASTER FIGMA CANVAS GENERATOR (ALL 12 SCREENS ON 1 EXPANDED CANVAS)
+# MASTER FIGMA CANVAS GENERATOR (ALL 13 SCREENS ON 1 EXPANDED CANVAS)
 # =============================================================================
 
 def gen_master_figma_canvas(screens_dict):
     """Creates a large multi-screen SVG canvas suitable for direct Figma / Sketch import."""
     canvas_w = 4 * 430 + 60
-    canvas_h = 3 * 890 + 120
+    canvas_h = 4 * 890 + 120
     
     svg_canvas = [f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {canvas_w} {canvas_h}" width="{canvas_w}" height="{canvas_h}" style="background:#090A0E; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;">
   <defs>
@@ -701,14 +764,14 @@ def gen_master_figma_canvas(screens_dict):
 
   <!-- Canvas Header -->
   <text x="60" y="60" fill="#F59E0B" font-size="32" font-weight="900">LARBAR TAXI PLATFORM — MASTER FIGMA / SKETCH WIREFRAME CANVAS</text>
-  <text x="60" y="90" fill="#9CA3AF" font-size="16">12 Complete Production Mobile Screen Prototypes • Red &amp; Gold Design System • Myanmar Pyidaungsu Typography</text>
+  <text x="60" y="90" fill="#9CA3AF" font-size="16">13 Production Mobile Screen Prototypes &amp; Dynamic Add-On Store • Red &amp; Gold Design System</text>
 """]
 
-    # Layout coordinates: 4 columns x 3 rows
     positions = [
         (0, 0), (1, 0), (2, 0), (3, 0),
         (0, 1), (1, 1), (2, 1), (3, 1),
         (0, 2), (1, 2), (2, 2), (3, 2),
+        (0, 3)
     ]
 
     for idx, (fname, title, func) in enumerate(screens_dict):
@@ -717,7 +780,6 @@ def gen_master_figma_canvas(screens_dict):
         pos_y = 130 + row * 890
         
         inner_svg = func()
-        # strip outer svg tags to embed cleanly
         inner_body = inner_svg[inner_svg.find("<rect x=\"1\" y=\"1\""):inner_svg.rfind("</svg>")]
 
         svg_canvas.append(f"""
@@ -749,6 +811,7 @@ def generate_all_wireframes():
         ("guardian_01_passenger_shield.svg", "Passenger Family Guardian Live Route Shield", gen_guardian_01_passenger_shield),
         ("guardian_02_driver_family_shield.svg", "Driver Family Guardian Shift & SOS Shield", gen_guardian_02_driver_family),
         ("guardian_03_pairing_qr_mesh.svg", "Family Mesh Pairing & QR Code Scanner", gen_guardian_03_pairing_qr),
+        ("plugins_01_addons_store.svg", "In-App Add-Ons & Dynamic Plugin Store", gen_plugin_addons_store),
     ]
 
     for fname, title, func in screens:
@@ -758,7 +821,6 @@ def generate_all_wireframes():
             f.write(svg_code)
         print(f"Generated Wireframe Screen: {target}")
 
-    # Generate Master Canvas
     master_canvas = gen_master_figma_canvas(screens)
     master_target = os.path.join(OUTPUT_DIR, "larbar_master_figma_canvas.svg")
     with open(master_target, "w", encoding="utf-8") as f:
@@ -767,3 +829,4 @@ def generate_all_wireframes():
 
 if __name__ == "__main__":
     generate_all_wireframes()
+

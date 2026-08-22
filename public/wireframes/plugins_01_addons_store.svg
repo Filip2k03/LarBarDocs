@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">အပိုဆောင်း စနစ်များ (Add-Ons Store)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Add-Ons & Plugins Marketplace Header -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="110" width="358" height="100" rx="18" fill="#181922" stroke="#F59E0B" stroke-width="2"/>
+      <text x="36" y="142" fill="#F59E0B" font-size="13" font-weight="800">🧩 ON-DEMAND ADD-ONS STORE</text>
+      <text x="36" y="168" fill="#FFFFFF" font-size="16" font-weight="900">အပိုဆောင်း လုပ်ဆောင်ချက်များ</text>
+      <text x="36" y="190" fill="#9CA3AF" font-size="11">Base App: 18MB • Download only what you need (~3.8MB)</text>
+    </g>
+
+    <!-- Plugin 1: Guardian Safety Shield (INSTALLED) -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="222" width="358" height="150" rx="16" fill="#181922" stroke="#10B981" stroke-width="1.5"/>
+      <circle cx="48" cy="254" r="18" fill="#10B981" fill-opacity="0.2"/>
+      <text x="48" y="260" fill="#10B981" font-size="16" text-anchor="middle">🛡️</text>
+
+      <text x="76" y="250" fill="#FFFFFF" font-size="14" font-weight="800">Guardian Family Safety Shield</text>
+      <text x="76" y="268" fill="#10B981" font-size="11">● INSTALLED &amp; ACTIVE • v1.4.0 (3.8 MB)</text>
+      <text x="36" y="296" fill="#9CA3AF" font-size="11">60fps live route telemetry, cross-track deviation warnings, DND-override siren alarms.</text>
+
+      <rect x="36" y="318" width="160" height="34" rx="8" fill="#242533" stroke="#282836"/>
+      <text x="116" y="339" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">Open Settings ⚙️</text>
+
+      <rect x="294" y="240" width="56" height="28" rx="14" fill="#10B981"/>
+      <circle cx="336" cy="254" r="11" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Plugin 2: In-Car CCTV Protecting Mode (AVAILABLE DOWNLOAD) -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="384" width="358" height="150" rx="16" fill="#181922" stroke="#282836"/>
+      <circle cx="48" cy="416" r="18" fill="#E5252A" fill-opacity="0.2"/>
+      <text x="48" y="422" fill="#E5252A" font-size="16" text-anchor="middle">📹</text>
+
+      <text x="76" y="412" fill="#FFFFFF" font-size="14" font-weight="800">In-Car CCTV Video Sentinel</text>
+      <text x="76" y="430" fill="#F59E0B" font-size="11">Available for Drivers • Size: 3.2 MB</text>
+      <text x="36" y="458" fill="#9CA3AF" font-size="11">1080p continuous loop recording, SHA-256 cloud rolling buffer &amp; G-sensor collision lock.</text>
+
+      <rect x="36" y="480" width="318" height="36" rx="10" fill="url(#gold-grad)"/>
+      <text x="195" y="503" fill="#181922" font-size="12" font-weight="900" text-anchor="middle">ဒေါင်းလုဒ်ရယူမည် (DOWNLOAD &amp; INSTALL ~3.2MB)</text>
+    </g>
+
+    <!-- Plugin 3: Silent Audio Sentinel (AVAILABLE DOWNLOAD) -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="546" width="358" height="150" rx="16" fill="#181922" stroke="#282836"/>
+      <circle cx="48" cy="578" r="18" fill="#38BDF8" fill-opacity="0.2"/>
+      <text x="48" y="584" fill="#38BDF8" font-size="16" text-anchor="middle">🎙️</text>
+
+      <text x="76" y="574" fill="#FFFFFF" font-size="14" font-weight="800">Silent Voice Panic Sentinel</text>
+      <text x="76" y="592" fill="#38BDF8" font-size="11">Passenger &amp; Driver Safety • Size: 2.4 MB</text>
+      <text x="36" y="620" fill="#9CA3AF" font-size="11">On-device acoustic distress keyword detector ("Help", "ကယ်ပါ") with cloud audio vault.</text>
+
+      <rect x="36" y="642" width="318" height="36" rx="10" fill="url(#gold-grad)"/>
+      <text x="195" y="665" fill="#181922" font-size="12" font-weight="900" text-anchor="middle">ဒေါင်းလုဒ်ရယူမည် (DOWNLOAD &amp; INSTALL ~2.4MB)</text>
+    </g>
+
+    <!-- Storage Manager Footer -->
+    <rect x="16" y="710" width="358" height="60" rx="14" fill="#242533" stroke="#282836"/>
+    <text x="36" y="736" fill="#FFFFFF" font-size="11">💾 App Storage Usage: <tspan fill="#10B981" font-weight="700">21.8 MB Total</tspan></text>
+    <text x="36" y="754" fill="#9CA3AF" font-size="10">Clean Cache &amp; Manage Add-On Storage Space</text>
+    <text x="354" y="744" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="end">Manage ❯</text>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>

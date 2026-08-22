@@ -48,6 +48,7 @@ export default defineConfig({
         text: '🛡️ Core Features & Safety',
         collapsed: false,
         items: [
+          { text: '🧩 On-Demand Add-Ons & Plugin Store', link: '/features/dynamic-plugin-store' },
           { text: 'Myanmar 🇲🇲 Localization & Compliance', link: '/features/myanmar-localization-and-payments' },
           { text: 'Guardian Dynamic Plugin Module', link: '/features/guardian-plugin' },
           { text: 'Driver SOS & Family Guardian', link: '/features/driver-sos-and-family-guardian' },
