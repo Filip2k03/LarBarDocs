@@ -1,0 +1,122 @@
+# Optimized Single-Node Production Deployment for Hetzner CPX22 (2 vCPU, 4GB RAM, 80GB NVMe)
+version: '3.8'
+
+services:
+  caddy_edge:
+    image: caddy:2-alpine
+    container_name: larbar_caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - larbar_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 150M
+
+  go_api_core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: larbar/backend-api:latest
+    container_name: larbar_go_core
+    restart: always
+    environment:
+      - PORT=8080
+      - APP_ENV=production
+      - DB_DSN=postgres://larbar_user:SecurePostgresPass123@postgres_db:5432/larbar_prod?sslmode=disable
+      - REDIS_ADDR=redis_spatial:6379
+      - REDIS_PASSWORD=SecureRedisPass123
+      - JWT_SECRET=super_secret_production_signing_jwt_key_2026
+    depends_on:
+      - postgres_db
+      - redis_spatial
+    networks:
+      - larbar_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.80'
+          memory: 400M
+
+  postgres_db:
+    image: postgis/postgis:16-3.4-alpine
+    container_name: larbar_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: larbar_prod
+      POSTGRES_USER: larbar_user
+      POSTGRES_PASSWORD: SecurePostgresPass123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command: >
+      postgres
+      -c shared_buffers=768MB
+      -c effective_cache_size=2048MB
+      -c work_mem=16MB
+      -c maintenance_work_mem=128MB
+      -c max_connections=100
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - larbar_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.80'
+          memory: 1400M
+
+  redis_spatial:
+    image: redis:7-alpine
+    container_name: larbar_redis
+    restart: always
+    command: >
+      redis-server
+      --requirepass SecureRedisPass123
+      --maxmemory 384mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+    volumes:
+      - redisdata:/data
+    networks:
+      - larbar_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 450M
+
+  osrm_myanmar:
+    image: osrm/osrm-backend:latest
+    container_name: larbar_osrm
+    restart: always
+    command: ["osrm-routed", "--algorithm", "mld", "--max-matching-size", "1000", "/data/myanmar-latest.osrm"]
+    volumes:
+      - ./osrm-data:/data:ro
+    networks:
+      - larbar_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 1200M
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pgdata:
+  redisdata:
+
+networks:
+  larbar_net:
+    driver: bridge

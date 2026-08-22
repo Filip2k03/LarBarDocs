@@ -16,11 +16,11 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Architecture', link: '/architecture/overview' },
       { text: 'UML Diagrams', link: '/architecture/uml-diagrams' },
-      { text: 'Guardian Plugin', link: '/features/guardian-plugin' },
+      { text: 'Prototypes 📱', link: '/design/interactive-prototype' },
       { text: 'Driver SOS & Mesh', link: '/features/driver-sos-and-family-guardian' },
       { text: 'Myanmar 🇲🇲', link: '/features/myanmar-localization-and-payments' },
-      { text: 'Design System', link: '/design/design-system' },
-      { text: 'Hetzner 3-Server', link: '/devops/hetzner-3server-production' }
+      { text: 'Hetzner CPX22', link: '/devops/hetzner-cpx22-deployment' },
+      { text: '3-Server VPC', link: '/devops/hetzner-3server-production' }
     ],
     sidebar: [
       {
@@ -28,6 +28,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Getting Started', link: '/guide/getting-started' },
+          { text: 'Monorepo & Codebase Architecture', link: '/architecture/codebase-architecture' },
           { text: 'Tech Stack & Standards', link: '/guide/tech-stack' },
           { text: 'Native Mobile Architecture', link: '/guide/mobile-architecture' },
           { text: 'REST & WebSocket API Reference', link: '/guide/api-reference' }
@@ -72,6 +73,7 @@ export default defineConfig({
         text: '☁️ DevOps, VPS & Cloud Infrastructure',
         collapsed: false,
         items: [
+          { text: 'Hetzner CPX22 (2 CPU / 4GB RAM) Setup', link: '/devops/hetzner-cpx22-deployment' },
           { text: 'Hetzner 3-Server & Live Map Setup', link: '/devops/hetzner-3server-production' },
           { text: 'Server Separation Architecture', link: '/devops/vps-deployment' },
           { text: 'VPS Provider Benchmark & Costs', link: '/devops/vps-cost-calculator' },

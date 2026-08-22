@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LarBar Driver App — Interactive Mobile Prototype</title>
+  <style>
+    :root {
+      --bg: #0E0F14;
+      --card: #181922;
+      --card-elevated: #242533;
+      --border: #282836;
+      --gold-primary: #F59E0B;
+      --gold-light: #FFD54F;
+      --red-primary: #E5252A;
+      --emerald: #10B981;
+      --text: #FFFFFF;
+      --text-muted: #9CA3AF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif; }
+    body { background: #07080B; color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+    
+    .header-nav { text-align: center; margin-bottom: 24px; max-width: 600px; }
+    .header-nav h1 { color: var(--red-primary); font-size: 24px; margin-bottom: 8px; font-weight: 900; }
+    .header-nav p { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
+    .tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+    .tab-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s ease; }
+    .tab-btn.active { background: var(--red-primary); color: #FFFFFF; border-color: var(--red-primary); font-weight: 800; }
+
+    /* Phone Shell */
+    .phone-container {
+      width: 390px;
+      height: 844px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 44px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.8), 0 0 0 8px #181922;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .island { width: 120px; height: 28px; background: #000; border-radius: 14px; margin: 10px auto 0; z-index: 10; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; }
+    .island-cam { width: 8px; height: 8px; border-radius: 50%; background: #181922; }
+    .status-bar { display: flex; justify-content: space-between; padding: 4px 28px 8px; font-size: 12px; font-weight: 600; }
+    .app-header { background: rgba(24, 25, 34, 0.95); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+    .app-header .logo { color: var(--gold-primary); font-size: 18px; font-weight: 900; }
+    .app-header .title { font-size: 13px; font-weight: 700; }
+
+    .content-viewport { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+    .home-indicator { width: 130px; height: 4px; background: #484856; border-radius: 2px; margin: 8px auto 12px; }
+
+    /* Cards */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+    .btn-gold { background: linear-gradient(135deg, var(--gold-light), var(--gold-primary)); color: #181922; border: none; border-radius: 14px; padding: 14px; font-weight: 800; font-size: 15px; width: 100%; cursor: pointer; text-align: center; }
+    .btn-red { background: linear-gradient(135deg, #F85A5A, var(--red-primary)); color: #FFF; border: none; border-radius: 14px; padding: 14px; font-weight: 800; font-size: 15px; width: 100%; cursor: pointer; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="header-nav">
+    <h1>🚗 LarBar Driver App Interactive Prototype</h1>
+    <p>Simulate driver shifts, 15-second cascading ride offers, CCTV metering, 1km SOS mesh assistance, and sales payout.</p>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchStep(1)">1. Shift Dashboard</button>
+      <button class="tab-btn" onclick="switchStep(2)">2. 15s Offer Modal</button>
+      <button class="tab-btn" onclick="switchStep(3)">3. Turn Meter &amp; CCTV</button>
+      <button class="tab-btn" onclick="switchStep(4)">4. 1km SOS Mesh Alert</button>
+      <button class="tab-btn" onclick="switchStep(5)">5. Daily Sales Payout</button>
+    </div>
+  </div>
+
+  <div class="phone-container">
+    <div class="island"><div class="island-cam"></div></div>
+    <div class="status-bar"><span>9:41</span><span>5G 🔋 88%</span></div>
+    
+    <div class="app-header">
+      <span class="logo">LarBar</span>
+      <span class="title" id="screen-title">ယာဥ်မောင်း ပင်မစာမျက်နှာ</span>
+      <span>🔔</span>
+    </div>
+
+    <div class="content-viewport" id="viewport">
+      <!-- Injected step content -->
+    </div>
+
+    <div class="home-indicator"></div>
+  </div>
+
+  <script>
+    const steps = [
+      {
+        title: 'ယာဥ်မောင်း ပင်မစာမျက်နှာ (Shift Dashboard)',
+        html: `
+          <div class="card" style="border: 2px solid var(--emerald); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-weight: 800; font-size: 15px;">အလုပ်ဆင်းနေသည် (ON DUTY)</div>
+              <div style="font-size: 11px; color: var(--emerald);">Ready for 15s cascading ride offers</div>
+            </div>
+            <div style="width: 48px; height: 26px; background: var(--emerald); border-radius: 13px; display: flex; align-items: center; justify-content: flex-end; padding-right: 3px;">
+              <div style="width: 20px; height: 20px; border-radius: 50%; background: #FFF;"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="font-size: 12px; color: var(--text-muted);">ယနေ့ ရရှိငွေ (Today's Gross Sales)</div>
+            <div style="color: var(--gold-primary); font-size: 30px; font-weight: 900; margin: 4px 0;">48,500 MMK</div>
+            <div style="font-size: 12px; color: #FFF;">12 Completed Trips • 5.4 Hours Online • ⭐ 4.96</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="card" onclick="switchStep(5)" style="cursor: pointer; text-align: center;">
+              <div style="font-size: 20px;">💳</div>
+              <div style="font-weight: 700; font-size: 13px; margin-top: 4px;">ငွေထုတ်ယူမည်</div>
+              <div style="font-size: 10px; color: var(--text-muted);">KBZPay Payout</div>
+            </div>
+            <div class="card" style="text-align: center;">
+              <div style="font-size: 20px;">📹</div>
+              <div style="font-weight: 700; font-size: 13px; margin-top: 4px;">CCTV Active</div>
+              <div style="font-size: 10px; color: var(--emerald);">1080p Stream</div>
+            </div>
+          </div>
+
+          <button class="btn-red" onclick="switchStep(4)">🚨 အရေးပေါ် အကူအညီတောင်းရန် (DRIVER SOS)</button>
+          <button class="btn-gold" onclick="switchStep(2)">Simulate Incoming 15s Ride Offer ➔</button>
+        `
+      },
+      {
+        title: 'ခရီးစဥ်အသစ် ရောက်ရှိပါသည် (15s Offer)',
+        html: `
+          <div class="card" style="border: 2px solid var(--gold-primary); text-align: center;">
+            <div style="background: var(--gold-primary); color: #181922; font-weight: 900; font-size: 13px; padding: 6px; border-radius: 8px; margin-bottom: 12px;">
+              ⏱️ 15s Cascading Offer (11s left)
+            </div>
+            <div style="color: var(--gold-primary); font-size: 32px; font-weight: 900;">3,800 MMK</div>
+            <div style="font-size: 12px; color: #38BDF8; margin-bottom: 14px;">Cashless (KBZPay Direct)</div>
+            
+            <div style="text-align: left; background: var(--card-elevated); padding: 12px; border-radius: 12px; font-size: 12px; margin-bottom: 14px;">
+              <div style="margin-bottom: 6px;"><b style="color: var(--emerald);">Pickup:</b> Sule Square (450m away)</div>
+              <div><b style="color: var(--red-primary);">Dest:</b> Junction City Mall (5.4 km)</div>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 14px; text-align: left;">
+              <div style="font-size: 24px;">👤</div>
+              <div>
+                <div style="font-weight: 700; font-size: 13px;">Ma Thiri (Passenger)</div>
+                <div style="font-size: 11px; color: var(--gold-primary);">⭐ 4.95 (148 trips completed)</div>
+              </div>
+            </div>
+
+            <button class="btn-gold" style="margin-bottom: 8px;" onclick="switchStep(3)">လက်ခံမည် (ACCEPT RIDE OFFER)</button>
+            <button style="background: transparent; border: 1px solid var(--red-primary); color: var(--red-primary); padding: 10px; border-radius: 10px; font-weight: 700; width: 100%; cursor: pointer;" onclick="switchStep(1)">ငြင်းပယ်မည် (Decline)</button>
+          </div>
+        `
+      },
+      {
+        title: 'လမ်းညွှန် မီတာစနစ် (Turn Navigation & CCTV)',
+        html: `
+          <div style="background: var(--red-primary); padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-align: center;">
+            ● REC 1080p CCTV PROTECTING BUFFER ACTIVE
+          </div>
+
+          <div class="card" style="border: 2px solid var(--gold-primary);">
+            <div style="font-size: 11px; color: var(--text-muted);">Dynamic Taximeter HUD</div>
+            <div style="color: var(--gold-primary); font-size: 30px; font-weight: 900; margin: 4px 0;">3,850 MMK</div>
+            <div style="font-size: 11px; color: #FFF;">5.4 km • 14m 20s • Speed: 38 km/h</div>
+          </div>
+
+          <div class="card">
+            <div style="font-weight: 700; font-size: 13px; margin-bottom: 4px;">Turn Left on Bogyoke Aung San Rd (220m)</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Destination: Junction City Mall, Main Entrance</div>
+          </div>
+
+          <button class="btn-gold" onclick="switchStep(5)">ရောက်ရှိပါပြီ (ARRIVED &amp; COLLECT)</button>
+        `
+      },
+      {
+        title: '၁ကီလိုမီတာ အရေးပေါ် အကူအညီ (SOS Mesh)',
+        html: `
+          <div class="card" style="border: 2px solid var(--red-primary); background: #2A0E10; text-align: center;">
+            <div style="font-size: 32px; margin-bottom: 6px;">🚨</div>
+            <div style="color: #FFF; font-size: 17px; font-weight: 900;">CODE RED: DRIVER IN DISTRESS</div>
+            <div style="color: var(--gold-primary); font-size: 13px; margin: 6px 0;">U Kyaw Swar (240m away • White Probox 4B-9102)</div>
+            <div style="font-size: 11px; color: #FFE8E8;">Physical Passenger Attack Reported</div>
+          </div>
+
+          <div class="card">
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Incident Location:</div>
+            <div style="font-weight: 700; font-size: 13px;">Corner of Anawrahta &amp; Sule Pagoda Rd</div>
+            <div style="font-size: 11px; color: var(--emerald); margin-top: 6px;">Protecting CCTV Video Buffer Locked</div>
+          </div>
+
+          <button class="btn-red" style="margin-bottom: 8px;" onclick="alert('⚡ Your response has been dispatched! Navigating to victim...')">ကူညီရန် သွားမည် (I AM RESPONDING / EN ROUTE)</button>
+          <button class="btn-gold" onclick="switchStep(1)">Back to Dashboard</button>
+        `
+      },
+      {
+        title: 'ဝင်ငွေ ထုတ်ယူခြင်း (Sales Payout)',
+        html: `
+          <div class="card" style="border: 2px solid var(--gold-primary);">
+            <div style="font-size: 12px; color: var(--text-muted);">ထုတ်ယူနိုင်သော လက်ကျန်ငွေ (Net Balance)</div>
+            <div style="color: var(--gold-primary); font-size: 32px; font-weight: 900; margin: 4px 0;">41,225 MMK</div>
+            <div style="font-size: 11px; color: var(--emerald);">Net after 15% platform commission (-7,275 MMK)</div>
+          </div>
+
+          <div class="card">
+            <div style="font-weight: 700; font-size: 13px; margin-bottom: 10px;">Transfer to Linked E-Wallet:</div>
+            <div style="background: var(--card-elevated); border: 1px solid #38BDF8; padding: 10px; border-radius: 10px; margin-bottom: 8px;">
+              <div style="color: #38BDF8; font-weight: 800; font-size: 12px;">KBZPay Partner Direct</div>
+              <div style="font-size: 11px; color: var(--text-muted);">09123456789 (U Aung Kyaw)</div>
+            </div>
+          </div>
+
+          <button class="btn-gold" onclick="alert('✓ 41,225 MMK transferred instantly to KBZPay!')">ငွေထုတ်ယူမှု အတည်ပြုမည် (TRANSFER NOW)</button>
+          <button style="background: transparent; border: 1px solid var(--border); color: #FFF; padding: 12px; border-radius: 12px; font-weight: 700; width: 100%; cursor: pointer;" onclick="switchStep(1)">Back to Dashboard</button>
+        `
+      }
+    ];
+
+    function switchStep(stepNum) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === stepNum - 1);
+      });
+      const s = steps[stepNum - 1];
+      document.getElementById('screen-title').innerText = s.title;
+      document.getElementById('viewport').innerHTML = s.html;
+    }
+
+    switchStep(1);
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LarBar — Interactive Mobile Prototypes Hub</title>
+  <style>
+    :root {
+      --bg: #0E0F14;
+      --card: #181922;
+      --border: #282836;
+      --gold-primary: #F59E0B;
+      --red-primary: #E5252A;
+      --emerald: #10B981;
+      --text: #FFFFFF;
+      --text-muted: #9CA3AF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif; }
+    body { background: #07080B; color: var(--text); min-height: 100vh; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+    .container { max-width: 900px; width: 100%; }
+    .header { text-align: center; margin-bottom: 40px; }
+    .header h1 { font-size: 32px; font-weight: 900; color: var(--gold-primary); margin-bottom: 12px; }
+    .header p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: transform 0.2s ease, border-color 0.2s ease; display: flex; flex-direction: column; justify-content: space-between; }
+    .card:hover { transform: translateY(-4px); }
+    .card h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+    .card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; flex: 1; }
+    .btn { display: inline-block; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; text-decoration: none; text-align: center; }
+    .btn-gold { background: linear-gradient(135deg, #FFD54F, var(--gold-primary)); color: #181922; }
+    .btn-red { background: linear-gradient(135deg, #F85A5A, var(--red-primary)); color: #FFF; }
+    .btn-emerald { background: linear-gradient(135deg, #34D399, var(--emerald)); color: #181922; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>🚀 LarBar Interactive Mobile Prototypes Hub</h1>
+      <p>Click below to launch standalone, fully interactive mobile prototype simulations for each client application.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card" style="border-top: 4px solid var(--gold-primary);">
+        <div>
+          <h2 style="color: var(--gold-primary);">🚖 Passenger App</h2>
+          <p>Experience multi-stop booking (*Sule ➔ Bogyoke ➔ Junction City*), 15s cascading spatial radar, in-trip dynamic taximeter, and KBZPay auto-settlement with tipping.</p>
+        </div>
+        <a href="/prototypes/passenger-app.html" class="btn btn-gold">Launch Passenger Prototype ❯</a>
+      </div>
+
+      <div class="card" style="border-top: 4px solid var(--red-primary);">
+        <div>
+          <h2 style="color: var(--red-primary);">🚗 Driver App</h2>
+          <p>Experience shift mode management (`ON DUTY`), 15s incoming cascading offer modal, in-car 1080p CCTV navigation meter, **1km SOS mesh intercept radar**, and instant KBZPay sales payout.</p>
+        </div>
+        <a href="/prototypes/driver-app.html" class="btn btn-red">Launch Driver Prototype ❯</a>
+      </div>
+
+      <div class="card" style="border-top: 4px solid var(--emerald);">
+        <div>
+          <h2 style="color: var(--emerald);">🛡️ Guardian Safety Shield</h2>
+          <p>Experience passenger 60fps real-time live route tracking with cross-track deviation warnings ($d_{xt} > 300\text{m}$), driver family shift health (86% battery / 5G), and QR mesh pairing.</p>
+        </div>
+        <a href="/prototypes/guardian-shield.html" class="btn btn-emerald">Launch Guardian Prototype ❯</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
