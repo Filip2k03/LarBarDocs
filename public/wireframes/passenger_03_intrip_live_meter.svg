@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Full Live Navigation Map Area -->
+    <rect x="16" y="112" width="358" height="310" rx="18" fill="#181922" stroke="#282836"/>
+    <path d="M 40 370 Q 180 290 320 180" stroke="#10B981" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <circle cx="40" cy="370" r="7" fill="#10B981"/>
+    <circle cx="320" cy="180" r="7" fill="#E5252A"/>
+
+    <!-- Live Moving Taxi Pin -->
+    <circle cx="190" cy="275" r="14" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2"/>
+    <text x="190" y="280" fill="#181922" font-size="10" font-weight="900" text-anchor="middle">🚖</text>
+
+    <!-- Floating Speed & Waypoint HUD -->
+    <rect x="36" y="130" width="318" height="50" rx="12" fill="#0E0F14" fill-opacity="0.9" stroke="#282836"/>
+    <text x="56" y="152" fill="#FFFFFF" font-size="11">Next: <tspan font-weight="700">Turn Right on Bogyoke Aung San Rd (180m)</tspan></text>
+    <text x="56" y="169" fill="#10B981" font-size="10">Speed: 42 km/h • ETA: 8 mins to Junction City</text>
+
+    <!-- Live Dynamic Fare Meter Floating Card -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="434" width="358" height="106" rx="18" fill="#181922" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="36" y="464" fill="#9CA3AF" font-size="11">လက်ရှိ ကျသင့်ငွေ (Current Fare Meter)</text>
+      <text x="36" y="500" fill="#F59E0B" font-size="28" font-weight="900">2,350 <tspan font-size="14">MMK</tspan></text>
+      <text x="354" y="475" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="end">Distance: 4.2 km</text>
+      <text x="354" y="496" fill="#9CA3AF" font-size="11" text-anchor="end">Duration: 11m 40s</text>
+      <text x="36" y="526" fill="#38BDF8" font-size="11">Payment: KBZPay Digital Linked</text>
+    </g>
+
+    <!-- Driver Info Card -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="550" width="358" height="120" rx="16" fill="#181922" stroke="#282836"/>
+      <circle cx="56" cy="595" r="22" fill="#282836"/>
+      <text x="56" y="601" fill="#FFFFFF" font-size="16" text-anchor="middle">👨🏻‍✈️</text>
+
+      <text x="90" y="588" fill="#FFFFFF" font-size="15" font-weight="800">U Aung Kyaw</text>
+      <text x="90" y="608" fill="#F59E0B" font-size="12">⭐ 4.96 (1,420 trips) • Pro Driver</text>
+      <text x="90" y="626" fill="#9CA3AF" font-size="11">Toyota Fielder <tspan fill="#FFFFFF" font-weight="700">(3A-8492)</tspan></text>
+
+      <circle cx="310" cy="595" r="18" fill="#242533"/>
+      <text x="310" y="600" fill="#38BDF8" font-size="14" text-anchor="middle">💬</text>
+
+      <circle cx="350" cy="595" r="18" fill="#242533"/>
+      <text x="350" y="600" fill="#10B981" font-size="14" text-anchor="middle">📞</text>
+
+      <rect x="28" y="642" width="334" height="20" rx="4" fill="#10B981" fill-opacity="0.15"/>
+      <text x="195" y="656" fill="#10B981" font-size="10" font-weight="700" text-anchor="middle">📹 Driver Protecting CCTV: RECORDING ACTIVE</text>
+    </g>
+
+    <!-- In-Trip Safety SOS Button -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="682" width="358" height="54" rx="14" fill="url(#red-grad)"/>
+      <text x="195" y="716" fill="#FFFFFF" font-size="15" font-weight="900" text-anchor="middle">🚨 EMERGENCY SOS &amp; GUARDIAN SIREN</text>
+    </g>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>

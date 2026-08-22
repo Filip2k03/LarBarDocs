@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
   <defs>
     <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFD54F"/>
@@ -7,6 +7,14 @@
     <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#F85A5A"/>
       <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
     </linearGradient>
     <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
       <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
@@ -23,21 +31,24 @@
   <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
 
   <!-- App Header -->
-  <rect x="0" y="52" width="390" height="50" fill="#181922" fill-opacity="0.8"/>
-  <text x="24" y="83" fill="#F59E0B" font-size="18" font-weight="800">LarBar</text>
-  <text x="195" y="83" fill="#FFFFFF" font-size="15" font-weight="700" text-anchor="middle">မိသားစု အကာအကွယ် (Guardian Shield)</text>
-  <circle cx="360" cy="77" r="14" fill="#282836"/>
-  <text x="360" y="82" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">မိသားစု အကာအကွယ် (Guardian Shield)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
 
   <!-- Body Content -->
   
     <!-- Guardian Live Shield Status Header -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="112" width="358" height="110" rx="18" fill="#181922" stroke="#F59E0B" stroke-width="2"/>
-      <text x="36" y="144" fill="#10B981" font-size="13" font-weight="700">🟢 RIDE IN PROGRESS (NORMAL)</text>
+      <rect x="16" y="110" width="358" height="114" rx="18" fill="#181922" stroke="#F59E0B" stroke-width="2"/>
+      <text x="36" y="142" fill="#10B981" font-size="13" font-weight="800">🟢 RIDE IN PROGRESS (NORMAL)</text>
       <text x="36" y="168" fill="#FFFFFF" font-size="16" font-weight="800">Passenger: Ma Thiri (Daughter)</text>
       <text x="36" y="190" fill="#9CA3AF" font-size="12">Driver: U Aung Kyaw (Toyota Fielder - 3A-8492)</text>
-      <text x="36" y="208" fill="#F59E0B" font-size="11">Protecting CCTV: ACTIVE • 1080p</text>
+      <text x="36" y="208" fill="#F59E0B" font-size="11">In-Car CCTV: ACTIVE • 1080p Buffer Locked</text>
     </g>
 
     <!-- Real-time 60fps Route & Telemetry HUD -->
@@ -46,34 +57,34 @@
     <!-- Map Path -->
     <path d="M 60 480 Q 200 380 320 280" stroke="#10B981" stroke-width="5" fill="none"/>
     <circle cx="60" cy="480" r="7" fill="#10B981"/>
-    <text x="75" y="484" fill="#FFFFFF" font-size="10">Pickup</text>
+    <text x="75" y="484" fill="#FFFFFF" font-size="10">Pickup: Sule</text>
 
     <circle cx="320" cy="280" r="7" fill="#E5252A"/>
-    <text x="320" y="265" fill="#FFFFFF" font-size="10" text-anchor="middle">Destination</text>
+    <text x="320" y="265" fill="#FFFFFF" font-size="10" text-anchor="middle">Destination: Junction City</text>
 
     <!-- Live Vehicle Marker -->
     <circle cx="210" cy="350" r="14" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2"/>
-    <text x="210" y="355" fill="#181922" font-size="10" font-weight="800" text-anchor="middle">🚖</text>
+    <text x="210" y="355" fill="#181922" font-size="10" font-weight="900" text-anchor="middle">🚖</text>
 
     <!-- Telemetry Float Card -->
     <rect x="36" y="490" width="318" height="64" rx="12" fill="#0E0F14" stroke="#282836"/>
-    <text x="56" y="515" fill="#FFFFFF" font-size="11">Cross-Track Deviation: <tspan fill="#10B981" font-weight="700">12m (SAFE)</tspan></text>
+    <text x="56" y="515" fill="#FFFFFF" font-size="11">Cross-Track Deviation: <tspan fill="#10B981" font-weight="700">12m (SAFE &lt; 300m)</tspan></text>
     <text x="56" y="536" fill="#FFFFFF" font-size="11">Speed: <tspan font-weight="700">38 km/h</tspan> | Heading: North-West</text>
 
     <!-- Emergency SOS Siren Button -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="590" width="358" height="60" rx="16" fill="url(#red-grad)"/>
-      <text x="195" y="626" fill="#FFFFFF" font-size="16" font-weight="800" text-anchor="middle">🚨 အရေးပေါ် ဥသြသံဖွင့်မည် (EMERGENCY SOS)</text>
+      <text x="195" y="626" fill="#FFFFFF" font-size="16" font-weight="900" text-anchor="middle">🚨 အရေးပေါ် ဥသြသံဖွင့်မည် (EMERGENCY SOS)</text>
     </g>
 
     <!-- Direct Call Driver & Police -->
     <rect x="16" y="662" width="172" height="50" rx="12" fill="#242533" stroke="#282836"/>
-    <text x="102" y="693" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="middle">📞 ယာဥ်မောင်းခေါ်မည်</text>
+    <text x="102" y="693" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">📞 ယာဥ်မောင်းခေါ်မည်</text>
 
     <rect x="202" y="662" width="172" height="50" rx="12" fill="#242533" stroke="#282836"/>
-    <text x="288" y="693" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="middle">👮 ရဲစခန်း ၁၉၉</text>
+    <text x="288" y="693" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">👮 ရဲစခန်း ၁၉၉</text>
 
-    <text x="195" y="745" fill="#9CA3AF" font-size="11" text-anchor="middle">Guardian Shield Dynamic Plugin v1.4 • Encrypted</text>
+    <text x="195" y="745" fill="#9CA3AF" font-size="11" text-anchor="middle">Guardian Shield Dynamic Plugin v1.4 • Encrypted Stream</text>
     
 
   <!-- Home Indicator -->

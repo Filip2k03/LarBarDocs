@@ -59,9 +59,13 @@ export default defineConfig({
         text: '🎨 UX/UI & Figma Design System',
         collapsed: false,
         items: [
-          { text: 'Red & Gold Color Palette (100-900)', link: '/design/design-system' },
-          { text: 'UI Components & Motion States', link: '/design/ui-components' },
-          { text: 'Wireframe Mockups & Flows', link: '/design/wireframes' }
+          { text: '📱 Interactive Mobile Prototype', link: '/design/interactive-prototype' },
+          { text: '📐 Master Wireframes Gallery', link: '/design/wireframes' },
+          { text: '🚖 Passenger App (4 Screens)', link: '/design/wireframes-passenger' },
+          { text: '🚗 Driver App (5 Screens)', link: '/design/wireframes-driver' },
+          { text: '🛡️ Guardian Safety (3 Screens)', link: '/design/wireframes-guardian' },
+          { text: '🎨 Red & Gold Palette (100-900)', link: '/design/design-system' },
+          { text: '🎛️ UI Components & Motion States', link: '/design/ui-components' }
         ]
       },
       {

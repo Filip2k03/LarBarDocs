@@ -1,10 +1,4 @@
-import os
-
-OUTPUT_DIR = "/Users/stephanfilip/Yamato_project/Labar/public/wireframes"
-os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-def screen_frame(content, title, status_bar="9:41", battery="100%", badge_color="#F59E0B", badge_text="LARBAR NATIVE"):
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1780 2790" width="1780" height="2790" style="background:#090A0E; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;">
   <defs>
     <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFD54F"/>
@@ -14,51 +8,38 @@ def screen_frame(content, title, status_bar="9:41", battery="100%", badge_color=
       <stop offset="0%" stop-color="#F85A5A"/>
       <stop offset="100%" stop-color="#E5252A"/>
     </linearGradient>
-    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#34D399"/>
-      <stop offset="100%" stop-color="#10B981"/>
-    </linearGradient>
-    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="100%" stop-color="#0284C7"/>
-    </linearGradient>
     <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
       <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
     </filter>
   </defs>
 
-  <!-- Device Outer Border & Island -->
-  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <!-- Canvas Header -->
+  <text x="60" y="60" fill="#F59E0B" font-size="32" font-weight="900">LARBAR TAXI PLATFORM — MASTER FIGMA / SKETCH WIREFRAME CANVAS</text>
+  <text x="60" y="90" fill="#9CA3AF" font-size="16">12 Complete Production Mobile Screen Prototypes • Red &amp; Gold Design System • Myanmar Pyidaungsu Typography</text>
+
+  <!-- Screen 1: Passenger Multi-Stop Booking -->
+  <g transform="translate(60, 130)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#01 • Passenger Multi-Stop Booking</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
   <circle cx="236" cy="27" r="5" fill="#181922"/>
 
   <!-- Status Bar -->
-  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">{status_bar}</text>
-  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 {battery}</text>
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
 
   <!-- App Header -->
   <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
   <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
-  <rect x="94" y="68" width="82" height="18" rx="9" fill="{badge_color}" fill-opacity="0.2" stroke="{badge_color}" stroke-width="1"/>
-  <text x="135" y="81" fill="{badge_color}" font-size="9" font-weight="700" text-anchor="middle">{badge_text}</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
   
-  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">{title}</text>
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ခရီးစဥ်မှာယူခြင်း (Ride Booking)</text>
   <circle cx="360" cy="76" r="14" fill="#282836"/>
   <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
 
   <!-- Body Content -->
-  {content}
-
-  <!-- Home Indicator -->
-  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
-</svg>"""
-
-# =============================================================================
-# 1. PASSENGER APP (4 SCREENS)
-# =============================================================================
-
-def gen_passenger_01_booking():
-    content = """
+  
     <!-- Live Map Preview Area -->
     <rect x="16" y="110" width="358" height="236" rx="18" fill="#181922" stroke="#282836"/>
     <!-- Map Streets Grid -->
@@ -124,11 +105,36 @@ def gen_passenger_01_booking():
       <rect x="16" y="738" width="358" height="56" rx="14" fill="url(#gold-grad)"/>
       <text x="195" y="772" fill="#181922" font-size="16" font-weight="900" text-anchor="middle">ခရီးစဥ် ခေါ်ယူမည် (CONFIRM RIDE)</text>
     </g>
-    """
-    return screen_frame(content, "ခရီးစဥ်မှာယူခြင်း (Ride Booking)")
+    
 
-def gen_passenger_02_cascading():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 2: Passenger 15s Cascading Search -->
+  <g transform="translate(490, 130)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#02 • Passenger 15s Cascading Search</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ရှာဖွေနေသည် (Cascading Dispatch)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Cascading Dispatch Radar Animation Area -->
     <rect x="16" y="112" width="358" height="400" rx="20" fill="#181922" stroke="#282836"/>
     
@@ -164,11 +170,36 @@ def gen_passenger_02_cascading():
     <!-- Cancel Button -->
     <rect x="16" y="708" width="358" height="52" rx="14" fill="#242533" stroke="#F85A5A" stroke-width="1.5"/>
     <text x="195" y="740" fill="#F85A5A" font-size="14" font-weight="700" text-anchor="middle">မခေါ်ယူတော့ပါ (CANCEL SEARCH)</text>
-    """
-    return screen_frame(content, "ရှာဖွေနေသည် (Cascading Dispatch)")
+    
 
-def gen_passenger_03_intrip():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 3: Passenger In-Trip Navigation & Fare Meter -->
+  <g transform="translate(920, 130)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#03 • Passenger In-Trip Navigation & Fare Meter</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Full Live Navigation Map Area -->
     <rect x="16" y="112" width="358" height="310" rx="18" fill="#181922" stroke="#282836"/>
     <path d="M 40 370 Q 180 290 320 180" stroke="#10B981" stroke-width="6" stroke-linecap="round" fill="none"/>
@@ -219,11 +250,36 @@ def gen_passenger_03_intrip():
       <rect x="16" y="682" width="358" height="54" rx="14" fill="url(#red-grad)"/>
       <text x="195" y="716" fill="#FFFFFF" font-size="15" font-weight="900" text-anchor="middle">🚨 EMERGENCY SOS &amp; GUARDIAN SIREN</text>
     </g>
-    """
-    return screen_frame(content, "ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)")
+    
 
-def gen_passenger_04_payment_rating():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 4: Passenger Receipt & Driver 5-Star Rating -->
+  <g transform="translate(1350, 130)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#04 • Passenger Receipt & Driver 5-Star Rating</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt & Rating)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Trip Completed Success Card -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="112" width="358" height="230" rx="20" fill="#181922" stroke="#10B981" stroke-width="2"/>
@@ -267,15 +323,36 @@ def gen_passenger_04_payment_rating():
       <rect x="16" y="584" width="358" height="56" rx="14" fill="url(#gold-grad)"/>
       <text x="195" y="618" fill="#181922" font-size="16" font-weight="900" text-anchor="middle">ပြီးဆုံးပါပြီ (DONE &amp; SUBMIT)</text>
     </g>
-    """
-    return screen_frame(content, "ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt & Rating)")
+    
 
-# =============================================================================
-# 2. DRIVER APP (5 SCREENS)
-# =============================================================================
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
 
-def gen_driver_01_dashboard():
-    content = """
+  </g>
+
+  <!-- Screen 5: Driver Shift Dashboard & Today's Earnings -->
+  <g transform="translate(60, 1020)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#05 • Driver Shift Dashboard & Today's Earnings</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ယာဥ်မောင်း ပင်မစာမျက်နှာ (Driver Home)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Shift Mode Toggle Card -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="110" width="358" height="96" rx="18" fill="#181922" stroke="#10B981" stroke-width="2"/>
@@ -334,11 +411,36 @@ def gen_driver_01_dashboard():
     <text x="44" y="734" fill="#FFFFFF" font-size="12" font-weight="600">Hledan Center ➔ Inya Lake</text>
     <text x="44" y="754" fill="#9CA3AF" font-size="10">1:15 PM • Cash Collected</text>
     <text x="346" y="744" fill="#10B981" font-size="14" font-weight="700" text-anchor="end">+3,500 MMK</text>
-    """
-    return screen_frame(content, "ယာဥ်မောင်း ပင်မစာမျက်နှာ (Driver Home)")
+    
 
-def gen_driver_02_offer():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 6: Driver 15s Cascading Ride Offer Modal -->
+  <g transform="translate(490, 1020)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#06 • Driver 15s Cascading Ride Offer Modal</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ခရီးစဥ်လက်ခံခြင်း (Offer Modal)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Incoming 15s Offer Modal Card -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="110" width="358" height="670" rx="24" fill="#181922" stroke="#F59E0B" stroke-width="2.5"/>
@@ -383,11 +485,36 @@ def gen_driver_02_offer():
       <rect x="36" y="650" width="318" height="48" rx="14" fill="#242533" stroke="#F85A5A"/>
       <text x="195" y="680" fill="#F85A5A" font-size="14" font-weight="700" text-anchor="middle">ငြင်းပယ်မည် (DECLINE / PASS)</text>
     </g>
-    """
-    return screen_frame(content, "ခရီးစဥ်လက်ခံခြင်း (Offer Modal)")
+    
 
-def gen_driver_03_intrip_cctv():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 7: Driver In-Trip Meter & CCTV HUD -->
+  <g transform="translate(920, 1020)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#07 • Driver In-Trip Meter & CCTV HUD</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">လမ်းညွှန် မီတာစနစ် (Turn Navigation)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Turn-by-Turn Navigation Map Area -->
     <rect x="16" y="112" width="358" height="310" rx="18" fill="#181922" stroke="#282836"/>
     <path d="M 60 380 L 160 380 L 160 200 L 300 200" stroke="#10B981" stroke-width="6" stroke-linecap="round" fill="none"/>
@@ -431,11 +558,36 @@ def gen_driver_03_intrip_cctv():
       <rect x="16" y="674" width="358" height="56" rx="14" fill="url(#gold-grad)"/>
       <text x="195" y="708" fill="#181922" font-size="16" font-weight="900" text-anchor="middle">ရောက်ရှိပါပြီ (ARRIVE AT DESTINATION)</text>
     </g>
-    """
-    return screen_frame(content, "လမ်းညွှန် မီတာစနစ် (Turn Navigation)")
+    
 
-def gen_driver_04_sos_mesh():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 8: Driver 1km Emergency SOS Intercept Radar -->
+  <g transform="translate(1350, 1020)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#08 • Driver 1km Emergency SOS Intercept Radar</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">၁ကီလိုမီတာ အရေးပေါ် အကူအညီ (SOS Mesh)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Code Red Alert Banner -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="110" width="358" height="114" rx="18" fill="url(#red-grad)"/>
@@ -476,11 +628,36 @@ def gen_driver_04_sos_mesh():
 
     <rect x="16" y="752" width="358" height="44" rx="12" fill="#242533" stroke="#282836"/>
     <text x="195" y="779" fill="#9CA3AF" font-size="13" text-anchor="middle">ရဲစခန်း တိုက်ရိုက်ခေါ်ဆိုမည် (CALL POLICE 199)</text>
-    """
-    return screen_frame(content, "၁ကီလိုမီတာ အရေးပေါ် အကူအညီ (SOS Mesh)")
+    
 
-def gen_driver_05_daily_payout():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 9: Driver Daily Settlement & Instant Payout -->
+  <g transform="translate(60, 1910)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#09 • Driver Daily Settlement & Instant Payout</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ဝင်ငွေ ထုတ်ယူခြင်း (Sales Payout)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Daily Settlement Header -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="110" width="358" height="150" rx="18" fill="#181922" stroke="#F59E0B" stroke-width="2"/>
@@ -527,15 +704,36 @@ def gen_driver_05_daily_payout():
       <rect x="16" y="678" width="358" height="56" rx="14" fill="url(#gold-grad)"/>
       <text x="195" y="712" fill="#181922" font-size="16" font-weight="900" text-anchor="middle">ငွေထုတ်ယူမှု အတည်ပြုမည် (TRANSFER NOW)</text>
     </g>
-    """
-    return screen_frame(content, "ဝင်ငွေ ထုတ်ယူခြင်း (Sales Payout)")
+    
 
-# =============================================================================
-# 3. GUARDIAN SAFETY APPS (3 SCREENS)
-# =============================================================================
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
 
-def gen_guardian_01_passenger_shield():
-    content = """
+  </g>
+
+  <!-- Screen 10: Passenger Family Guardian Live Route Shield -->
+  <g transform="translate(490, 1910)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#10 • Passenger Family Guardian Live Route Shield</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">မိသားစု အကာအကွယ် (Guardian Shield)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Guardian Live Shield Status Header -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="110" width="358" height="114" rx="18" fill="#181922" stroke="#F59E0B" stroke-width="2"/>
@@ -579,11 +777,36 @@ def gen_guardian_01_passenger_shield():
     <text x="288" y="693" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">👮 ရဲစခန်း ၁၉၉</text>
 
     <text x="195" y="745" fill="#9CA3AF" font-size="11" text-anchor="middle">Guardian Shield Dynamic Plugin v1.4 • Encrypted Stream</text>
-    """
-    return screen_frame(content, "မိသားစု အကာအကွယ် (Guardian Shield)")
+    
 
-def gen_guardian_02_driver_family():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 11: Driver Family Guardian Shift & SOS Shield -->
+  <g transform="translate(920, 1910)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#11 • Driver Family Guardian Shift & SOS Shield</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ယာဥ်မောင်း မိသားစု အကာအကွယ် (Driver Family)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Driver Family Guardian Status Card -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="110" width="358" height="134" rx="18" fill="#181922" stroke="#10B981" stroke-width="2"/>
@@ -622,11 +845,36 @@ def gen_guardian_02_driver_family():
     </g>
 
     <text x="195" y="760" fill="#9CA3AF" font-size="11" text-anchor="middle">Driver Guardian Family Mesh Shield • DND Override Active</text>
-    """
-    return screen_frame(content, "ယာဥ်မောင်း မိသားစု အကာအကွယ် (Driver Family)")
+    
 
-def gen_guardian_03_pairing_qr():
-    content = """
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+
+  </g>
+
+  <!-- Screen 12: Family Mesh Pairing & QR Code Scanner -->
+  <g transform="translate(1350, 1910)">
+    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#12 • Family Mesh Pairing & QR Code Scanner</text>
+    <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
     <!-- Family Mesh Pairing Container -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="110" width="358" height="670" rx="20" fill="#181922" stroke="#282836"/>
@@ -672,98 +920,10 @@ def gen_guardian_03_pairing_qr():
         <text x="195" y="724" fill="#181922" font-size="15" font-weight="900" text-anchor="middle">မိသားစုထံ ဖိတ်ခေါ်လင့်ခ် ပေးပို့မည် (SHARE LINK)</text>
       </g>
     </g>
-    """
-    return screen_frame(content, "မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)")
-
-# =============================================================================
-# MASTER FIGMA CANVAS GENERATOR (ALL 12 SCREENS ON 1 EXPANDED CANVAS)
-# =============================================================================
-
-def gen_master_figma_canvas(screens_dict):
-    """Creates a large multi-screen SVG canvas suitable for direct Figma / Sketch import."""
-    canvas_w = 4 * 430 + 60
-    canvas_h = 3 * 890 + 120
     
-    svg_canvas = [f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {canvas_w} {canvas_h}" width="{canvas_w}" height="{canvas_h}" style="background:#090A0E; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;">
-  <defs>
-    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFD54F"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
-    </linearGradient>
-    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F85A5A"/>
-      <stop offset="100%" stop-color="#E5252A"/>
-    </linearGradient>
-    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
-    </filter>
-  </defs>
 
-  <!-- Canvas Header -->
-  <text x="60" y="60" fill="#F59E0B" font-size="32" font-weight="900">LARBAR TAXI PLATFORM — MASTER FIGMA / SKETCH WIREFRAME CANVAS</text>
-  <text x="60" y="90" fill="#9CA3AF" font-size="16">12 Complete Production Mobile Screen Prototypes • Red &amp; Gold Design System • Myanmar Pyidaungsu Typography</text>
-"""]
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
 
-    # Layout coordinates: 4 columns x 3 rows
-    positions = [
-        (0, 0), (1, 0), (2, 0), (3, 0),
-        (0, 1), (1, 1), (2, 1), (3, 1),
-        (0, 2), (1, 2), (2, 2), (3, 2),
-    ]
-
-    for idx, (fname, title, func) in enumerate(screens_dict):
-        col, row = positions[idx]
-        pos_x = 60 + col * 430
-        pos_y = 130 + row * 890
-        
-        inner_svg = func()
-        # strip outer svg tags to embed cleanly
-        inner_body = inner_svg[inner_svg.find("<rect x=\"1\" y=\"1\""):inner_svg.rfind("</svg>")]
-
-        svg_canvas.append(f"""
-  <!-- Screen {idx+1}: {title} -->
-  <g transform="translate({pos_x}, {pos_y})">
-    <text x="0" y="-12" fill="#FFFFFF" font-size="14" font-weight="800">#{idx+1:02d} • {title}</text>
-    {inner_body}
   </g>
-""")
-
-    svg_canvas.append("</svg>")
-    return "".join(svg_canvas)
-
-# =============================================================================
-# EXPORT ALL WIREFRAME SCREENS
-# =============================================================================
-
-def generate_all_wireframes():
-    screens = [
-        ("passenger_01_booking_multistop.svg", "Passenger Multi-Stop Booking", gen_passenger_01_booking),
-        ("passenger_02_cascading_search.svg", "Passenger 15s Cascading Search", gen_passenger_02_cascading),
-        ("passenger_03_intrip_live_meter.svg", "Passenger In-Trip Navigation & Fare Meter", gen_passenger_03_intrip),
-        ("passenger_04_payment_rating.svg", "Passenger Receipt & Driver 5-Star Rating", gen_passenger_04_payment_rating),
-        ("driver_01_shift_dashboard.svg", "Driver Shift Dashboard & Today's Earnings", gen_driver_01_dashboard),
-        ("driver_02_15s_offer_card.svg", "Driver 15s Cascading Ride Offer Modal", gen_driver_02_offer),
-        ("driver_03_intrip_cctv_meter.svg", "Driver In-Trip Meter & CCTV HUD", gen_driver_03_intrip_cctv),
-        ("driver_04_sos_1km_mesh.svg", "Driver 1km Emergency SOS Intercept Radar", gen_driver_04_sos_mesh),
-        ("driver_05_daily_sales_payout.svg", "Driver Daily Settlement & Instant Payout", gen_driver_05_daily_payout),
-        ("guardian_01_passenger_shield.svg", "Passenger Family Guardian Live Route Shield", gen_guardian_01_passenger_shield),
-        ("guardian_02_driver_family_shield.svg", "Driver Family Guardian Shift & SOS Shield", gen_guardian_02_driver_family),
-        ("guardian_03_pairing_qr_mesh.svg", "Family Mesh Pairing & QR Code Scanner", gen_guardian_03_pairing_qr),
-    ]
-
-    for fname, title, func in screens:
-        svg_code = func()
-        target = os.path.join(OUTPUT_DIR, fname)
-        with open(target, "w", encoding="utf-8") as f:
-            f.write(svg_code)
-        print(f"Generated Wireframe Screen: {target}")
-
-    # Generate Master Canvas
-    master_canvas = gen_master_figma_canvas(screens)
-    master_target = os.path.join(OUTPUT_DIR, "larbar_master_figma_canvas.svg")
-    with open(master_target, "w", encoding="utf-8") as f:
-        f.write(master_canvas)
-    print(f"Generated Master Figma Canvas: {master_target}")
-
-if __name__ == "__main__":
-    generate_all_wireframes()
+</svg>

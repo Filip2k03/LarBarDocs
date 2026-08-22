@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Family Mesh Pairing Container -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="110" width="358" height="670" rx="20" fill="#181922" stroke="#282836"/>
+      
+      <text x="195" y="150" fill="#FFFFFF" font-size="18" font-weight="800" text-anchor="middle">မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)</text>
+      <text x="195" y="174" fill="#9CA3AF" font-size="12" text-anchor="middle">Scan QR code or share 6-digit OTP token</text>
+
+      <!-- High-Contrast QR Code Card -->
+      <rect x="75" y="200" width="240" height="240" rx="18" fill="#FFFFFF" stroke="#F59E0B" stroke-width="3"/>
+      
+      <!-- QR Matrix Mockup -->
+      <rect x="95" y="220" width="60" height="60" fill="#000000"/>
+      <rect x="105" y="230" width="40" height="40" fill="#FFFFFF"/>
+      <rect x="115" y="240" width="20" height="20" fill="#000000"/>
+
+      <rect x="235" y="220" width="60" height="60" fill="#000000"/>
+      <rect x="245" y="230" width="40" height="40" fill="#FFFFFF"/>
+      <rect x="255" y="240" width="20" height="20" fill="#000000"/>
+
+      <rect x="95" y="360" width="60" height="60" fill="#000000"/>
+      <rect x="105" y="370" width="40" height="40" fill="#FFFFFF"/>
+      <rect x="115" y="380" width="20" height="20" fill="#000000"/>
+
+      <!-- QR Center Shield Emblem -->
+      <circle cx="195" cy="320" r="22" fill="#E5252A"/>
+      <text x="195" y="326" fill="#FFFFFF" font-size="14" font-weight="900" text-anchor="middle">🛡️</text>
+
+      <!-- 6-Digit OTP Box -->
+      <rect x="55" y="465" width="280" height="54" rx="12" fill="#0E0F14" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="195" y="500" fill="#F59E0B" font-size="22" font-weight="900" letter-spacing="6" text-anchor="middle">8 4 9 2 0 1</text>
+
+      <text x="195" y="545" fill="#9CA3AF" font-size="11" text-anchor="middle">OTP Token expires in 10 minutes</text>
+
+      <!-- Pairing Instructions -->
+      <rect x="36" y="570" width="318" height="100" rx="12" fill="#242533"/>
+      <text x="50" y="595" fill="#FFFFFF" font-size="12" font-weight="700">1. Install LarBar Guardian Plugin (~3.8MB)</text>
+      <text x="50" y="618" fill="#FFFFFF" font-size="12" font-weight="700">2. Scan this QR or type code 849201</text>
+      <text x="50" y="641" fill="#10B981" font-size="12" font-weight="700">3. Enjoy 24/7 Live GPS &amp; Emergency Alarms</text>
+
+      <!-- Share Invite Button -->
+      <g filter="url(#card-shadow)">
+        <rect x="36" y="692" width="318" height="52" rx="14" fill="url(#gold-grad)"/>
+        <text x="195" y="724" fill="#181922" font-size="15" font-weight="900" text-anchor="middle">မိသားစုထံ ဖိတ်ခေါ်လင့်ခ် ပေးပို့မည် (SHARE LINK)</text>
+      </g>
+    </g>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>

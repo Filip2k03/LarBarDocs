@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ခရီးစဥ်လက်ခံခြင်း (Offer Modal)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Incoming 15s Offer Modal Card -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="110" width="358" height="670" rx="24" fill="#181922" stroke="#F59E0B" stroke-width="2.5"/>
+      
+      <!-- 15s Countdown Header -->
+      <rect x="16" y="110" width="358" height="60" rx="24" fill="url(#gold-grad)"/>
+      <text x="195" y="146" fill="#181922" font-size="16" font-weight="900" text-anchor="middle">⏱️ ခရီးစဥ်အသစ် ရောက်ရှိပါသည် (11s left)</text>
+
+      <!-- Earnings Highlight -->
+      <text x="195" y="210" fill="#F59E0B" font-size="34" font-weight="900" text-anchor="middle">3,800 <tspan font-size="16">MMK</tspan></text>
+      <text x="195" y="234" fill="#38BDF8" font-size="12" text-anchor="middle">Cashless (KBZPay Direct) • Standard Taxi</text>
+
+      <!-- Mini Route Map -->
+      <rect x="36" y="252" width="318" height="150" rx="14" fill="#0E0F14" stroke="#282836"/>
+      <path d="M 60 360 L 160 300 L 290 270" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <circle cx="60" cy="360" r="6" fill="#10B981"/>
+      <circle cx="290" cy="270" r="6" fill="#E5252A"/>
+      <text x="75" y="364" fill="#FFFFFF" font-size="10">Pickup (450m away)</text>
+      <text x="290" y="258" fill="#FFFFFF" font-size="10" text-anchor="middle">Junction City</text>
+
+      <!-- Trip Details List -->
+      <circle cx="50" cy="430" r="6" fill="#10B981"/>
+      <text x="68" y="434" fill="#FFFFFF" font-size="13" font-weight="700">Sule Square (450m • 2 mins away)</text>
+
+      <circle cx="50" cy="470" r="6" fill="#E5252A"/>
+      <text x="68" y="474" fill="#FFFFFF" font-size="13" font-weight="700">Junction City Mall (Trip: 5.4 km)</text>
+
+      <line x1="36" y1="496" x2="354" y2="496" stroke="#282836" stroke-width="1"/>
+
+      <!-- Passenger Profile -->
+      <circle cx="56" cy="530" r="16" fill="#282836"/>
+      <text x="56" y="535" fill="#FFFFFF" font-size="12" text-anchor="middle">👤</text>
+      <text x="82" y="526" fill="#FFFFFF" font-size="13" font-weight="700">Ma Thiri (Passenger)</text>
+      <text x="82" y="544" fill="#F59E0B" font-size="11">⭐ 4.95 (148 trips completed)</text>
+
+      <!-- Accept / Reject Actions -->
+      <g filter="url(#card-shadow)">
+        <rect x="36" y="576" width="318" height="60" rx="16" fill="url(#gold-grad)"/>
+        <text x="195" y="612" fill="#181922" font-size="17" font-weight="900" text-anchor="middle">လက်ခံမည် (ACCEPT RIDE OFFER)</text>
+      </g>
+
+      <rect x="36" y="650" width="318" height="48" rx="14" fill="#242533" stroke="#F85A5A"/>
+      <text x="195" y="680" fill="#F85A5A" font-size="14" font-weight="700" text-anchor="middle">ငြင်းပယ်မည် (DECLINE / PASS)</text>
+    </g>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>

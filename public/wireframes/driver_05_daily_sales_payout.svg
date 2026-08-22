@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0E0F14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD54F"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F85A5A"/>
+      <stop offset="100%" stop-color="#E5252A"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Island -->
+  <rect x="1" y="1" width="388" height="842" rx="44" fill="#0E0F14" stroke="#282836" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="30" rx="15" fill="#000000"/>
+  <circle cx="236" cy="27" r="5" fill="#181922"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#FFFFFF" font-size="14" font-weight="600">9:41</text>
+  <text x="354" y="32" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="50" width="390" height="52" fill="#181922" fill-opacity="0.95"/>
+  <text x="24" y="82" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="1">LarBar</text>
+  <rect x="94" y="68" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1"/>
+  <text x="135" y="81" fill="#F59E0B" font-size="9" font-weight="700" text-anchor="middle">LARBAR NATIVE</text>
+  
+  <text x="280" y="82" fill="#FFFFFF" font-size="13" font-weight="700" text-anchor="middle">ဝင်ငွေ ထုတ်ယူခြင်း (Sales Payout)</text>
+  <circle cx="360" cy="76" r="14" fill="#282836"/>
+  <text x="360" y="81" fill="#FFFFFF" font-size="12" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Daily Settlement Header -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="110" width="358" height="150" rx="18" fill="#181922" stroke="#F59E0B" stroke-width="2"/>
+      <text x="36" y="142" fill="#9CA3AF" font-size="12">ထုတ်ယူနိုင်သော လက်ကျန်ငွေ (Available Balance)</text>
+      <text x="36" y="180" fill="#F59E0B" font-size="34" font-weight="900">41,225 <tspan font-size="16">MMK</tspan></text>
+      <text x="36" y="208" fill="#10B981" font-size="11">Net After 15% Platform Commission</text>
+      
+      <line x1="36" y1="222" x2="354" y2="222" stroke="#282836" stroke-width="1"/>
+      <text x="36" y="244" fill="#FFFFFF" font-size="11">Gross Sales: 48,500 MMK | Fee: -7,275 MMK</text>
+    </g>
+
+    <!-- Payout Destination Channels -->
+    <rect x="16" y="272" width="358" height="230" rx="16" fill="#181922" stroke="#282836"/>
+    <text x="36" y="302" fill="#FFFFFF" font-size="14" font-weight="700">ငွေထုတ်ယူမည့် ချန်နယ် ရွေးချယ်ပါ (Select Payout Channel)</text>
+
+    <!-- KBZPay Option -->
+    <rect x="28" y="318" width="334" height="60" rx="12" fill="#242533" stroke="#38BDF8" stroke-width="1.5"/>
+    <text x="44" y="342" fill="#38BDF8" font-size="14" font-weight="800">KBZPay Partner Direct</text>
+    <text x="44" y="362" fill="#9CA3AF" font-size="11">Account: 09123456789 (U Aung Kyaw)</text>
+    <text x="346" y="352" fill="#38BDF8" font-size="14" text-anchor="end">✓</text>
+
+    <!-- WavePay Option -->
+    <rect x="28" y="388" width="334" height="60" rx="12" fill="#242533" stroke="#282836"/>
+    <text x="44" y="412" fill="#FFFFFF" font-size="14" font-weight="700">WavePay Instant Transfer</text>
+    <text x="44" y="432" fill="#9CA3AF" font-size="11">Wave Account Linked: 09123456789</text>
+
+    <text x="195" y="482" fill="#9CA3AF" font-size="11" text-anchor="middle">Processing Time: Instant (Under 30 seconds)</text>
+
+    <!-- Daily Breakdown Table -->
+    <rect x="16" y="514" width="358" height="150" rx="16" fill="#181922" stroke="#282836"/>
+    <text x="36" y="544" fill="#FFFFFF" font-size="14" font-weight="700">ယနေ့ ခရီးစဥ် အကျဉ်းချုပ် (Daily Summary)</text>
+    
+    <text x="36" y="572" fill="#9CA3AF" font-size="12">Total Completed Trips:</text>
+    <text x="354" y="572" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="end">12 Trips</text>
+
+    <text x="36" y="596" fill="#9CA3AF" font-size="12">Cash Collected (In-Hand):</text>
+    <text x="354" y="596" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="end">18,500 MMK</text>
+
+    <text x="36" y="620" fill="#9CA3AF" font-size="12">Digital E-Wallet Sales:</text>
+    <text x="354" y="620" fill="#10B981" font-size="12" font-weight="700" text-anchor="end">30,000 MMK</text>
+
+    <!-- Payout Confirm Button -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="678" width="358" height="56" rx="14" fill="url(#gold-grad)"/>
+      <text x="195" y="712" fill="#181922" font-size="16" font-weight="900" text-anchor="middle">ငွေထုတ်ယူမှု အတည်ပြုမည် (TRANSFER NOW)</text>
+    </g>
+    
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="5" rx="2.5" fill="#484856"/>
+</svg>
