@@ -29,6 +29,7 @@ export default defineConfig({
         items: [
           { text: 'Getting Started', link: '/guide/getting-started' },
           { text: 'Monorepo & Codebase Architecture', link: '/architecture/codebase-architecture' },
+          { text: 'Recommended Libraries & Standards', link: '/guide/recommended-tech-stack-and-libraries' },
           { text: 'Tech Stack & Standards', link: '/guide/tech-stack' },
           { text: 'Native Mobile Architecture', link: '/guide/mobile-architecture' },
           { text: 'REST & WebSocket API Reference', link: '/guide/api-reference' }

@@ -3,215 +3,434 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LarBar Passenger App — Interactive Mobile Prototype</title>
+  <title>LarBar Passenger App — High-Fidelity Interactive Prototype</title>
   <style>
     :root {
-      --bg: #0E0F14;
-      --card: #181922;
-      --card-elevated: #242533;
-      --border: #282836;
-      --gold-primary: #F59E0B;
-      --gold-light: #FFD54F;
-      --red-primary: #E5252A;
-      --emerald: #10B981;
-      --text: #FFFFFF;
-      --text-muted: #9CA3AF;
+      --clr-noir-base: #0A0B0E;
+      --clr-noir-surface: #12131A;
+      --clr-noir-elevated: #1C1D26;
+      --clr-noir-card: #232532;
+      --clr-noir-border: #2D3042;
+      
+      --clr-gold-300: #FFE082;
+      --clr-gold-500: #F59E0B;
+      --clr-gold-600: #D97706;
+      --clr-crimson-500: #E5252A;
+      --clr-crimson-600: #C41419;
+      --clr-emerald-500: #10B981;
+      --clr-cyan-500: #06B6D4;
+      
+      --clr-text-main: #FFFFFF;
+      --clr-text-dim: #94A3B8;
+      --clr-text-sub: #64748B;
+      
+      --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif; }
-    body { background: #07080B; color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
-    
-    .header-nav { text-align: center; margin-bottom: 24px; max-width: 600px; }
-    .header-nav h1 { color: var(--gold-primary); font-size: 24px; margin-bottom: 8px; font-weight: 900; }
-    .header-nav p { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
-    .tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
-    .tab-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s ease; }
-    .tab-btn.active { background: var(--gold-primary); color: #181922; border-color: var(--gold-primary); font-weight: 800; }
 
-    /* Phone Shell */
-    .phone-container {
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-display); }
+    body { background: var(--clr-noir-base); color: var(--clr-text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px; }
+
+    /* Top Control Hub */
+    .prototype-control-hub { text-align: center; margin-bottom: 24px; max-width: 640px; }
+    .prototype-heading { font-size: 26px; font-weight: 900; color: var(--clr-gold-500); letter-spacing: -0.5px; margin-bottom: 6px; }
+    .prototype-subtitle { font-size: 13px; color: var(--clr-text-dim); line-height: 1.5; margin-bottom: 18px; }
+    
+    .lifecycle-nav-pill-group { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .lifecycle-tab-trigger {
+      background: var(--clr-noir-surface);
+      border: 1px solid var(--clr-noir-border);
+      color: var(--clr-text-dim);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .lifecycle-tab-trigger:hover { border-color: var(--clr-gold-500); color: var(--clr-text-main); }
+    .lifecycle-tab-trigger.is-active {
+      background: linear-gradient(135deg, var(--clr-gold-300), var(--clr-gold-500));
+      color: #12131A;
+      border-color: var(--clr-gold-500);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+    }
+
+    /* Device Viewport Frame */
+    .device-chassis {
       width: 390px;
       height: 844px;
-      background: var(--bg);
-      border: 2px solid var(--border);
-      border-radius: 44px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.8), 0 0 0 8px #181922;
+      background: var(--clr-noir-surface);
+      border: 2px solid var(--clr-noir-border);
+      border-radius: 48px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.85), 0 0 0 10px #181924;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
-    .island { width: 120px; height: 28px; background: #000; border-radius: 14px; margin: 10px auto 0; z-index: 10; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; }
-    .island-cam { width: 8px; height: 8px; border-radius: 50%; background: #181922; }
-    .status-bar { display: flex; justify-content: space-between; padding: 4px 28px 8px; font-size: 12px; font-weight: 600; }
-    .app-header { background: rgba(24, 25, 34, 0.95); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-    .app-header .logo { color: var(--gold-primary); font-size: 18px; font-weight: 900; }
-    .app-header .title { font-size: 13px; font-weight: 700; }
 
-    .content-viewport { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
-    .home-indicator { width: 130px; height: 4px; background: #484856; border-radius: 2px; margin: 8px auto 12px; }
+    .notch-island {
+      width: 125px;
+      height: 28px;
+      background: #000000;
+      border-radius: 14px;
+      margin: 10px auto 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 12px;
+    }
+    .camera-lens-dot { width: 8px; height: 8px; border-radius: 50%; background: #1C1D26; }
+    
+    .status-telemetry-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 30px 4px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
 
-    /* Cards */
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
-    .btn-gold { background: linear-gradient(135deg, var(--gold-light), var(--gold-primary)); color: #181922; border: none; border-radius: 14px; padding: 14px; font-weight: 800; font-size: 15px; width: 100%; cursor: pointer; text-align: center; }
-    .btn-red { background: linear-gradient(135deg, #F85A5A, var(--red-primary)); color: #FFF; border: none; border-radius: 14px; padding: 14px; font-weight: 800; font-size: 15px; width: 100%; cursor: pointer; text-align: center; }
+    .top-app-bar {
+      background: rgba(18, 19, 26, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--clr-noir-border);
+    }
+    .brand-emblem { font-size: 20px; font-weight: 900; color: var(--clr-gold-500); letter-spacing: 0.5px; }
+    .screen-title-tag { font-size: 13px; font-weight: 700; color: var(--clr-text-main); }
+    .notification-bell-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--clr-noir-elevated); border: 1px solid var(--clr-noir-border); display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; }
+
+    .interactive-scroll-pane { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+    .interactive-scroll-pane::-webkit-scrollbar { width: 4px; }
+    .interactive-scroll-pane::-webkit-scrollbar-thumb { background: var(--clr-noir-border); border-radius: 2px; }
+
+    .bottom-home-indicator { width: 134px; height: 4px; background: var(--clr-text-sub); border-radius: 2px; margin: 8px auto 10px; }
+
+    /* Component System */
+    .map-canvas-container {
+      height: 200px;
+      background: #10121A;
+      border: 1px solid var(--clr-noir-border);
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .map-grid-svg { width: 100%; height: 100%; }
+
+    .route-timeline-container {
+      background: var(--clr-noir-elevated);
+      border: 1px solid var(--clr-noir-border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .timeline-stop-row { display: flex; align-items: center; gap: 12px; }
+    .timeline-node-pin { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .timeline-node-pickup { background: var(--clr-emerald-500); box-shadow: 0 0 8px rgba(16,185,129,0.6); }
+    .timeline-node-stop { background: var(--clr-gold-500); box-shadow: 0 0 8px rgba(245,158,11,0.6); }
+    .timeline-node-dest { background: var(--clr-crimson-500); box-shadow: 0 0 8px rgba(229,37,42,0.6); }
+    .timeline-connector-line { width: 2px; height: 16px; background: var(--clr-noir-border); margin-left: 4px; }
+    .timeline-address-text { font-size: 13px; font-weight: 600; color: var(--clr-text-main); flex: 1; }
+    .timeline-address-sub { font-size: 11px; color: var(--clr-text-dim); }
+
+    .vehicle-tier-card {
+      background: var(--clr-noir-elevated);
+      border: 1px solid var(--clr-noir-border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .vehicle-tier-card:hover { border-color: var(--clr-gold-500); }
+    .vehicle-tier-card.is-selected {
+      border: 2px solid var(--clr-gold-500);
+      background: rgba(245, 158, 11, 0.08);
+    }
+    .tier-title { font-size: 14px; font-weight: 800; color: var(--clr-text-main); margin-bottom: 2px; }
+    .tier-details { font-size: 11px; color: var(--clr-text-dim); }
+    .tier-fare-badge { font-size: 17px; font-weight: 900; color: var(--clr-gold-500); text-align: right; }
+
+    .action-btn-gold {
+      background: linear-gradient(135deg, var(--clr-gold-300), var(--clr-gold-500));
+      color: #12131A;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 15px;
+      font-weight: 900;
+      width: 100%;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(245,158,11,0.3);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .action-btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.45); }
+    .action-btn-gold:active { transform: translateY(0); }
+
+    .action-btn-crimson {
+      background: linear-gradient(135deg, #F85A5A, var(--clr-crimson-500));
+      color: #FFFFFF;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 15px;
+      font-weight: 900;
+      width: 100%;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(229,37,42,0.35);
+      transition: transform 0.15s ease;
+    }
+    .action-btn-crimson:hover { transform: translateY(-2px); }
+
+    /* Radar Animations */
+    .cascading-radar-sphere {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 1px solid var(--clr-noir-border);
+      position: relative;
+      margin: 16px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .radar-sweep-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--clr-gold-500);
+      opacity: 0;
+      animation: radarPulse 2s infinite cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    @keyframes radarPulse {
+      0% { transform: scale(0.2); opacity: 0.8; }
+      100% { transform: scale(1.3); opacity: 0; }
+    }
   </style>
 </head>
 <body>
 
-  <div class="header-nav">
-    <h1>🚖 LarBar Passenger App Interactive Prototype</h1>
-    <p>Click the interactive steps below to simulate the end-to-end booking, dispatch, in-trip, and payment lifecycle.</p>
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchStep(1)">1. Multi-Stop Booking</button>
-      <button class="tab-btn" onclick="switchStep(2)">2. 15s Cascading Dispatch</button>
-      <button class="tab-btn" onclick="switchStep(3)">3. In-Trip Live Meter</button>
-      <button class="tab-btn" onclick="switchStep(4)">4. Receipt & Rating</button>
+  <div class="prototype-control-hub">
+    <h1 class="prototype-heading">🚖 LarBar Passenger App Interactive Prototype</h1>
+    <p class="prototype-subtitle">Click through the live lifecycle steps below to simulate multi-stop ride estimation, 15s cascading dispatch, dynamic in-trip metering, and KBZPay MMQR settlement.</p>
+    
+    <div class="lifecycle-nav-pill-group">
+      <button class="lifecycle-tab-trigger is-active" onclick="renderStep(1)">1. Multi-Stop Booking</button>
+      <button class="lifecycle-tab-trigger" onclick="renderStep(2)">2. 15s Cascading Search</button>
+      <button class="lifecycle-tab-trigger" onclick="renderStep(3)">3. In-Trip Live Meter</button>
+      <button class="lifecycle-tab-trigger" onclick="renderStep(4)">4. Receipt &amp; 5★ Rating</button>
     </div>
   </div>
 
-  <div class="phone-container">
-    <div class="island"><div class="island-cam"></div></div>
-    <div class="status-bar"><span>9:41</span><span>5G 🔋 100%</span></div>
-    
-    <div class="app-header">
-      <span class="logo">LarBar</span>
-      <span class="title" id="screen-title">ခရီးစဥ်မှာယူခြင်း</span>
-      <span>🔔</span>
+  <div class="device-chassis">
+    <div class="notch-island"><div class="camera-lens-dot"></div></div>
+    <div class="status-telemetry-bar">
+      <span>9:41</span>
+      <span>5G 🔋 100%</span>
     </div>
 
-    <div class="content-viewport" id="viewport">
-      <!-- Injected step content -->
+    <div class="top-app-bar">
+      <span class="brand-emblem">LarBar</span>
+      <span class="screen-title-tag" id="active-screen-title">ခရီးစဥ်မှာယူခြင်း</span>
+      <div class="notification-bell-btn">🔔</div>
     </div>
 
-    <div class="home-indicator"></div>
+    <div class="interactive-scroll-pane" id="interactive-viewport"></div>
+
+    <div class="bottom-home-indicator"></div>
   </div>
 
   <script>
-    const steps = [
-      {
-        title: 'ခရီးစဥ်မှာယူခြင်း (Ride Booking)',
-        html: `
-          <div style="height: 200px; background: #14151D; border: 1px solid var(--border); border-radius: 16px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-            <div style="position: absolute; color: var(--gold-primary); font-weight: 900; font-size: 14px;">🗺️ LIVE YANGON DOWNTOWN MAP</div>
-            <div style="position: absolute; bottom: 12px; left: 16px; background: rgba(0,0,0,0.8); padding: 4px 10px; border-radius: 8px; font-size: 11px; color: var(--emerald);">🚖 3 Taxis nearby (2-4 mins)</div>
-          </div>
+    let selectedTier = 'standard';
+    let countdownSec = 15;
+    let timerInterval = null;
 
-          <div class="card">
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
-              <span style="color: var(--emerald);">●</span>
-              <span style="font-size: 13px; font-weight: 600;">Sule Square, Downtown</span>
-            </div>
-            <div style="border-left: 2px dashed #484856; margin-left: 5px; height: 16px;"></div>
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
-              <span style="color: var(--gold-primary);">●</span>
-              <span style="font-size: 12px; color: var(--gold-light);">Stop: Bogyoke Aung San Market</span>
-            </div>
-            <div style="border-left: 2px dashed #484856; margin-left: 5px; height: 16px;"></div>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <span style="color: var(--red-primary);">●</span>
-              <span style="font-size: 13px; font-weight: 600;">Junction City Mall</span>
-            </div>
-          </div>
-
-          <div class="card" style="border: 2px solid var(--gold-primary);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <div style="font-weight: 800; font-size: 14px;">🚗 Standard Taxi (4 Seats)</div>
-                <div style="font-size: 11px; color: var(--text-muted);">Toyota Probox / Fielder • 3m away</div>
-              </div>
-              <div style="color: var(--gold-primary); font-size: 18px; font-weight: 900;">2,800 MMK</div>
-            </div>
-          </div>
-
-          <button class="btn-gold" onclick="switchStep(2)">ခရီးစဥ် ခေါ်ယူမည် (CALL TAXI NOW)</button>
-        `
-      },
-      {
-        title: 'ယာဥ်မောင်း ရှာဖွေနေသည် (15s Cascading)',
-        html: `
-          <div class="card" style="text-align: center; padding: 32px 16px;">
-            <div style="font-size: 48px; margin-bottom: 12px;">📡</div>
-            <div style="color: var(--gold-primary); font-size: 18px; font-weight: 800; margin-bottom: 6px;">15s Cascading Dispatch Active</div>
-            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Offering to nearest driver: U Aung Kyaw (240m away)</div>
-            <div style="background: var(--card-elevated); border-radius: 12px; padding: 12px; font-size: 13px;">
-              ⏱️ Offer expires in: <b style="color: var(--gold-primary);">9 seconds</b>
-            </div>
-          </div>
-
-          <div class="card">
-            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Pickup ➔ Destination:</div>
-            <div style="font-weight: 700; font-size: 13px;">Sule Square ➔ Junction City (5.4 km)</div>
-            <div style="font-size: 12px; color: var(--gold-primary); margin-top: 6px;">Est. Fare: 2,800 MMK (KBZPay Direct)</div>
-          </div>
-
-          <button class="btn-gold" onclick="switchStep(3)">Simulate Driver Accepted ➔</button>
-          <button style="background: transparent; border: 1px solid var(--red-primary); color: var(--red-primary); padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer;" onclick="switchStep(1)">မခေါ်ယူတော့ပါ (Cancel Search)</button>
-        `
-      },
-      {
-        title: 'ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)',
-        html: `
-          <div style="height: 180px; background: #14151D; border: 1px solid var(--border); border-radius: 16px; position: relative; display: flex; align-items: center; justify-content: center;">
-            <div style="color: var(--emerald); font-weight: 800; font-size: 13px;">📍 Live Navigation: 42 km/h on Pyay Road</div>
-          </div>
-
-          <div class="card" style="border: 2px solid var(--gold-primary);">
-            <div style="font-size: 11px; color: var(--text-muted);">လက်ရှိ မီတာခ (Dynamic Taximeter)</div>
-            <div style="color: var(--gold-primary); font-size: 28px; font-weight: 900; margin: 4px 0;">2,350 MMK</div>
-            <div style="font-size: 11px; color: #38BDF8;">Distance: 4.2 km • Duration: 11m 40s</div>
-          </div>
-
-          <div class="card">
-            <div style="display: flex; gap: 12px; align-items: center;">
-              <div style="font-size: 28px;">👨🏻‍✈️</div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px;">U Aung Kyaw (Toyota Fielder)</div>
-                <div style="font-size: 11px; color: var(--gold-primary);">⭐ 4.96 • Plate: 3A-8492</div>
-              </div>
-            </div>
-            <div style="margin-top: 10px; font-size: 11px; color: var(--emerald); font-weight: 700;">📹 In-Car CCTV Protecting: ACTIVE</div>
-          </div>
-
-          <button class="btn-red" onclick="alert('🚨 SOS Panic Alarm Broadcasted to Family Guardian & Police!')">🚨 EMERGENCY SOS PANIC</button>
-          <button class="btn-gold" onclick="switchStep(4)">Simulate Arrived at Destination ➔</button>
-        `
-      },
-      {
-        title: 'ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt & Rating)',
-        html: `
-          <div class="card" style="text-align: center; padding: 24px 16px; border: 2px solid var(--emerald);">
-            <div style="font-size: 36px; margin-bottom: 8px;">✓</div>
-            <div style="font-weight: 800; font-size: 16px;">ခရီးစဥ် ပြီးဆုံးပါပြီ</div>
-            <div style="color: var(--gold-primary); font-size: 32px; font-weight: 900; margin: 6px 0;">2,800 MMK</div>
-            <div style="font-size: 12px; color: #38BDF8;">Paid via KBZPay Direct (Auto Settled)</div>
-          </div>
-
-          <div class="card" style="text-align: center;">
-            <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Rate U Aung Kyaw:</div>
-            <div style="color: var(--gold-primary); font-size: 24px; letter-spacing: 6px; margin-bottom: 12px;">★★★★★</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Add Tip (မုန့်ဖိုးပေးမည်):</div>
-            <div style="display: flex; gap: 8px; justify-content: center;">
-              <button style="background: var(--card-elevated); border: 1px solid var(--border); color: #FFF; padding: 6px 12px; border-radius: 8px; font-size: 11px;">+500 MMK</button>
-              <button style="background: var(--card-elevated); border: 1px solid var(--gold-primary); color: var(--gold-primary); padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700;">+1,000 MMK</button>
-              <button style="background: var(--card-elevated); border: 1px solid var(--border); color: #FFF; padding: 6px 12px; border-radius: 8px; font-size: 11px;">+2,000 MMK</button>
-            </div>
-          </div>
-
-          <button class="btn-gold" onclick="switchStep(1)">ပြီးဆုံးပါပြီ (DONE &amp; NEW RIDE)</button>
-        `
-      }
-    ];
-
-    function switchStep(stepNum) {
-      document.querySelectorAll('.tab-btn').forEach((b, i) => {
-        b.classList.toggle('active', i === stepNum - 1);
+    function renderStep(step) {
+      clearInterval(timerInterval);
+      document.querySelectorAll('.lifecycle-tab-trigger').forEach((btn, idx) => {
+        btn.classList.toggle('is-active', idx === step - 1);
       });
-      const s = steps[stepNum - 1];
-      document.getElementById('screen-title').innerText = s.title;
-      document.getElementById('viewport').innerHTML = s.html;
+
+      const viewport = document.getElementById('interactive-viewport');
+      const titleEl = document.getElementById('active-screen-title');
+
+      if (step === 1) {
+        titleEl.innerText = 'ခရီးစဥ်မှာယူခြင်း (Ride Booking)';
+        viewport.innerHTML = `
+          <div class="map-canvas-container">
+            <svg class="map-grid-svg" viewBox="0 0 358 200">
+              <path d="M 20 180 Q 140 120 340 160" stroke="#2D3042" stroke-width="6" fill="none"/>
+              <path d="M 100 20 L 100 190" stroke="#2D3042" stroke-width="4" fill="none"/>
+              <path d="M 240 20 L 240 190" stroke="#2D3042" stroke-width="4" fill="none"/>
+              <!-- Route Polyline -->
+              <path d="M 60 160 L 160 100 L 290 60" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <circle cx="60" cy="160" r="7" fill="#10B981"/>
+              <circle cx="160" cy="100" r="5" fill="#F59E0B"/>
+              <circle cx="290" cy="60" r="7" fill="#E5252A"/>
+              <!-- Moving Taxi -->
+              <rect x="110" y="115" width="28" height="15" rx="3" fill="#F59E0B"/>
+              <text x="124" y="126" fill="#12131A" font-size="8" font-weight="900" text-anchor="middle">🚖 3m</text>
+            </svg>
+          </div>
+
+          <div class="route-timeline-container">
+            <div class="timeline-stop-row">
+              <div class="timeline-node-pin timeline-node-pickup"></div>
+              <div>
+                <div class="timeline-address-text">Sule Square, Downtown</div>
+                <div class="timeline-address-sub">စတင်ရာနေရာ (Pickup Point)</div>
+              </div>
+            </div>
+            <div class="timeline-connector-line"></div>
+            <div class="timeline-stop-row">
+              <div class="timeline-node-pin timeline-node-stop"></div>
+              <div style="flex: 1;">
+                <div class="timeline-address-text" style="color: var(--clr-gold-300);">Stop 1: Bogyoke Aung San Market</div>
+                <div class="timeline-address-sub">အပိုမှတ်တိုင် (Intermediate Stop)</div>
+              </div>
+              <span style="color: var(--clr-crimson-500); font-size: 11px; cursor: pointer;">✕</span>
+            </div>
+            <div class="timeline-connector-line"></div>
+            <div class="timeline-stop-row">
+              <div class="timeline-node-pin timeline-node-dest"></div>
+              <div>
+                <div class="timeline-address-text">Junction City Mall</div>
+                <div class="timeline-address-sub">သွားရောက်မည့်နေရာ (Final Destination)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vehicle-tier-card ${selectedTier === 'standard' ? 'is-selected' : ''}" onclick="selectVehicle('standard')">
+            <div>
+              <div class="tier-title">🚗 Standard Taxi (4 Seats)</div>
+              <div class="tier-details">Toyota Probox / Fielder • 3 mins away</div>
+            </div>
+            <div class="tier-fare-badge">2,800 MMK</div>
+          </div>
+
+          <div class="vehicle-tier-card ${selectedTier === 'vip' ? 'is-selected' : ''}" onclick="selectVehicle('vip')">
+            <div>
+              <div class="tier-title">👑 Royal Gold VIP Sedan</div>
+              <div class="tier-details">Crown / Alphard • Leather &amp; AC • 2 mins</div>
+            </div>
+            <div class="tier-fare-badge" style="color: var(--clr-gold-300);">4,500 MMK</div>
+          </div>
+
+          <button class="action-btn-gold" onclick="renderStep(2)">ခရီးစဥ် ခေါ်ယူမည် (CALL TAXI NOW)</button>
+        `;
+      } else if (step === 2) {
+        countdownSec = 15;
+        titleEl.innerText = 'ယာဥ်မောင်း ရှာဖွေနေသည် (15s Cascading)';
+        viewport.innerHTML = `
+          <div class="route-timeline-container" style="text-align: center; padding: 24px 16px;">
+            <div class="cascading-radar-sphere">
+              <div class="radar-sweep-ring"></div>
+              <div class="radar-sweep-ring" style="animation-delay: 0.7s;"></div>
+              <div style="font-size: 36px;">🚖</div>
+            </div>
+            <div style="font-size: 16px; font-weight: 900; color: var(--clr-gold-500); margin-bottom: 4px;">
+              15s Cascading Dispatch Active
+            </div>
+            <div style="font-size: 12px; color: var(--clr-text-dim); margin-bottom: 14px;">
+              Offering to nearest driver: <b style="color: #FFF;">U Aung Kyaw (240m away)</b>
+            </div>
+            <div style="background: var(--clr-noir-card); border-radius: 12px; padding: 10px; font-size: 13px;">
+              ⏱️ Time remaining: <span id="timer-sec" style="color: var(--clr-gold-500); font-weight: 900;">15s</span>
+            </div>
+          </div>
+
+          <div class="route-timeline-container">
+            <div style="font-size: 12px; color: var(--clr-text-dim); margin-bottom: 6px;">Trip Summary:</div>
+            <div style="font-weight: 800; font-size: 13px;">Sule Square ➔ Junction City (5.4 km)</div>
+            <div style="font-size: 12px; color: var(--clr-gold-500); margin-top: 4px;">Fare: 2,800 MMK (KBZPay Direct)</div>
+          </div>
+
+          <button class="action-btn-gold" onclick="renderStep(3)">Simulate Driver Accepted ➔</button>
+          <button style="background: transparent; border: 1px solid var(--clr-crimson-500); color: var(--clr-crimson-500); padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer;" onclick="renderStep(1)">မခေါ်ယူတော့ပါ (Cancel Search)</button>
+        `;
+
+        timerInterval = setInterval(() => {
+          countdownSec--;
+          const tEl = document.getElementById('timer-sec');
+          if (tEl) tEl.innerText = countdownSec + 's';
+          if (countdownSec <= 0) {
+            clearInterval(timerInterval);
+            renderStep(3);
+          }
+        }, 1000);
+      } else if (step === 3) {
+        titleEl.innerText = 'ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)';
+        viewport.innerHTML = `
+          <div class="map-canvas-container" style="display: flex; align-items: center; justify-content: center;">
+            <div style="color: var(--clr-emerald-500); font-weight: 900; font-size: 14px;">📍 42 km/h on Pyay Road • 8 mins to Junction City</div>
+          </div>
+
+          <div class="route-timeline-container" style="border: 2px solid var(--clr-gold-500);">
+            <div style="font-size: 11px; color: var(--clr-text-dim);">လက်ရှိ မီတာခ (Live Taximeter)</div>
+            <div style="color: var(--clr-gold-500); font-size: 32px; font-weight: 900; margin: 4px 0;">2,350 MMK</div>
+            <div style="font-size: 11px; color: var(--clr-cyan-500);">Distance: 4.2 km • Duration: 11m 40s</div>
+          </div>
+
+          <div class="route-timeline-container">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--clr-noir-card); display: flex; align-items: center; justify-content: center; font-size: 20px;">👨🏻‍✈️</div>
+              <div style="flex: 1;">
+                <div style="font-weight: 800; font-size: 14px;">U Aung Kyaw</div>
+                <div style="font-size: 11px; color: var(--clr-gold-500);">⭐ 4.96 • Toyota Fielder (3A-8492)</div>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--clr-noir-card); display: flex; align-items: center; justify-content: center;">💬</div>
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--clr-noir-card); display: flex; align-items: center; justify-content: center;">📞</div>
+              </div>
+            </div>
+            <div style="margin-top: 10px; font-size: 10px; color: var(--clr-emerald-500); font-weight: 800;">📹 CCTV Protecting Mode: ACTIVE</div>
+          </div>
+
+          <button class="action-btn-crimson" onclick="alert('🚨 SOS Panic Broadcasted to Police & Family Guardian!')">🚨 EMERGENCY SOS PANIC</button>
+          <button class="action-btn-gold" onclick="renderStep(4)">Simulate Arrived at Destination ➔</button>
+        `;
+      } else if (step === 4) {
+        titleEl.innerText = 'ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt & Rating)';
+        viewport.innerHTML = `
+          <div class="route-timeline-container" style="text-align: center; padding: 24px 16px; border: 2px solid var(--clr-emerald-500);">
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--clr-emerald-500); color: #12131A; font-size: 24px; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">✓</div>
+            <div style="font-weight: 800; font-size: 16px;">ခရီးစဥ် ပြီးဆုံးပါပြီ</div>
+            <div style="color: var(--clr-gold-500); font-size: 34px; font-weight: 900; margin: 6px 0;">2,800 MMK</div>
+            <div style="font-size: 12px; color: var(--clr-cyan-500);">Paid via KBZPay Direct (Auto Settled)</div>
+          </div>
+
+          <div class="route-timeline-container" style="text-align: center;">
+            <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Rate U Aung Kyaw:</div>
+            <div style="color: var(--clr-gold-500); font-size: 26px; letter-spacing: 6px; margin-bottom: 12px;">★★★★★</div>
+            <div style="font-size: 11px; color: var(--clr-text-dim); margin-bottom: 8px;">Add Tip (မုန့်ဖိုးပေးမည်):</div>
+            <div style="display: flex; gap: 8px; justify-content: center;">
+              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 8px 14px; border-radius: 8px; font-size: 11px;">+500 MMK</button>
+              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-gold-500); color: var(--clr-gold-500); padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 800;">+1,000 MMK</button>
+              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 8px 14px; border-radius: 8px; font-size: 11px;">+2,000 MMK</button>
+            </div>
+          </div>
+
+          <button class="action-btn-gold" onclick="renderStep(1)">ပြီးဆုံးပါပြီ (DONE &amp; NEW RIDE)</button>
+        `;
+      }
     }
 
-    switchStep(1);
+    function selectVehicle(tier) {
+      selectedTier = tier;
+      renderStep(1);
+    }
+
+    renderStep(1);
   </script>
 </body>
 </html>
