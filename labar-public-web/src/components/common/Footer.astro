@@ -10,7 +10,40 @@ const { locale = defaultLocale } = Astro.props;
 const t = getTranslation(locale);
 ---
 
-<footer class="bg-white border-t border-brand-border/80 pt-16 pb-12 mt-20">
+<!-- Unique Myanmar Live Fleet Highway Ticker -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 mb-4">
+  <div class="bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 rounded-3xl p-4 sm:p-5 text-white shadow-soft-lg flex flex-col md:flex-row items-center justify-between gap-4 overflow-hidden relative border border-neutral-700/60">
+    <div class="flex items-center gap-3 z-10">
+      <div class="w-10 h-10 rounded-2xl bg-brand-red text-white flex items-center justify-center shadow-sm">
+        <Icon name="taxi" size={20} />
+      </div>
+      <div>
+        <div class="text-xs font-black tracking-wide flex items-center gap-2">
+          <span>LaBar High-Speed Mesh Telemetry</span>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">● Active 24/7</span>
+        </div>
+        <div class="text-[11px] text-neutral-400 font-medium">
+          Connecting Yangon ➔ Mandalay ➔ Naypyidaw ➔ Taunggyi ➔ Inle Lake
+        </div>
+      </div>
+    </div>
+
+    <!-- Animated Road Waypoints Track -->
+    <div class="w-full md:w-80 h-2 bg-neutral-700/80 rounded-full overflow-hidden relative">
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-brand-red to-transparent w-24 animate-[marquee_3s_linear_infinite]" />
+    </div>
+
+    <a
+      href="/status"
+      class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1.5 z-10 shrink-0"
+    >
+      <span>Live Fleet Radar</span>
+      <span>❯</span>
+    </a>
+  </div>
+</div>
+
+<footer class="bg-white border-t border-brand-border/80 pt-16 pb-12">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 pb-12 border-b border-neutral-200">
       <!-- Brand & Mission Column (Col 1-2) -->
