@@ -1,92 +1,92 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0A0B0E; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
   <defs>
     <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFE082"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
     <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F85A5A"/>
-      <stop offset="100%" stop-color="#E5252A"/>
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#DC2626"/>
     </linearGradient>
     <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#34D399"/>
-      <stop offset="100%" stop-color="#10B981"/>
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
     </linearGradient>
     <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38BDF8"/>
       <stop offset="100%" stop-color="#0284C7"/>
     </linearGradient>
-    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
     </filter>
   </defs>
 
-  <!-- Device Outer Border & Dynamic Island -->
-  <rect x="1" y="1" width="388" height="842" rx="46" fill="#12131A" stroke="#2D3042" stroke-width="2"/>
-  <rect x="130" y="12" width="130" height="28" rx="14" fill="#000000"/>
-  <circle cx="236" cy="26" r="5" fill="#1C1D26"/>
+  <!-- Device Outer Border & Dynamic Island - Light Mode -->
+  <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
+  <circle cx="236" cy="26" r="5" fill="#1E293B"/>
 
   <!-- Status Bar -->
-  <text x="36" y="32" fill="#FFFFFF" font-size="13" font-weight="700">9:41</text>
-  <text x="354" y="32" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="end">5G 🔋 100%</text>
+  <text x="36" y="32" fill="#0F172A" font-size="13" font-weight="700">9:41</text>
+  <text x="354" y="32" fill="#0F172A" font-size="11" font-weight="700" text-anchor="end">5G 🔋 100%</text>
 
   <!-- App Header -->
-  <rect x="0" y="48" width="390" height="52" fill="#181924" fill-opacity="0.95"/>
-  <text x="24" y="80" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="0.5">LaBar</text>
-  <rect x="92" y="66" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-width="1"/>
+  <rect x="0" y="48" width="390" height="52" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="24" y="80" fill="#D97706" font-size="18" font-weight="900" letter-spacing="0.5">LaBar</text>
+  <rect x="92" y="66" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.12" stroke="#F59E0B" stroke-width="1"/>
   <text x="133" y="79" fill="#F59E0B" font-size="9" font-weight="800" text-anchor="middle">LABAR NATIVE</text>
   
-  <text x="280" y="80" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt & Rating)</text>
-  <circle cx="360" cy="74" r="14" fill="#232532"/>
-  <text x="360" y="79" fill="#FFFFFF" font-size="11" text-anchor="middle">🔔</text>
+  <text x="280" y="80" fill="#0F172A" font-size="12" font-weight="800" text-anchor="middle">ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt & Rating)</text>
+  <circle cx="360" cy="74" r="14" fill="#F1F5F9"/>
+  <text x="360" y="79" fill="#0F172A" font-size="11" text-anchor="middle">🔔</text>
 
   <!-- Body Content -->
   
     <!-- Trip Completed Success Card -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="112" width="358" height="230" rx="20" fill="#181924" stroke="#10B981" stroke-width="2"/>
+      <rect x="16" y="112" width="358" height="230" rx="20" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
       <circle cx="195" cy="155" r="24" fill="#10B981"/>
-      <text x="195" y="163" fill="#12131A" font-size="18" font-weight="900" text-anchor="middle">✓</text>
+      <text x="195" y="163" fill="#FFFFFF" font-size="18" font-weight="900" text-anchor="middle">✓</text>
       
-      <text x="195" y="202" fill="#FFFFFF" font-size="18" font-weight="800" text-anchor="middle">ခရီးစဥ် ပြီးဆုံးပါပြီ (Trip Completed)</text>
-      <text x="195" y="240" fill="#F59E0B" font-size="32" font-weight="900" text-anchor="middle">2,800 <tspan font-size="16">MMK</tspan></text>
-      <text x="195" y="264" fill="#38BDF8" font-size="12" text-anchor="middle">Paid via KBZPay Direct (Auto Settled)</text>
+      <text x="195" y="202" fill="#065F46" font-size="18" font-weight="800" text-anchor="middle">ခရီးစဥ် ပြီးဆုံးပါပြီ (Trip Completed)</text>
+      <text x="195" y="240" fill="#D97706" font-size="32" font-weight="900" text-anchor="middle">2,800 <tspan font-size="16">MMK</tspan></text>
+      <text x="195" y="264" fill="#0284C7" font-size="12" font-weight="700" text-anchor="middle">Paid via KBZPay Direct (Auto Settled)</text>
       
-      <line x1="36" y1="282" x2="354" y2="282" stroke="#2D3042" stroke-width="1"/>
-      <text x="36" y="306" fill="#94A3B8" font-size="11">Distance: 5.4 km</text>
-      <text x="195" y="306" fill="#94A3B8" font-size="11" text-anchor="middle">Duration: 14 mins</text>
-      <text x="354" y="306" fill="#94A3B8" font-size="11" text-anchor="end">Ref: #TX-98421</text>
+      <line x1="36" y1="282" x2="354" y2="282" stroke="#CBD5E1" stroke-width="1"/>
+      <text x="36" y="306" fill="#475569" font-size="11">Distance: 5.4 km</text>
+      <text x="195" y="306" fill="#475569" font-size="11" text-anchor="middle">Duration: 14 mins</text>
+      <text x="354" y="306" fill="#475569" font-size="11" text-anchor="end">Ref: #TX-98421</text>
     </g>
 
     <!-- 5-Star Rating Card -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="356" width="358" height="210" rx="18" fill="#181924" stroke="#2D3042"/>
-      <text x="195" y="388" fill="#FFFFFF" font-size="15" font-weight="800" text-anchor="middle">ယာဥ်မောင်းအား အဆင့်သတ်မှတ်ပါ</text>
-      <text x="195" y="408" fill="#94A3B8" font-size="12" text-anchor="middle">How was your ride with U Aung Kyaw?</text>
+      <rect x="16" y="356" width="358" height="210" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="195" y="388" fill="#0F172A" font-size="15" font-weight="800" text-anchor="middle">ယာဥ်မောင်းအား အဆင့်သတ်မှတ်ပါ</text>
+      <text x="195" y="408" fill="#475569" font-size="12" text-anchor="middle">How was your ride with U Aung Kyaw?</text>
 
       <!-- 5 Gold Stars -->
       <text x="195" y="450" fill="#F59E0B" font-size="28" letter-spacing="8" text-anchor="middle">★★★★★</text>
 
       <!-- Tipping Quick Chips -->
-      <text x="195" y="488" fill="#94A3B8" font-size="11" text-anchor="middle">Add Driver Tip (မုန့်ဖိုးပေးမည်):</text>
+      <text x="195" y="488" fill="#475569" font-size="11" text-anchor="middle">Add Driver Tip (မုန့်ဖိုးပေးမည်):</text>
       
-      <rect x="36" y="504" width="96" height="36" rx="8" fill="#232532" stroke="#2D3042"/>
-      <text x="84" y="527" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">+500 MMK</text>
+      <rect x="36" y="504" width="96" height="36" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="84" y="527" fill="#0F172A" font-size="11" font-weight="700" text-anchor="middle">+500 MMK</text>
 
-      <rect x="146" y="504" width="96" height="36" rx="8" fill="#232532" stroke="#F59E0B"/>
-      <text x="194" y="527" fill="#F59E0B" font-size="11" font-weight="800" text-anchor="middle">+1,000 MMK</text>
+      <rect x="146" y="504" width="96" height="36" rx="8" fill="#FEF3C7" stroke="#F59E0B"/>
+      <text x="194" y="527" fill="#D97706" font-size="11" font-weight="800" text-anchor="middle">+1,000 MMK</text>
 
-      <rect x="256" y="504" width="96" height="36" rx="8" fill="#232532" stroke="#2D3042"/>
-      <text x="304" y="527" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">+2,000 MMK</text>
+      <rect x="256" y="504" width="96" height="36" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="304" y="527" fill="#0F172A" font-size="11" font-weight="700" text-anchor="middle">+2,000 MMK</text>
     </g>
 
     <!-- Done & Back to Home Button -->
     <g filter="url(#card-shadow)">
       <rect x="16" y="584" width="358" height="56" rx="14" fill="url(#gold-grad)"/>
-      <text x="195" y="618" fill="#12131A" font-size="16" font-weight="900" text-anchor="middle">ပြီးဆုံးပါပြီ (DONE &amp; SUBMIT)</text>
+      <text x="195" y="618" fill="#FFFFFF" font-size="16" font-weight="900" text-anchor="middle">ပြီးဆုံးပါပြီ (DONE &amp; SUBMIT)</text>
     </g>
     
 
   <!-- Home Indicator -->
-  <rect x="128" y="828" width="134" height="4" rx="2" fill="#64748B"/>
+  <rect x="128" y="828" width="134" height="4" rx="2" fill="#CBD5E1"/>
 </svg>

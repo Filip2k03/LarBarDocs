@@ -1,102 +1,102 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0A0B0E; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
   <defs>
     <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFE082"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
     <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F85A5A"/>
-      <stop offset="100%" stop-color="#E5252A"/>
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#DC2626"/>
     </linearGradient>
     <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#34D399"/>
-      <stop offset="100%" stop-color="#10B981"/>
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
     </linearGradient>
     <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38BDF8"/>
       <stop offset="100%" stop-color="#0284C7"/>
     </linearGradient>
-    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
     </filter>
   </defs>
 
-  <!-- Device Outer Border & Dynamic Island -->
-  <rect x="1" y="1" width="388" height="842" rx="46" fill="#12131A" stroke="#2D3042" stroke-width="2"/>
-  <rect x="130" y="12" width="130" height="28" rx="14" fill="#000000"/>
-  <circle cx="236" cy="26" r="5" fill="#1C1D26"/>
+  <!-- Device Outer Border & Dynamic Island - Light Mode -->
+  <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
+  <circle cx="236" cy="26" r="5" fill="#1E293B"/>
 
   <!-- Status Bar -->
-  <text x="36" y="32" fill="#FFFFFF" font-size="13" font-weight="700">9:41</text>
-  <text x="354" y="32" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="end">5G 🔋 100%</text>
+  <text x="36" y="32" fill="#0F172A" font-size="13" font-weight="700">9:41</text>
+  <text x="354" y="32" fill="#0F172A" font-size="11" font-weight="700" text-anchor="end">5G 🔋 100%</text>
 
   <!-- App Header -->
-  <rect x="0" y="48" width="390" height="52" fill="#181924" fill-opacity="0.95"/>
-  <text x="24" y="80" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="0.5">LaBar</text>
-  <rect x="92" y="66" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-width="1"/>
+  <rect x="0" y="48" width="390" height="52" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="24" y="80" fill="#D97706" font-size="18" font-weight="900" letter-spacing="0.5">LaBar</text>
+  <rect x="92" y="66" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.12" stroke="#F59E0B" stroke-width="1"/>
   <text x="133" y="79" fill="#F59E0B" font-size="9" font-weight="800" text-anchor="middle">LABAR NATIVE</text>
   
-  <text x="280" y="80" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)</text>
-  <circle cx="360" cy="74" r="14" fill="#232532"/>
-  <text x="360" y="79" fill="#FFFFFF" font-size="11" text-anchor="middle">🔔</text>
+  <text x="280" y="80" fill="#0F172A" font-size="12" font-weight="800" text-anchor="middle">ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)</text>
+  <circle cx="360" cy="74" r="14" fill="#F1F5F9"/>
+  <text x="360" y="79" fill="#0F172A" font-size="11" text-anchor="middle">🔔</text>
 
   <!-- Body Content -->
   
     
-    <!-- Rich Cartography Map Layer -->
+    <!-- Rich Daylight Cartography Map Layer -->
     <g id="cartography-basemap">
-      <!-- Background Land Surface -->
-      <rect x="16" y="110" width="358" height="310" rx="18" fill="#141620" stroke="#2D3042" stroke-width="1.5"/>
+      <!-- Background Land Surface (Light Slate 100) -->
+      <rect x="16" y="110" width="358" height="310" rx="18" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="1.5"/>
       <clipPath id="map-clip">
         <rect x="16" y="110" width="358" height="310" rx="18"/>
       </clipPath>
       
       <g clip-path="url(#map-clip)">
-        <!-- Yangon River / Water Layer -->
-        <path d="M 16 310 Q 120 280 220 315 T 374 340 L 374 360 L 16 360 Z" fill="#162534" stroke="#1F364D" stroke-width="2"/>
-        <!-- Kandawgyi / Inya Lake Park Reservoir -->
-        <path d="M 270 120 C 310 120, 360 140, 350 180 C 340 210, 290 200, 270 180 Z" fill="#13261D" stroke="#1D3D30" stroke-width="1.5"/>
-        <text x="310" y="165" fill="#2E654C" font-size="8" font-weight="700" text-anchor="middle">Kandawgyi Lake</text>
+        <!-- Yangon River / Water Layer (Light Blue) -->
+        <path d="M 16 310 Q 120 280 220 315 T 374 340 L 374 360 L 16 360 Z" fill="#BAE6FD" stroke="#7DD3FC" stroke-width="2"/>
+        <!-- Kandawgyi / Inya Lake Park Reservoir (Soft Green) -->
+        <path d="M 270 120 C 310 120, 360 140, 350 180 C 340 210, 290 200, 270 180 Z" fill="#BBF7D0" stroke="#86EFAC" stroke-width="1.5"/>
+        <text x="310" y="165" fill="#166534" font-size="8" font-weight="700" text-anchor="middle">Kandawgyi Lake</text>
 
-        <!-- City Block Footprints -->
-        <rect x="30" y="130" width="55" height="40" rx="4" fill="#1B1D2B"/>
-        <rect x="95" y="130" width="60" height="40" rx="4" fill="#1B1D2B"/>
-        <rect x="165" y="130" width="60" height="40" rx="4" fill="#1B1D2B"/>
+        <!-- City Block Footprints (Crisp White / Subtle Slate) -->
+        <rect x="30" y="130" width="55" height="40" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+        <rect x="95" y="130" width="60" height="40" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+        <rect x="165" y="130" width="60" height="40" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
         
-        <rect x="30" y="185" width="55" height="45" rx="4" fill="#1B1D2B"/>
-        <rect x="95" y="185" width="60" height="45" rx="4" fill="#1B1D2B"/>
-        <rect x="165" y="185" width="60" height="45" rx="4" fill="#1B1D2B"/>
+        <rect x="30" y="185" width="55" height="45" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+        <rect x="95" y="185" width="60" height="45" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+        <rect x="165" y="185" width="60" height="45" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
 
-        <rect x="30" y="245" width="55" height="40" rx="4" fill="#1B1D2B"/>
-        <rect x="95" y="245" width="60" height="40" rx="4" fill="#1B1D2B"/>
-        <rect x="165" y="245" width="60" height="40" rx="4" fill="#1B1D2B"/>
+        <rect x="30" y="245" width="55" height="40" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+        <rect x="95" y="245" width="60" height="40" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+        <rect x="165" y="245" width="60" height="40" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
 
         <!-- Secondary Street Network -->
-        <line x1="20" y1="178" x2="370" y2="178" stroke="#252838" stroke-width="3"/>
-        <line x1="20" y1="238" x2="370" y2="238" stroke="#252838" stroke-width="3"/>
-        <line x1="90" y1="110" x2="90" y2="340" stroke="#252838" stroke-width="3"/>
-        <line x1="160" y1="110" x2="160" y2="340" stroke="#252838" stroke-width="3"/>
-        <line x1="230" y1="110" x2="230" y2="340" stroke="#252838" stroke-width="3"/>
+        <line x1="20" y1="178" x2="370" y2="178" stroke="#E2E8F0" stroke-width="3"/>
+        <line x1="20" y1="238" x2="370" y2="238" stroke="#E2E8F0" stroke-width="3"/>
+        <line x1="90" y1="110" x2="90" y2="340" stroke="#E2E8F0" stroke-width="3"/>
+        <line x1="160" y1="110" x2="160" y2="340" stroke="#E2E8F0" stroke-width="3"/>
+        <line x1="230" y1="110" x2="230" y2="340" stroke="#E2E8F0" stroke-width="3"/>
 
         <!-- Major Arterial Highways (Pyay Rd / Bogyoke Rd / Strand Rd) -->
-        <path d="M 20 236 Q 160 210 374 240" stroke="#373B52" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M 20 236 Q 160 210 374 240" stroke="#4A4F6E" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path d="M 20 236 Q 160 210 374 240" stroke="#CBD5E1" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M 20 236 Q 160 210 374 240" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none"/>
         
-        <line x1="160" y1="110" x2="160" y2="340" stroke="#373B52" stroke-width="8"/>
-        <line x1="160" y1="110" x2="160" y2="340" stroke="#4A4F6E" stroke-width="5"/>
+        <line x1="160" y1="110" x2="160" y2="340" stroke="#CBD5E1" stroke-width="8"/>
+        <line x1="160" y1="110" x2="160" y2="340" stroke="#FFFFFF" stroke-width="4"/>
 
         <!-- Street Labels in Yangon -->
-        <text x="210" y="228" fill="#71789B" font-size="8" font-weight="700">Bogyoke Aung San Rd</text>
-        <text x="166" y="145" fill="#71789B" font-size="8" font-weight="700" transform="rotate(90 166 145)">Sule Pagoda Rd</text>
-        <text x="32" y="230" fill="#71789B" font-size="8" font-weight="700">Anawrahta Rd</text>
+        <text x="210" y="228" fill="#475569" font-size="8" font-weight="700">Bogyoke Aung San Rd</text>
+        <text x="166" y="145" fill="#475569" font-size="8" font-weight="700" transform="rotate(90 166 145)">Sule Pagoda Rd</text>
+        <text x="32" y="230" fill="#475569" font-size="8" font-weight="700">Anawrahta Rd</text>
 
         <!-- Route Overlays and Pins -->
         
-      <path d="M 40 370 Q 180 290 320 180" stroke="#10B981" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path d="M 40 370 Q 180 290 320 180" stroke="#059669" stroke-width="6" stroke-linecap="round" fill="none"/>
       <circle cx="40" cy="370" r="7" fill="#10B981"/>
-      <circle cx="320" cy="180" r="7" fill="#E5252A"/>
+      <circle cx="320" cy="180" r="7" fill="#EF4444"/>
       <circle cx="190" cy="275" r="14" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2"/>
-      <text x="190" y="280" fill="#12131A" font-size="10" font-weight="900" text-anchor="middle">🚖</text>
+      <text x="190" y="280" fill="#FFFFFF" font-size="10" font-weight="900" text-anchor="middle">🚖</text>
     
         
       </g>
@@ -105,32 +105,32 @@
 
     <!-- Live Dynamic Fare Meter Floating Card -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="434" width="358" height="106" rx="18" fill="#181924" stroke="#F59E0B" stroke-width="1.5"/>
-      <text x="36" y="464" fill="#94A3B8" font-size="11">လက်ရှိ ကျသင့်ငွေ (Current Fare Meter)</text>
-      <text x="36" y="500" fill="#F59E0B" font-size="28" font-weight="900">2,350 <tspan font-size="14">MMK</tspan></text>
-      <text x="354" y="475" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="end">Distance: 4.2 km</text>
-      <text x="354" y="496" fill="#94A3B8" font-size="11" text-anchor="end">Duration: 11m 40s</text>
-      <text x="36" y="526" fill="#38BDF8" font-size="11">Payment: KBZPay Digital Linked</text>
+      <rect x="16" y="434" width="358" height="106" rx="18" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="36" y="464" fill="#92400E" font-size="11" font-weight="700">လက်ရှိ ကျသင့်ငွေ (Current Fare Meter)</text>
+      <text x="36" y="500" fill="#D97706" font-size="28" font-weight="900">2,350 <tspan font-size="14">MMK</tspan></text>
+      <text x="354" y="475" fill="#0F172A" font-size="12" font-weight="700" text-anchor="end">Distance: 4.2 km</text>
+      <text x="354" y="496" fill="#475569" font-size="11" text-anchor="end">Duration: 11m 40s</text>
+      <text x="36" y="526" fill="#0284C7" font-size="11" font-weight="700">Payment: KBZPay Digital Linked</text>
     </g>
 
     <!-- Driver Info Card -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="550" width="358" height="120" rx="16" fill="#181924" stroke="#2D3042"/>
-      <circle cx="56" cy="595" r="22" fill="#232532"/>
-      <text x="56" y="601" fill="#FFFFFF" font-size="16" text-anchor="middle">👨🏻‍✈️</text>
+      <rect x="16" y="550" width="358" height="120" rx="16" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <circle cx="56" cy="595" r="22" fill="#F1F5F9"/>
+      <text x="56" y="601" fill="#0F172A" font-size="16" text-anchor="middle">👨🏻‍✈️</text>
 
-      <text x="90" y="588" fill="#FFFFFF" font-size="15" font-weight="800">U Aung Kyaw</text>
-      <text x="90" y="608" fill="#F59E0B" font-size="12">⭐ 4.96 (1,420 trips) • Pro Driver</text>
-      <text x="90" y="626" fill="#94A3B8" font-size="11">Toyota Fielder <tspan fill="#FFFFFF" font-weight="700">(3A-8492)</tspan></text>
+      <text x="90" y="588" fill="#0F172A" font-size="15" font-weight="800">U Aung Kyaw</text>
+      <text x="90" y="608" fill="#D97706" font-size="12" font-weight="700">⭐ 4.96 (1,420 trips) • Pro Driver</text>
+      <text x="90" y="626" fill="#475569" font-size="11">Toyota Fielder <tspan fill="#0F172A" font-weight="700">(3A-8492)</tspan></text>
 
-      <circle cx="310" cy="595" r="18" fill="#232532"/>
-      <text x="310" y="600" fill="#38BDF8" font-size="14" text-anchor="middle">💬</text>
+      <circle cx="310" cy="595" r="18" fill="#F1F5F9"/>
+      <text x="310" y="600" fill="#0284C7" font-size="14" text-anchor="middle">💬</text>
 
-      <circle cx="350" cy="595" r="18" fill="#232532"/>
-      <text x="350" y="600" fill="#10B981" font-size="14" text-anchor="middle">📞</text>
+      <circle cx="350" cy="595" r="18" fill="#F1F5F9"/>
+      <text x="350" y="600" fill="#059669" font-size="14" text-anchor="middle">📞</text>
 
-      <rect x="28" y="642" width="334" height="20" rx="4" fill="#10B981" fill-opacity="0.15"/>
-      <text x="195" y="656" fill="#10B981" font-size="10" font-weight="800" text-anchor="middle">📹 Driver Protecting CCTV: RECORDING ACTIVE</text>
+      <rect x="28" y="642" width="334" height="20" rx="4" fill="#D1FAE5"/>
+      <text x="195" y="656" fill="#065F46" font-size="10" font-weight="800" text-anchor="middle">📹 Driver Protecting CCTV: RECORDING ACTIVE</text>
     </g>
 
     <!-- In-Trip Safety SOS Button -->
@@ -141,5 +141,5 @@
     
 
   <!-- Home Indicator -->
-  <rect x="128" y="828" width="134" height="4" rx="2" fill="#64748B"/>
+  <rect x="128" y="828" width="134" height="4" rx="2" fill="#CBD5E1"/>
 </svg>

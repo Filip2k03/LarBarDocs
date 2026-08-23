@@ -1,94 +1,94 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0A0B0E; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
   <defs>
     <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFE082"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
     <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F85A5A"/>
-      <stop offset="100%" stop-color="#E5252A"/>
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#DC2626"/>
     </linearGradient>
     <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#34D399"/>
-      <stop offset="100%" stop-color="#10B981"/>
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
     </linearGradient>
     <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38BDF8"/>
       <stop offset="100%" stop-color="#0284C7"/>
     </linearGradient>
-    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
     </filter>
   </defs>
 
-  <!-- Device Outer Border & Dynamic Island -->
-  <rect x="1" y="1" width="388" height="842" rx="46" fill="#12131A" stroke="#2D3042" stroke-width="2"/>
-  <rect x="130" y="12" width="130" height="28" rx="14" fill="#000000"/>
-  <circle cx="236" cy="26" r="5" fill="#1C1D26"/>
+  <!-- Device Outer Border & Dynamic Island - Light Mode -->
+  <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
+  <circle cx="236" cy="26" r="5" fill="#1E293B"/>
 
   <!-- Status Bar -->
-  <text x="36" y="32" fill="#FFFFFF" font-size="13" font-weight="700">9:41</text>
-  <text x="354" y="32" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="end">5G 🔋 100%</text>
+  <text x="36" y="32" fill="#0F172A" font-size="13" font-weight="700">9:41</text>
+  <text x="354" y="32" fill="#0F172A" font-size="11" font-weight="700" text-anchor="end">5G 🔋 100%</text>
 
   <!-- App Header -->
-  <rect x="0" y="48" width="390" height="52" fill="#181924" fill-opacity="0.95"/>
-  <text x="24" y="80" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="0.5">LaBar</text>
-  <rect x="92" y="66" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-width="1"/>
+  <rect x="0" y="48" width="390" height="52" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="24" y="80" fill="#D97706" font-size="18" font-weight="900" letter-spacing="0.5">LaBar</text>
+  <rect x="92" y="66" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.12" stroke="#F59E0B" stroke-width="1"/>
   <text x="133" y="79" fill="#F59E0B" font-size="9" font-weight="800" text-anchor="middle">LABAR NATIVE</text>
   
-  <text x="280" y="80" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)</text>
-  <circle cx="360" cy="74" r="14" fill="#232532"/>
-  <text x="360" y="79" fill="#FFFFFF" font-size="11" text-anchor="middle">🔔</text>
+  <text x="280" y="80" fill="#0F172A" font-size="12" font-weight="800" text-anchor="middle">မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)</text>
+  <circle cx="360" cy="74" r="14" fill="#F1F5F9"/>
+  <text x="360" y="79" fill="#0F172A" font-size="11" text-anchor="middle">🔔</text>
 
   <!-- Body Content -->
   
     <!-- Family Mesh Pairing Container -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="110" width="358" height="670" rx="20" fill="#181924" stroke="#2D3042"/>
+      <rect x="16" y="110" width="358" height="670" rx="20" fill="#FFFFFF" stroke="#E2E8F0"/>
       
-      <text x="195" y="150" fill="#FFFFFF" font-size="18" font-weight="800" text-anchor="middle">မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)</text>
-      <text x="195" y="174" fill="#94A3B8" font-size="12" text-anchor="middle">Scan QR code or share 6-digit OTP token</text>
+      <text x="195" y="150" fill="#0F172A" font-size="18" font-weight="800" text-anchor="middle">မိသားစု ချိတ်ဆက်ခြင်း (Family Pairing)</text>
+      <text x="195" y="174" fill="#475569" font-size="12" text-anchor="middle">Scan QR code or share 6-digit OTP token</text>
 
       <!-- High-Contrast QR Code Card -->
-      <rect x="75" y="200" width="240" height="240" rx="18" fill="#FFFFFF" stroke="#F59E0B" stroke-width="3"/>
+      <rect x="75" y="200" width="240" height="240" rx="18" fill="#0F172A" stroke="#F59E0B" stroke-width="3"/>
       
       <!-- QR Matrix Mockup -->
-      <rect x="95" y="220" width="60" height="60" fill="#000000"/>
-      <rect x="105" y="230" width="40" height="40" fill="#FFFFFF"/>
-      <rect x="115" y="240" width="20" height="20" fill="#000000"/>
+      <rect x="95" y="220" width="60" height="60" fill="#FFFFFF"/>
+      <rect x="105" y="230" width="40" height="40" fill="#0F172A"/>
+      <rect x="115" y="240" width="20" height="20" fill="#FFFFFF"/>
 
-      <rect x="235" y="220" width="60" height="60" fill="#000000"/>
-      <rect x="245" y="230" width="40" height="40" fill="#FFFFFF"/>
-      <rect x="255" y="240" width="20" height="20" fill="#000000"/>
+      <rect x="235" y="220" width="60" height="60" fill="#FFFFFF"/>
+      <rect x="245" y="230" width="40" height="40" fill="#0F172A"/>
+      <rect x="255" y="240" width="20" height="20" fill="#FFFFFF"/>
 
-      <rect x="95" y="360" width="60" height="60" fill="#000000"/>
-      <rect x="105" y="370" width="40" height="40" fill="#FFFFFF"/>
-      <rect x="115" y="380" width="20" height="20" fill="#000000"/>
+      <rect x="95" y="360" width="60" height="60" fill="#FFFFFF"/>
+      <rect x="105" y="370" width="40" height="40" fill="#0F172A"/>
+      <rect x="115" y="380" width="20" height="20" fill="#FFFFFF"/>
 
       <!-- QR Center Shield Emblem -->
-      <circle cx="195" cy="320" r="22" fill="#E5252A"/>
+      <circle cx="195" cy="320" r="22" fill="#EF4444"/>
       <text x="195" y="326" fill="#FFFFFF" font-size="14" font-weight="900" text-anchor="middle">🛡️</text>
 
       <!-- 6-Digit OTP Box -->
-      <rect x="55" y="465" width="280" height="54" rx="12" fill="#12131A" stroke="#F59E0B" stroke-width="1.5"/>
-      <text x="195" y="500" fill="#F59E0B" font-size="22" font-weight="900" letter-spacing="6" text-anchor="middle">8 4 9 2 0 1</text>
+      <rect x="55" y="465" width="280" height="54" rx="12" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="195" y="500" fill="#D97706" font-size="22" font-weight="900" letter-spacing="6" text-anchor="middle">8 4 9 2 0 1</text>
 
-      <text x="195" y="545" fill="#94A3B8" font-size="11" text-anchor="middle">OTP Token expires in 10 minutes</text>
+      <text x="195" y="545" fill="#475569" font-size="11" text-anchor="middle">OTP Token expires in 10 minutes</text>
 
       <!-- Pairing Instructions -->
-      <rect x="36" y="570" width="318" height="100" rx="12" fill="#232532"/>
-      <text x="50" y="595" fill="#FFFFFF" font-size="12" font-weight="700">1. Install LaBar Guardian Plugin (~3.8MB)</text>
-      <text x="50" y="618" fill="#FFFFFF" font-size="12" font-weight="700">2. Scan this QR or type code 849201</text>
-      <text x="50" y="641" fill="#10B981" font-size="12" font-weight="700">3. Enjoy 24/7 Live GPS &amp; Emergency Alarms</text>
+      <rect x="36" y="570" width="318" height="100" rx="12" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="50" y="595" fill="#0F172A" font-size="12" font-weight="700">1. Install LaBar Guardian Plugin (~3.8MB)</text>
+      <text x="50" y="618" fill="#0F172A" font-size="12" font-weight="700">2. Scan this QR or type code 849201</text>
+      <text x="50" y="641" fill="#059669" font-size="12" font-weight="800">3. Enjoy 24/7 Live GPS &amp; Emergency Alarms</text>
 
       <!-- Share Invite Button -->
       <g filter="url(#card-shadow)">
         <rect x="36" y="692" width="318" height="52" rx="14" fill="url(#gold-grad)"/>
-        <text x="195" y="724" fill="#12131A" font-size="15" font-weight="900" text-anchor="middle">မိသားစုထံ ဖိတ်ခေါ်လင့်ခ် ပေးပို့မည် (SHARE LINK)</text>
+        <text x="195" y="724" fill="#FFFFFF" font-size="15" font-weight="900" text-anchor="middle">မိသားစုထံ ဖိတ်ခေါ်လင့်ခ် ပေးပို့မည် (SHARE LINK)</text>
       </g>
     </g>
     
 
   <!-- Home Indicator -->
-  <rect x="128" y="828" width="134" height="4" rx="2" fill="#64748B"/>
+  <rect x="128" y="828" width="134" height="4" rx="2" fill="#CBD5E1"/>
 </svg>

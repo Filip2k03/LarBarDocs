@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LaBar Guardian Safety Shield — Live Map Interactive Prototype</title>
+  <title>LaBar Guardian Safety Shield — Light Mode Interactive Prototype</title>
   
   <!-- Leaflet.js for Real Live Yangon Map Tiles -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -11,61 +11,68 @@
 
   <style>
     :root {
-      --clr-noir-base: #0A0B0E;
-      --clr-noir-surface: #12131A;
-      --clr-noir-elevated: #1C1D26;
-      --clr-noir-card: #232532;
-      --clr-noir-border: #2D3042;
+      --clr-canvas-bg: #F8FAFC;
+      --clr-device-chassis: #FFFFFF;
+      --clr-surface-card: #FFFFFF;
+      --clr-surface-elevated: #F1F5F9;
+      --clr-border-main: #E2E8F0;
       
-      --clr-gold-300: #FFE082;
       --clr-gold-500: #F59E0B;
-      --clr-crimson-500: #E5252A;
+      --clr-gold-600: #D97706;
+      --clr-crimson-500: #EF4444;
+      --clr-crimson-600: #DC2626;
+      --clr-crimson-light: #FEE2E2;
       --clr-emerald-500: #10B981;
-      --clr-cyan-500: #06B6D4;
+      --clr-emerald-600: #059669;
+      --clr-emerald-light: #D1FAE5;
+      --clr-cyan-500: #0EA5E9;
+      --clr-cyan-600: #0284C7;
+      --clr-cyan-light: #E0F2FE;
       
-      --clr-text-main: #FFFFFF;
-      --clr-text-dim: #94A3B8;
-      --clr-text-sub: #64748B;
+      --clr-text-primary: #0F172A;
+      --clr-text-secondary: #475569;
+      --clr-text-muted: #94A3B8;
       
       --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-display); }
-    body { background: var(--clr-noir-base); color: var(--clr-text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px; }
+    body { background: var(--clr-canvas-bg); color: var(--clr-text-primary); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px; }
 
     /* Top Navigation */
     .prototype-control-hub { text-align: center; margin-bottom: 20px; max-width: 680px; }
-    .prototype-heading { font-size: 26px; font-weight: 900; color: var(--clr-emerald-500); letter-spacing: -0.5px; margin-bottom: 6px; }
-    .prototype-subtitle { font-size: 13px; color: var(--clr-text-dim); line-height: 1.5; margin-bottom: 16px; }
+    .prototype-heading { font-size: 26px; font-weight: 900; color: var(--clr-emerald-600); letter-spacing: -0.5px; margin-bottom: 6px; }
+    .prototype-subtitle { font-size: 13px; color: var(--clr-text-secondary); line-height: 1.5; margin-bottom: 16px; }
     
     .lifecycle-nav-pill-group { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
     .lifecycle-tab-trigger {
-      background: var(--clr-noir-surface);
-      border: 1px solid var(--clr-noir-border);
-      color: var(--clr-text-dim);
+      background: var(--clr-surface-card);
+      border: 1px solid var(--clr-border-main);
+      color: var(--clr-text-secondary);
       padding: 8px 16px;
       border-radius: 9999px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: all 0.2s ease;
     }
-    .lifecycle-tab-trigger:hover { border-color: var(--clr-emerald-500); color: var(--clr-text-main); }
+    .lifecycle-tab-trigger:hover { border-color: var(--clr-emerald-500); color: var(--clr-text-primary); }
     .lifecycle-tab-trigger.is-active {
-      background: linear-gradient(135deg, #34D399, var(--clr-emerald-500));
-      color: #12131A;
-      border-color: var(--clr-emerald-500);
-      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: #FFFFFF;
+      border-color: #059669;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
     }
 
-    /* Device Chassis */
+    /* Device Chassis - Light Mode */
     .device-chassis {
       width: 390px;
       height: 844px;
-      background: var(--clr-noir-surface);
-      border: 2px solid var(--clr-noir-border);
+      background: var(--clr-surface-card);
+      border: 2px solid var(--clr-border-main);
       border-radius: 48px;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.85), 0 0 0 10px #181924;
+      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.12), 0 0 0 10px #E2E8F0;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -75,7 +82,7 @@
     .notch-island {
       width: 125px;
       height: 28px;
-      background: #000000;
+      background: #0F172A;
       border-radius: 14px;
       margin: 10px auto 0;
       z-index: 1000;
@@ -84,7 +91,7 @@
       justify-content: flex-end;
       padding-right: 12px;
     }
-    .camera-lens-dot { width: 8px; height: 8px; border-radius: 50%; background: #1C1D26; }
+    .camera-lens-dot { width: 8px; height: 8px; border-radius: 50%; background: #1E293B; }
     
     .status-telemetry-bar {
       display: flex;
@@ -93,65 +100,50 @@
       padding: 6px 30px 4px;
       font-size: 12px;
       font-weight: 700;
+      color: var(--clr-text-primary);
       z-index: 1000;
-      background: rgba(18, 19, 26, 0.9);
+      background: #FFFFFF;
     }
 
     .top-app-bar {
-      background: rgba(18, 19, 26, 0.95);
-      backdrop-filter: blur(12px);
+      background: #FFFFFF;
       padding: 10px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--clr-noir-border);
+      border-bottom: 1px solid var(--clr-border-main);
       z-index: 1000;
     }
-    .brand-emblem { font-size: 18px; font-weight: 900; color: var(--clr-emerald-500); letter-spacing: 0.5px; }
-    .screen-title-tag { font-size: 12px; font-weight: 700; color: var(--clr-text-main); }
+    .brand-emblem { font-size: 18px; font-weight: 900; color: var(--clr-emerald-600); letter-spacing: 0.5px; }
+    .screen-title-tag { font-size: 12px; font-weight: 800; color: var(--clr-text-primary); }
 
     /* Leaflet Live Map Box */
     .live-map-viewport {
       width: 100%;
       height: 240px;
-      border-bottom: 1px solid var(--clr-noir-border);
+      border-bottom: 1px solid var(--clr-border-main);
       position: relative;
       z-index: 10;
     }
-    .leaflet-container { background: #12131A !important; }
+    .leaflet-container { background: #E2E8F0 !important; }
 
-    .interactive-scroll-pane { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; z-index: 20; background: var(--clr-noir-surface); }
+    .interactive-scroll-pane { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; z-index: 20; background: #F8FAFC; }
     .interactive-scroll-pane::-webkit-scrollbar { width: 4px; }
-    .interactive-scroll-pane::-webkit-scrollbar-thumb { background: var(--clr-noir-border); border-radius: 2px; }
+    .interactive-scroll-pane::-webkit-scrollbar-thumb { background: var(--clr-border-main); border-radius: 2px; }
 
-    .bottom-home-indicator { width: 134px; height: 4px; background: var(--clr-text-sub); border-radius: 2px; margin: 6px auto 8px; z-index: 1000; }
+    .bottom-home-indicator { width: 134px; height: 4px; background: #CBD5E1; border-radius: 2px; margin: 6px auto 8px; z-index: 1000; }
 
     /* Component System */
     .route-timeline-container {
-      background: var(--clr-noir-elevated);
-      border: 1px solid var(--clr-noir-border);
+      background: var(--clr-surface-card);
+      border: 1px solid var(--clr-border-main);
       border-radius: 16px;
       padding: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     }
 
     .action-btn-emerald {
-      background: linear-gradient(135deg, #34D399, var(--clr-emerald-500));
-      color: #12131A;
-      border: none;
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 14px;
-      font-weight: 900;
-      width: 100%;
-      cursor: pointer;
-      text-align: center;
-      box-shadow: 0 6px 20px rgba(16,185,129,0.3);
-      transition: transform 0.15s ease;
-    }
-    .action-btn-emerald:hover { transform: translateY(-2px); }
-
-    .action-btn-crimson {
-      background: linear-gradient(135deg, #F85A5A, var(--clr-crimson-500));
+      background: linear-gradient(135deg, #10B981, #059669);
       color: #FFFFFF;
       border: none;
       border-radius: 14px;
@@ -161,7 +153,23 @@
       width: 100%;
       cursor: pointer;
       text-align: center;
-      box-shadow: 0 6px 20px rgba(229,37,42,0.35);
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+      transition: transform 0.15s ease;
+    }
+    .action-btn-emerald:hover { transform: translateY(-2px); }
+
+    .action-btn-crimson {
+      background: linear-gradient(135deg, #EF4444, #DC2626);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 900;
+      width: 100%;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
       transition: transform 0.15s ease;
     }
     .action-btn-crimson:hover { transform: translateY(-2px); }
@@ -170,8 +178,8 @@
 <body>
 
   <div class="prototype-control-hub">
-    <h1 class="prototype-heading">🛡️ LaBar Guardian Safety Shield Live Map</h1>
-    <p class="prototype-subtitle">Simulate real-time 60fps ride telemetry across Yangon, cross-track anomaly alerts ($d_{xt} > 300\text{m}$), driver spouse shift health (86% battery / 5G signal), and remote DND-override siren alarms.</p>
+    <h1 class="prototype-heading">🛡️ LaBar Guardian Safety Shield (Light Mode)</h1>
+    <p class="prototype-subtitle">Daylight 60fps ride telemetry across Yangon, cross-track anomaly alerts ($d_{xt} > 300\text{m}$), driver spouse shift health (86% battery / 5G signal), and remote DND-override siren alarms.</p>
     
     <div class="lifecycle-nav-pill-group">
       <button class="lifecycle-tab-trigger is-active" onclick="renderStep(1)">1. Passenger Live Shield</button>
@@ -190,7 +198,7 @@
     <div class="top-app-bar">
       <span class="brand-emblem">Guardian</span>
       <span class="screen-title-tag" id="active-screen-title">မိသားစု အကာအကွယ်</span>
-      <div style="font-size: 12px;">🔒</div>
+      <div style="font-size: 14px;">🔒</div>
     </div>
 
     <!-- Leaflet Map Canvas -->
@@ -226,7 +234,7 @@
 
       // Route Path
       gpolyline = L.polyline([gcoords.pickup, gcoords.current, gcoords.dest], {
-        color: '#10B981',
+        color: '#059669',
         weight: 5,
         opacity: 0.9
       }).addTo(gmap);
@@ -235,7 +243,7 @@
       L.marker(gcoords.current, {
         icon: L.divIcon({
           className: 'custom-guardian-pin',
-          html: '<div style="background:#F59E0B; color:#12131A; font-weight:900; font-size:10px; padding:3px 6px; border-radius:6px; border:2px solid #FFF; white-space:nowrap;">🚖 Daughter (38 km/h)</div>',
+          html: '<div style="background:#F59E0B; color:#FFFFFF; font-weight:900; font-size:10px; padding:3px 6px; border-radius:6px; border:2px solid #FFF; box-shadow:0 2px 6px rgba(0,0,0,0.15); white-space:nowrap;">🚖 Daughter (38 km/h)</div>',
           iconSize: [110, 24]
         })
       }).addTo(gmap);
@@ -258,38 +266,38 @@
       if (step === 1) {
         titleEl.innerText = 'မိသားစု အကာအကွယ် (Passenger Live Shield)';
         viewport.innerHTML = `
-          <div class="route-timeline-container" style="border: 2px solid var(--clr-emerald-500);">
-            <div style="color: var(--clr-emerald-500); font-weight: 800; font-size: 11px; margin-bottom: 2px;">🟢 RIDE IN PROGRESS (NORMAL)</div>
-            <div style="font-weight: 800; font-size: 15px;">Passenger: Ma Thiri (Daughter)</div>
-            <div style="font-size: 11px; color: var(--clr-text-dim); margin-top: 2px;">Driver: U Aung Kyaw (Toyota Fielder 3A-8492)</div>
+          <div class="route-timeline-container" style="border: 2px solid var(--clr-emerald-500); background: #ECFDF5;">
+            <div style="color: var(--clr-emerald-600); font-weight: 800; font-size: 11px; margin-bottom: 2px;">🟢 RIDE IN PROGRESS (NORMAL)</div>
+            <div style="font-weight: 800; font-size: 15px; color: var(--clr-text-primary);">Passenger: Ma Thiri (Daughter)</div>
+            <div style="font-size: 11px; color: var(--clr-text-secondary); margin-top: 2px;">Driver: U Aung Kyaw (Toyota Fielder - 3A-8492)</div>
           </div>
 
           <div class="route-timeline-container">
-            <div style="font-size: 11px; color: var(--clr-text-dim);">Live Telemetry Status:</div>
-            <div style="font-size: 12px; font-weight: 700; color: var(--clr-emerald-500); margin-top: 2px;">Cross-Track Deviation: 12m (SAFE &lt; 300m)</div>
-            <div style="font-size: 11px; color: #FFF; margin-top: 2px;">Speed: 38 km/h • Heading: North-West • GPS Accuracy: 2.4m</div>
+            <div style="font-size: 11px; color: var(--clr-text-secondary);">Live Telemetry Status:</div>
+            <div style="font-size: 12px; font-weight: 800; color: var(--clr-emerald-600); margin-top: 2px;">Cross-Track Deviation: 12m (SAFE &lt; 300m)</div>
+            <div style="font-size: 11px; color: var(--clr-text-primary); font-weight: 600; margin-top: 2px;">Speed: 38 km/h • Heading: North-West • GPS Accuracy: 2.4m</div>
           </div>
 
           <button class="action-btn-crimson" onclick="alert('🚨 Remote High-Decibel Siren Triggered on Passenger Phone with DND Override!')">🚨 အရေးပေါ် ဥသြသံဖွင့်မည် (SOS SIREN)</button>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <button style="background: var(--clr-noir-elevated); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer;">📞 Call Driver</button>
-            <button style="background: var(--clr-noir-elevated); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer;">👮 Call Police 199</button>
+            <button style="background: var(--clr-surface-card); border: 1px solid var(--clr-border-main); color: var(--clr-text-primary); padding: 10px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer;">📞 Call Driver</button>
+            <button style="background: var(--clr-surface-card); border: 1px solid var(--clr-border-main); color: var(--clr-text-primary); padding: 10px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer;">👮 Call Police 199</button>
           </div>
         `;
       } else if (step === 2) {
         titleEl.innerText = 'ယာဥ်မောင်း မိသားစု အကာအကွယ် (Driver Family Shield)';
         viewport.innerHTML = `
-          <div class="route-timeline-container" style="border: 2px solid var(--clr-emerald-500);">
-            <div style="color: var(--clr-emerald-500); font-weight: 800; font-size: 11px; margin-bottom: 2px;">🟢 DRIVER STATUS: ON-DUTY</div>
-            <div style="font-weight: 800; font-size: 15px;">Ko Aung Kyaw (Husband)</div>
-            <div style="font-size: 11px; color: var(--clr-cyan-500); margin-top: 2px;">🔋 Phone Battery: 86% • 📶 5G Signal Strong</div>
+          <div class="route-timeline-container" style="border: 2px solid var(--clr-emerald-500); background: #ECFDF5;">
+            <div style="color: var(--clr-emerald-600); font-weight: 800; font-size: 11px; margin-bottom: 2px;">🟢 DRIVER STATUS: ON-DUTY</div>
+            <div style="font-weight: 800; font-size: 15px; color: var(--clr-text-primary);">Ko Aung Kyaw (Husband)</div>
+            <div style="font-size: 11px; color: var(--clr-cyan-600); font-weight: 700; margin-top: 2px;">🔋 Phone Battery: 86% • 📶 5G Signal Strong</div>
           </div>
 
           <div class="route-timeline-container">
-            <div style="font-size: 11px; color: var(--clr-text-dim);">Current Shift Health:</div>
-            <div style="font-size: 12px; font-weight: 700; margin-top: 2px;">Active Duration: <span style="color: var(--clr-gold-500);">4 hours 20 mins</span></div>
-            <div style="font-size: 11px; color: var(--clr-text-dim); margin-top: 2px;">Last GPS Ping: 1s ago (Accuracy: 2.8m)</div>
+            <div style="font-size: 11px; color: var(--clr-text-secondary);">Current Shift Health:</div>
+            <div style="font-size: 12px; font-weight: 800; color: var(--clr-text-primary); margin-top: 2px;">Active Duration: <span style="color: var(--clr-gold-600);">4 hours 20 mins</span></div>
+            <div style="font-size: 11px; color: var(--clr-text-secondary); margin-top: 2px;">Last GPS Ping: 1s ago (Accuracy: 2.8m)</div>
           </div>
 
           <button class="action-btn-crimson" onclick="alert('🚨 Emergency Siren Broadcasted to Husband Taxi!')">🚨 အရေးပေါ် အချက်ပြသံ မြည်စေမည် (SOS)</button>
@@ -299,17 +307,17 @@
         titleEl.innerText = 'မိသားစု ချိတ်ဆက်ခြင်း (Family QR Pairing)';
         viewport.innerHTML = `
           <div class="route-timeline-container" style="text-align: center; padding: 20px 14px;">
-            <div style="font-weight: 800; font-size: 14px; margin-bottom: 4px;">Scan Family Guardian QR</div>
-            <div style="font-size: 11px; color: var(--clr-text-dim); margin-bottom: 12px;">Sync live tracking in under 10 seconds</div>
+            <div style="font-weight: 800; font-size: 14px; margin-bottom: 4px; color: var(--clr-text-primary);">Scan Family Guardian QR</div>
+            <div style="font-size: 11px; color: var(--clr-text-secondary); margin-bottom: 12px;">Sync live tracking in under 10 seconds</div>
 
-            <div style="width: 120px; height: 120px; background: #FFF; margin: 0 auto 12px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 28px; font-weight: 900;">
+            <div style="width: 120px; height: 120px; background: #0F172A; margin: 0 auto 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #FFF; font-size: 28px; font-weight: 900; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
               🛡️ QR
             </div>
 
-            <div style="background: var(--clr-noir-card); border: 1px solid var(--clr-gold-500); padding: 8px; border-radius: 8px; font-size: 16px; font-weight: 900; letter-spacing: 4px; color: var(--clr-gold-500);">
+            <div style="background: var(--clr-gold-light); border: 1px solid var(--clr-gold-500); padding: 8px; border-radius: 8px; font-size: 16px; font-weight: 900; letter-spacing: 4px; color: var(--clr-gold-600);">
               8 4 9 2 0 1
             </div>
-            <div style="font-size: 10px; color: var(--clr-text-dim); margin-top: 4px;">6-digit token valid for 10 mins</div>
+            <div style="font-size: 10px; color: var(--clr-text-secondary); margin-top: 4px;">6-digit token valid for 10 mins</div>
           </div>
 
           <button class="action-btn-emerald" onclick="alert('✓ Invitation link copied to clipboard!')">မိသားစုထံ ဖိတ်ခေါ်လင့်ခ် ပေးပို့မည် (SHARE LINK)</button>

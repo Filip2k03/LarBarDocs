@@ -3,76 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LaBar — Interactive Mobile Prototypes Hub</title>
+  <title>LaBar Interactive Mobile Prototypes — Master Light Mode Hub</title>
   <style>
     :root {
-      --bg: #0E0F14;
-      --card: #181922;
-      --border: #282836;
-      --gold-primary: #F59E0B;
-      --red-primary: #E5252A;
-      --emerald: #10B981;
-      --text: #FFFFFF;
-      --text-muted: #9CA3AF;
+      --clr-canvas-bg: #F8FAFC;
+      --clr-surface-card: #FFFFFF;
+      --clr-surface-elevated: #F1F5F9;
+      --clr-border-main: #E2E8F0;
+      
+      --clr-gold-500: #F59E0B;
+      --clr-gold-600: #D97706;
+      --clr-crimson-500: #EF4444;
+      --clr-crimson-600: #DC2626;
+      --clr-emerald-500: #10B981;
+      --clr-emerald-600: #059669;
+      --clr-cyan-500: #0EA5E9;
+      --clr-cyan-600: #0284C7;
+      
+      --clr-text-primary: #0F172A;
+      --clr-text-secondary: #475569;
+      --clr-text-muted: #94A3B8;
+      
+      --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', sans-serif; }
-    body { background: #07080B; color: var(--text); min-height: 100vh; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
-    .container { max-width: 900px; width: 100%; }
-    .header { text-align: center; margin-bottom: 40px; }
-    .header h1 { font-size: 32px; font-weight: 900; color: var(--gold-primary); margin-bottom: 12px; }
-    .header p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: transform 0.2s ease, border-color 0.2s ease; display: flex; flex-direction: column; justify-content: space-between; }
-    .card:hover { transform: translateY(-4px); }
-    .card h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-    .card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; flex: 1; }
-    .btn { display: inline-block; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; text-decoration: none; text-align: center; }
-    .btn-gold { background: linear-gradient(135deg, #FFD54F, var(--gold-primary)); color: #181922; }
-    .btn-red { background: linear-gradient(135deg, #F85A5A, var(--red-primary)); color: #FFF; }
-    .btn-emerald { background: linear-gradient(135deg, #34D399, var(--emerald)); color: #181922; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-display); }
+    body { background: var(--clr-canvas-bg); color: var(--clr-text-primary); min-height: 100vh; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+
+    .hub-header-container { text-align: center; max-width: 760px; margin-bottom: 36px; }
+    .hub-title { font-size: 32px; font-weight: 900; color: var(--clr-gold-600); letter-spacing: -0.5px; margin-bottom: 8px; }
+    .hub-subtitle { font-size: 15px; color: var(--clr-text-secondary); line-height: 1.6; }
+
+    .prototype-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .hub-card {
+      background: var(--clr-surface-card);
+      border: 1px solid var(--clr-border-main);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .hub-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+      border-color: var(--clr-gold-500);
+    }
+
+    .hub-card-icon { font-size: 36px; margin-bottom: 12px; }
+    .hub-card-title { font-size: 18px; font-weight: 800; color: var(--clr-text-primary); margin-bottom: 6px; }
+    .hub-card-tag { font-size: 11px; font-weight: 700; display: inline-block; padding: 3px 8px; border-radius: 6px; margin-bottom: 12px; }
+    
+    .tag-passenger { background: #FEF3C7; color: #92400E; }
+    .tag-driver { background: #FEE2E2; color: #991B1B; }
+    .tag-guardian { background: #D1FAE5; color: #065F46; }
+    .tag-plugins { background: #E0F2FE; color: #075985; }
+
+    .hub-card-desc { font-size: 13px; color: var(--clr-text-secondary); line-height: 1.5; margin-bottom: 20px; flex: 1; }
+
+    .hub-card-btn {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #FFFFFF;
+      text-align: center;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="header">
-      <h1>🚀 LaBar Interactive Mobile Prototypes Hub</h1>
-      <p>Click below to launch standalone, fully interactive mobile prototype simulations for each client application.</p>
-    </div>
+  <div class="hub-header-container">
+    <h1 class="hub-title">🚕 LaBar Interactive Mobile Prototypes (Light Mode)</h1>
+    <p class="hub-subtitle">
+      Explore all 4 high-fidelity mobile application flows with real OpenStreetMap / CartoDB daylight cartography across Yangon, dynamic in-trip taximeters, 15s cascading search, CCTV sentinel recording, and 1km emergency SOS intercept radar.
+    </p>
+  </div>
 
-    <div class="grid">
-      <div class="card" style="border-top: 4px solid var(--gold-primary);">
-        <div>
-          <h2 style="color: var(--gold-primary);">🚖 Passenger App</h2>
-          <p>Experience multi-stop booking (*Sule ➔ Bogyoke ➔ Junction City*), 15s cascading spatial radar, in-trip dynamic taximeter, and KBZPay auto-settlement with tipping.</p>
-        </div>
-        <a href="/prototypes/passenger-app.html" class="btn btn-gold">Launch Passenger Prototype ❯</a>
+  <div class="prototype-cards-grid">
+    <!-- Passenger App -->
+    <a href="/prototypes/passenger-app.html" class="hub-card">
+      <div>
+        <div class="hub-card-icon">🚖</div>
+        <div class="hub-card-title">Passenger App Experience</div>
+        <span class="hub-card-tag tag-passenger">Core Booking &amp; Navigation</span>
+        <p class="hub-card-desc">
+          Multi-stop booking (Sule ➔ Bogyoke ➔ Junction City), 15s cascading search radar, dynamic in-trip taximeter (2,350 MMK), in-app driver chat, and KBZPay MMQR settlement.
+        </p>
       </div>
+      <div class="hub-card-btn">Launch Passenger App ❯</div>
+    </a>
 
-      <div class="card" style="border-top: 4px solid var(--red-primary);">
-        <div>
-          <h2 style="color: var(--red-primary);">🚗 Driver App</h2>
-          <p>Experience shift mode management (`ON DUTY`), 15s incoming cascading offer modal, in-car 1080p CCTV navigation meter, **1km SOS mesh intercept radar**, and instant KBZPay sales payout.</p>
-        </div>
-        <a href="/prototypes/driver-app.html" class="btn btn-red">Launch Driver Prototype ❯</a>
+    <!-- Driver App -->
+    <a href="/prototypes/driver-app.html" class="hub-card">
+      <div>
+        <div class="hub-card-icon">🚗</div>
+        <div class="hub-card-title">Driver App Experience</div>
+        <span class="hub-card-tag tag-driver">Shift &amp; 1km SOS Radar</span>
+        <p class="hub-card-desc">
+          Green ON DUTY shift toggle, today's gross sales (48,500 MMK), 15s incoming ride offer modal (3,800 MMK), 1080p CCTV recording HUD, and 1km fellow driver emergency SOS intercept radar.
+        </p>
       </div>
+      <div class="hub-card-btn" style="background: linear-gradient(135deg, #EF4444, #DC2626); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);">Launch Driver App ❯</div>
+    </a>
 
-      <div class="card" style="border-top: 4px solid var(--emerald);">
-        <div>
-          <h2 style="color: var(--emerald);">🛡️ Guardian Safety Shield</h2>
-          <p>Experience passenger 60fps real-time live route tracking with cross-track deviation warnings ($d_{xt} > 300\text{m}$), driver family shift health (86% battery / 5G), and QR mesh pairing.</p>
-        </div>
-        <a href="/prototypes/guardian-shield.html" class="btn btn-emerald">Launch Guardian Prototype ❯</a>
+    <!-- Guardian Shield -->
+    <a href="/prototypes/guardian-shield.html" class="hub-card">
+      <div>
+        <div class="hub-card-icon">🛡️</div>
+        <div class="hub-card-title">Guardian Safety Shield</div>
+        <span class="hub-card-tag tag-guardian">Family Telemetry &amp; Siren</span>
+        <p class="hub-card-desc">
+          60fps live route telemetry stream, cross-track anomaly alerts ($d_{xt} > 300\text{m}$), driver spouse shift health (86% battery / 5G signal), and remote DND-override siren trigger.
+        </p>
       </div>
+      <div class="hub-card-btn" style="background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);">Launch Guardian Shield ❯</div>
+    </a>
 
-      <div class="card" style="border-top: 4px solid #38BDF8;">
-        <div>
-          <h2 style="color: #38BDF8;">🧩 On-Demand Add-Ons Store</h2>
-          <p>Experience in-app modular downloading (~3.8MB bundles), hot-swapping features, dynamic navigation injection, and storage management without app updates.</p>
-        </div>
-        <a href="/prototypes/plugin-store.html" class="btn" style="background: linear-gradient(135deg, #38BDF8, #0284C7); color: #FFF;">Launch Add-Ons Store ❯</a>
+    <!-- Add-Ons & Plugins Store -->
+    <a href="/prototypes/plugin-store.html" class="hub-card">
+      <div>
+        <div class="hub-card-icon">🧩</div>
+        <div class="hub-card-title">On-Demand Add-Ons Store</div>
+        <span class="hub-card-tag tag-plugins">Dynamic In-App Delivery</span>
+        <p class="hub-card-desc">
+          Ultra-light base app (18MB). Download modular plugins (~3.8MB) on demand with animated progress bars, live hot-swapping, and real-time storage calculation.
+        </p>
       </div>
-    </div>
+      <div class="hub-card-btn">Launch Add-Ons Store ❯</div>
+    </a>
   </div>
 
 </body>
