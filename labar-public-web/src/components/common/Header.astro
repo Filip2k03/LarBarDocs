@@ -1,0 +1,85 @@
+---
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+interface Props {
+  locale?: 'en' | 'my';
+}
+
+const { locale = defaultLocale } = Astro.props;
+const t = getTranslation(locale);
+---
+
+<header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-brand-border/80 transition-all">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+    <!-- Brand Logo -->
+    <a href="/" class="flex items-center gap-3 shrink-0 group">
+      <img
+        src="/logo.png"
+        alt="LaBar Logo"
+        class="h-10 w-auto object-contain transition-transform group-hover:scale-105"
+      />
+      <span class="text-2xl font-black tracking-tight text-neutral-900 flex items-center">
+        La<span class="text-brand-red">Bar</span>
+      </span>
+    </a>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="hidden lg:flex items-center gap-6 text-xs font-bold text-neutral-700">
+      <div class="relative group">
+        <a href="/ride" class="flex items-center gap-1 hover:text-brand-red transition-colors py-2">
+          <span>{t.nav.ride}</span>
+          <svg class="w-3.5 h-3.5 text-neutral-400 group-hover:text-brand-red transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </a>
+        <div class="absolute left-0 top-full pt-1 hidden group-hover:block z-50">
+          <div class="w-48 bg-white rounded-2xl shadow-soft-lg border border-brand-border p-2 space-y-1">
+            <a href="/ride" class="block px-3 py-2 rounded-xl text-xs font-semibold text-neutral-800 hover:bg-brand-bg hover:text-brand-red">
+              Quick Ride (အမြန်ခေါ်ယူရန်)
+            </a>
+            <a href="/airport" class="block px-3 py-2 rounded-xl text-xs font-semibold text-neutral-800 hover:bg-brand-bg hover:text-brand-red">
+              Airport Transfer (လေဆိပ်)
+            </a>
+            <a href="/schedule" class="block px-3 py-2 rounded-xl text-xs font-semibold text-neutral-800 hover:bg-brand-bg hover:text-brand-red">
+              Schedule Ride (ကြိုတင်)
+            </a>
+            <a href="/fares" class="block px-3 py-2 rounded-xl text-xs font-semibold text-neutral-800 hover:bg-brand-bg hover:text-brand-red">
+              Fare Calculator (နှုန်းထား)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <a href="/drive" class="hover:text-brand-red transition-colors py-2">{t.nav.drive}</a>
+      <a href="/delivery" class="hover:text-brand-red transition-colors py-2">{t.nav.delivery}</a>
+      <a href="/business" class="hover:text-brand-red transition-colors py-2">{t.nav.business}</a>
+      <a href="/safety" class="hover:text-brand-red transition-colors py-2">{t.nav.safety}</a>
+      <a href="/promotions" class="hover:text-brand-red transition-colors py-2">{t.nav.promotions}</a>
+      <a href="/help" class="hover:text-brand-red transition-colors py-2">{t.nav.help}</a>
+      <a href="/about" class="hover:text-brand-red transition-colors py-2">{t.nav.about}</a>
+    </nav>
+
+    <!-- Right Controls: Language Switcher, Staff/Login, Book CTA -->
+    <div class="flex items-center gap-3 shrink-0">
+      <LanguageSwitcher client:load currentLocale={locale} />
+      
+      <a
+        href="/prototypes/admin-control-center.html"
+        class="hidden sm:inline-flex text-xs font-bold text-neutral-700 hover:text-neutral-900 px-3 py-1.5 rounded-full hover:bg-neutral-100 transition-colors"
+      >
+        Staff Portal
+      </a>
+
+      <a
+        href="/ride"
+        class="btn-primary text-xs py-2.5 px-5 shadow-sm"
+      >
+        <span>{t.nav.bookRide}</span>
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</header>

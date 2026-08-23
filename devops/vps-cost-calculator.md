@@ -1,20 +1,20 @@
-# 💰 VPS Provider Benchmark & Monthly Cost Calculator
+# VPS Provider Benchmark & Monthly Cost Calculator
 
 We evaluated the top three cloud VPS providers for hosting the LaBar Taxi Platform: **Hetzner Cloud**, **Hostinger KVM**, and **DigitalOcean**.
 
 ---
 
-## 🏆 Cloud Provider Comparison Matrix
+## Cloud Provider Comparison Matrix
 
 | Provider | Strengths | Weaknesses | Best Fit For |
 |---|---|---|---|
-| 🥇 **Hetzner Cloud** | **Highest CPU performance/price ratio**, unmetered 20TB traffic per node, blazing fast NVMe SSDs, private VPC networks. | Data centers in Germany, Finland, USA (Falkenstein/Helsinki/Ashburn/Hillsboro). Use Cloudflare CDN in front. | **Production Scale (Top Recommendation)** |
-| 🥈 **Hostinger KVM** | **Lowest entry price**, multiple regional locations (Singapore, India, USA, Europe), straightforward UI. | Slower disk I/O on lower tiers, fewer advanced cloud networking features. | **Starter MVP / Low-Budget Prototype** |
-| 🥉 **DigitalOcean** | **Extensive global regions (including Singapore)**, managed databases, 1-click Kubernetes, excellent developer tooling. | Highest cost per vCPU/RAM ratio among the three. | **Fast Regional Deployment in Asia** |
+|  **Hetzner Cloud** | **Highest CPU performance/price ratio**, unmetered 20TB traffic per node, blazing fast NVMe SSDs, private VPC networks. | Data centers in Germany, Finland, USA (Falkenstein/Helsinki/Ashburn/Hillsboro). Use Cloudflare CDN in front. | **Production Scale (Top Recommendation)** |
+|  **Hostinger KVM** | **Lowest entry price**, multiple regional locations (Singapore, India, USA, Europe), straightforward UI. | Slower disk I/O on lower tiers, fewer advanced cloud networking features. | **Starter MVP / Low-Budget Prototype** |
+|  **DigitalOcean** | **Extensive global regions (including Singapore)**, managed databases, 1-click Kubernetes, excellent developer tooling. | Highest cost per vCPU/RAM ratio among the three. | **Fast Regional Deployment in Asia** |
 
 ---
 
-## 💵 Dedicated Hetzner 3-Server Production Budget (Recommended)
+## Dedicated Hetzner 3-Server Production Budget (Recommended)
 
 | Server Role | Server Specification | Hetzner Cloud Model | Monthly Cost (€) | Monthly Cost (USD) |
 |---|---|---|---|---|
@@ -27,9 +27,9 @@ We evaluated the top three cloud VPS providers for hosting the LaBar Taxi Platfo
 
 ---
 
-## 💵 Alternative Scenarios Comparison
+## Alternative Scenarios Comparison
 
-### 🥉 Scenario A: Starter / MVP Tier (1,000 - 5,000 rides/day)
+### Scenario A: Starter / MVP Tier (1,000 - 5,000 rides/day)
 *Suitable for initial soft launch and prototype testing.*
 
 | Component | Node Spec | Provider Option 1: Hetzner | Provider Option 2: Hostinger | Provider Option 3: DigitalOcean |
@@ -42,7 +42,7 @@ We evaluated the top three cloud VPS providers for hosting the LaBar Taxi Platfo
 
 ---
 
-### 🥇 Scenario B: 5-Node High-Availability Scale Tier (50,000+ rides/day)
+### Scenario B: 5-Node High-Availability Scale Tier (50,000+ rides/day)
 
 | Server Role | Node Specification | Hetzner Cloud (Recommended) | DigitalOcean |
 |---|---|---|---|
@@ -55,7 +55,7 @@ We evaluated the top three cloud VPS providers for hosting the LaBar Taxi Platfo
 
 ---
 
-## 💡 Recommendation Summary
+## Recommendation Summary
 
 1. **Top Production Recommendation**: Deploy the **Hetzner 3-Server Architecture** (**~$62.40/month**) for dedicated API, Live Map (OSRM + TileServer), and PostGIS database isolation.
 2. **For Initial MVP / Budget Testing**: Start with **Hostinger KVM** (~$26/month single or dual VPS).

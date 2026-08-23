@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { BookingWizard } from '@/components/booking/BookingWizard';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="Schedule a Ride in Advance — LaBar Myanmar"
+  description="Plan ahead with scheduled taxi bookings up to 7 days in advance. Guaranteed on-time pickup with top-rated 5-star drivers."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="badge-gold">ADVANCE RIDE RESERVATION</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+        Schedule Your Trip in Advance
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+        Reserve your morning flight transfer, business meeting transport, or hospital appointment up to 7 days ahead with priority driver allocation.
+      </p>
+    </div>
+
+    <!-- Booking Wizard Island -->
+    <BookingWizard client:load />
+  </div>
+</BaseLayout>

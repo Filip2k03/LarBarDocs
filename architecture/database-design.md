@@ -1,10 +1,10 @@
-# 🗄️ Database Schema & PostGIS Design
+# Database Schema & PostGIS Design
 
 The persistence tier utilizes **PostgreSQL 16 with the PostGIS 3.4 spatial extension** as the primary relational database, coupled with **Redis 7** for sub-millisecond driver geohash queries.
 
 ---
 
-## 📊 Relational Tables Matrix (Ride Core + DriverReg and Staff Security)
+## Relational Tables Matrix (Ride Core + DriverReg and Staff Security)
 
 ```text
 ┌──────────────┐       ┌──────────────────────┐       ┌───────────────────────────┐
@@ -127,9 +127,73 @@ ALTER TABLE vehicles
 
 Permission enforcement belongs in the authorization service and database policies: `DRIVER_REGISTRAR` cannot approve its own case, `STAFF_REGISTRAR` cannot grant privileged roles, and only a break-glass `GOD_ADMIN` can create or revoke an executive superadmin.
 
+## Fare policy, promo credit, and receipt extensions
+
+```sql
+CREATE TABLE fare_policies (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    policy_version VARCHAR(40) UNIQUE NOT NULL,
+    minimum_transport_fare_mmk BIGINT NOT NULL,
+    included_distance_meters INT NOT NULL,
+    distance_step_meters INT NOT NULL,
+    distance_step_fare_mmk BIGINT NOT NULL,
+    service_fee_mmk BIGINT NOT NULL,
+    cash_rounding_unit_mmk BIGINT NOT NULL,
+    promo_credit_value_mmk BIGINT NOT NULL,
+    effective_from TIMESTAMPTZ NOT NULL,
+    effective_to TIMESTAMPTZ,
+    created_by UUID NOT NULL REFERENCES staff_accounts(id),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE fare_quotes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    passenger_id UUID NOT NULL REFERENCES users(id),
+    policy_id UUID NOT NULL REFERENCES fare_policies(id),
+    requested_distance_meters INT NOT NULL,
+    billable_distance_meters INT NOT NULL,
+    payment_method VARCHAR(30) NOT NULL,
+    transport_fare_mmk BIGINT NOT NULL,
+    service_fee_mmk BIGINT NOT NULL,
+    promo_discount_mmk BIGINT NOT NULL DEFAULT 0,
+    cash_rounding_mmk BIGINT NOT NULL DEFAULT 0,
+    payable_mmk BIGINT NOT NULL,
+    breakdown JSONB NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE passenger_credit_ledger (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    passenger_id UUID NOT NULL REFERENCES users(id),
+    entry_type VARCHAR(30) NOT NULL, -- GRANT, USE, REVERSAL, EXPIRY, ADJUSTMENT
+    credits_delta BIGINT NOT NULL,
+    value_mmk_per_credit BIGINT NOT NULL,
+    ride_id UUID REFERENCES rides(id),
+    reference_id VARCHAR(100),
+    expires_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE ride_receipts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    ride_id UUID UNIQUE NOT NULL REFERENCES rides(id),
+    quote_id UUID NOT NULL REFERENCES fare_quotes(id),
+    receipt_number VARCHAR(50) UNIQUE NOT NULL,
+    final_distance_meters INT NOT NULL,
+    final_duration_seconds INT NOT NULL,
+    final_breakdown JSONB NOT NULL,
+    payable_mmk BIGINT NOT NULL,
+    payment_status VARCHAR(30) NOT NULL,
+    issued_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+Quotes and receipts keep their policy reference and full monetary snapshot. Historical receipts never change when a newer fare policy becomes effective.
+
 ---
 
-## ⚡ PostGIS Spatial Indexing Strategy
+## PostGIS Spatial Indexing Strategy
 
 1. **Geographic Coordinates (`GEOMETRY(Point, 4326)`)**:
    - Location columns for pickup, destination, intermediate waypoints, and driver pings are indexed using **GIST (Generalized Search Tree)** indexes:
@@ -151,7 +215,7 @@ Permission enforcement belongs in the authorization service and database policie
 
 ---
 
-## 🛠️ Complete PostgreSQL 16 + PostGIS DDL Schema
+## Complete PostgreSQL 16 + PostGIS DDL Schema
 
 ```sql
 -- 1. Enable PostGIS & UUID Extensions

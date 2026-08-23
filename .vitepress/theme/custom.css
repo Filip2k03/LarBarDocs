@@ -49,6 +49,10 @@
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #E5252A 30%, #F59E0B);
   --vp-home-hero-image-filter: drop-shadow(0 0 40px rgba(229, 37, 42, 0.3));
+  --vp-font-family-base: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vp-c-bg: #F7F8FC;
+  --vp-c-bg-alt: #EEF1F7;
+  --vp-c-bg-soft: #F0F3F8;
 }
 
 .dark {
@@ -147,4 +151,172 @@
   padding: 8px;
   font-size: 0.75rem;
   line-height: 1.3;
+}
+
+/* LaBar documentation portal */
+.VPNavBar {
+  background: color-mix(in srgb, var(--vp-c-bg) 88%, transparent) !important;
+  backdrop-filter: blur(18px) saturate(150%);
+  border-bottom: 1px solid color-mix(in srgb, var(--vp-c-divider) 75%, transparent);
+}
+
+.VPNavBarTitle .title {
+  font-weight: 900;
+  letter-spacing: -0.025em;
+}
+
+.VPHomeHero .name,
+.VPHomeHero .text {
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.VPHomeHero .tagline {
+  max-width: 720px;
+  line-height: 1.65;
+}
+
+.VPButton {
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+}
+
+.VPSidebarItem .text {
+  line-height: 1.35;
+}
+
+.VPDoc h1,
+.VPDoc h2,
+.VPDoc h3 {
+  letter-spacing: -0.035em;
+}
+
+.VPDoc table {
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+}
+
+.VPDoc tr:nth-child(2n) {
+  background: color-mix(in srgb, var(--vp-c-bg-soft) 62%, transparent);
+}
+
+.VPDoc div[class*="language-"] {
+  border: 1px solid color-mix(in srgb, var(--vp-c-divider) 80%, transparent);
+  border-radius: 14px;
+}
+
+.portal-kicker {
+  display: inline-flex;
+  padding: 6px 10px;
+  border: 1px solid #F2C66D;
+  border-radius: 999px;
+  color: #995409;
+  background: #FFF7DF;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 24px 0 44px;
+}
+
+.product-card {
+  display: flex;
+  gap: 14px;
+  min-height: 132px;
+  padding: 18px;
+  color: var(--vp-c-text-1) !important;
+  text-decoration: none !important;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--vp-c-bg) 94%, white), var(--vp-c-bg-soft));
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 18px;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.055);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  border-color: #E6AD3E;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.1);
+}
+
+.product-card img {
+  width: 38px;
+  height: 38px;
+  padding: 7px;
+  color: #A65D04;
+  background: #FFF5D8;
+  border-radius: 12px;
+}
+
+.product-card strong,
+.product-card span {
+  display: block;
+}
+
+.product-card strong {
+  margin-bottom: 7px;
+  font-size: 16px;
+}
+
+.product-card span {
+  color: var(--vp-c-text-2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.policy-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  overflow: hidden;
+  margin: 22px 0;
+  background: #111827;
+  border: 1px solid #293244;
+  border-radius: 18px;
+}
+
+.policy-strip div {
+  padding: 18px;
+  border-right: 1px solid #293244;
+}
+
+.policy-strip div:last-child { border-right: 0; }
+.policy-strip span,
+.policy-strip strong { display: block; }
+.policy-strip span { margin-bottom: 7px; color: #9CA8BA; font-size: 11px; }
+.policy-strip strong { color: #FFFFFF; font-size: 14px; }
+
+.portal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0 50px;
+}
+
+.portal-actions a {
+  padding: 10px 14px;
+  color: var(--vp-c-text-1) !important;
+  text-decoration: none !important;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 11px;
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .policy-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .product-grid,
+  .policy-strip { grid-template-columns: 1fr; }
+  .policy-strip div { border-right: 0; border-bottom: 1px solid #293244; }
 }

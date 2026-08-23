@@ -1,0 +1,63 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { BusinessInquiryForm } from '@/components/business/BusinessInquiryForm';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="LaBar for Business — Corporate Mobility & Fleet Management"
+  description="Empower your workforce with centralized monthly invoicing, customized ride allowances, executive sedan dispatch, and automated tax expense reporting."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="badge-gold">ENTERPRISE MOBILITY SOLUTIONS</span>
+      <h1 class="text-3xl sm:text-5xl font-black text-neutral-900 tracking-tight leading-tight">
+        Smarter Corporate Travel. <br />
+        <span class="text-brand-red">Centralized Invoicing for Myanmar Enterprises.</span>
+      </h1>
+      <p class="text-sm sm:text-base text-neutral-600 leading-relaxed max-w-2xl mx-auto">
+        Eliminate paper receipts and manual reimbursement claims. Manage employee travel with departmental budgets, VIP executive vehicles, and automated corporate tax invoices.
+      </p>
+    </div>
+
+    <!-- 3 Corporate Pillars -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl mb-4">
+          📑
+        </div>
+        <h3 class="text-base font-extrabold text-neutral-900 mb-2">Consolidated Monthly Invoicing</h3>
+        <p class="text-xs text-neutral-600 leading-relaxed">
+          Receive a single itemized monthly invoice with full commercial tax compliance and department breakdown.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl mb-4">
+          👔
+        </div>
+        <h3 class="text-base font-extrabold text-neutral-900 mb-2">Executive VIP Fleet</h3>
+        <p class="text-xs text-neutral-600 leading-relaxed">
+          Top-tier Toyota Crown and Alphard vehicles for visiting VIPs, expatriate executives, and client hospitality.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center text-xl mb-4">
+          🛡️
+        </div>
+        <h3 class="text-base font-extrabold text-neutral-900 mb-2">Duty of Care &amp; Safety</h3>
+        <p class="text-xs text-neutral-600 leading-relaxed">
+          Live 24/7 telemetry monitoring for late-night overtime commutes with automated employee arrival confirmation.
+        </p>
+      </div>
+    </div>
+
+    <!-- Corporate Lead Inquiry Form Island -->
+    <BusinessInquiryForm client:load />
+  </div>
+</BaseLayout>

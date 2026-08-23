@@ -1,10 +1,10 @@
-# 🏛️ System Architecture Overview
+# System Architecture Overview
 
 The **Yamato Taxi Engine** follows a modern **5-Tier Microservices Architecture** designed for high throughput, sub-50ms dispatch cycles, real-time safety streaming, and resilient financial ledger processing.
 
 ---
 
-## 📐 5-Tier Component Topology
+## 5-Tier Component Topology
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -53,7 +53,7 @@ The **Yamato Taxi Engine** follows a modern **5-Tier Microservices Architecture*
 
 ---
 
-## ⚡ Core Operational Capabilities
+## Core Operational Capabilities
 
 1. **Intelligent Matchmaking**:
    - Nearby available drivers are indexed in Redis using geohash coordinates (`GEOADD`).
@@ -68,3 +68,6 @@ The **Yamato Taxi Engine** follows a modern **5-Tier Microservices Architecture*
    - An independent reviewer decides the case before the Driver App account can activate.
 5. **Staff Identity & Authorization**:
    - `GOD_ADMIN` is break-glass only; `CEO`, `CTO`, and `PSO` share `EXEC_SUPERADMIN`; operational roles use explicit least-privilege scopes and immutable audit logs.
+6. **Versioned Fare and Receipt Contract**:
+   - The Go fare use case calculates integer-MMK transport, service fee, credit discount, cash rounding, and payable values.
+   - Every booking and receipt retains the quote ID and policy version so later policy changes cannot rewrite history.

@@ -1,0 +1,78 @@
+---
+import { getTranslation, defaultLocale } from '@/i18n';
+
+interface Props {
+  locale?: 'en' | 'my';
+}
+
+const { locale = defaultLocale } = Astro.props;
+const t = getTranslation(locale);
+
+const services = [
+  {
+    title: t.services.quickRide,
+    sub: t.services.quickRideSub,
+    icon: '🚖',
+    href: '/ride',
+    bg: 'bg-red-50 text-brand-red border-red-100',
+  },
+  {
+    title: t.services.airportTransfer,
+    sub: t.services.airportTransferSub,
+    icon: '✈️',
+    href: '/airport',
+    bg: 'bg-blue-50 text-blue-600 border-blue-100',
+  },
+  {
+    title: t.services.delivery,
+    sub: t.services.deliverySub,
+    icon: '📦',
+    href: '/delivery',
+    bg: 'bg-amber-50 text-amber-600 border-amber-100',
+  },
+  {
+    title: t.services.schedule,
+    sub: t.services.scheduleSub,
+    icon: '🕒',
+    href: '/schedule',
+    bg: 'bg-purple-50 text-purple-600 border-purple-100',
+  },
+  {
+    title: t.services.business,
+    sub: t.services.businessSub,
+    icon: '💼',
+    href: '/business',
+    bg: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+  },
+  {
+    title: t.services.guardian,
+    sub: t.services.guardianSub,
+    icon: '🛡️',
+    href: '/safety',
+    bg: 'bg-rose-50 text-rose-600 border-rose-100',
+  },
+];
+---
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 relative z-20">
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+    {services.map((s) => (
+      <a
+        href={s.href}
+        class="bg-white rounded-3xl p-4 sm:p-5 border border-brand-border/80 shadow-soft hover:shadow-soft-md hover:border-brand-red/30 transition-all duration-200 flex flex-col justify-between group"
+      >
+        <div class={`w-10 h-10 rounded-2xl flex items-center justify-center text-lg mb-3 border ${s.bg}`}>
+          <span>{s.icon}</span>
+        </div>
+        <div>
+          <div class="text-xs sm:text-sm font-extrabold text-neutral-900 group-hover:text-brand-red transition-colors">
+            {s.title}
+          </div>
+          <div class="text-[11px] text-neutral-500 font-medium line-clamp-1 mt-0.5">
+            {s.sub}
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

@@ -1,11 +1,11 @@
-# Optimized Single-Node Production Deployment for Hetzner CPX22 (2 vCPU, 4GB RAM, 80GB NVMe)
-version: '3.8'
+# Single-node staging profile for a Hetzner CPX22-class server.
+# Production should use a secret manager and separate data services.
 
 services:
   caddy_edge:
     image: caddy:2-alpine
     container_name: labar_caddy
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
@@ -27,17 +27,24 @@ services:
       dockerfile: Dockerfile
     image: labar/backend-api:latest
     container_name: labar_go_core
-    restart: always
+    restart: unless-stopped
     environment:
       - PORT=8080
       - APP_ENV=production
-      - DB_DSN=postgres://labar_user:SecurePostgresPass123@postgres_db:5432/labar_prod?sslmode=disable
+      - DB_DSN=postgres://labar_user:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres_db:5432/labar_prod?sslmode=disable
       - REDIS_ADDR=redis_spatial:6379
-      - REDIS_PASSWORD=SecureRedisPass123
-      - JWT_SECRET=super_secret_production_signing_jwt_key_2026
+      - REDIS_PASSWORD=${REDIS_PASSWORD:?set REDIS_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET:?set JWT_SECRET}
     depends_on:
-      - postgres_db
-      - redis_spatial
+      postgres_db:
+        condition: service_healthy
+      redis_spatial:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/app/labar-api", "--healthcheck"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
     networks:
       - labar_net
     deploy:
@@ -49,11 +56,11 @@ services:
   postgres_db:
     image: postgis/postgis:16-3.4-alpine
     container_name: labar_postgres
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: labar_prod
       POSTGRES_USER: labar_user
-      POSTGRES_PASSWORD: SecurePostgresPass123
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
     command: >
       postgres
@@ -68,6 +75,11 @@ services:
       -c random_page_cost=1.1
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labar_user -d labar_prod"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       - labar_net
     deploy:
@@ -79,15 +91,22 @@ services:
   redis_spatial:
     image: redis:7-alpine
     container_name: labar_redis
-    restart: always
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD}
     command: >
       redis-server
-      --requirepass SecureRedisPass123
+      --requirepass $${REDIS_PASSWORD}
       --maxmemory 384mb
       --maxmemory-policy allkeys-lru
       --appendonly yes
     volumes:
       - redisdata:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a '$${REDIS_PASSWORD}' ping | grep PONG"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
     networks:
       - labar_net
     deploy:
@@ -99,7 +118,7 @@ services:
   osrm_myanmar:
     image: osrm/osrm-backend:latest
     container_name: labar_osrm
-    restart: always
+    restart: unless-stopped
     command: ["osrm-routed", "--algorithm", "mld", "--max-matching-size", "1000", "/data/myanmar-latest.osrm"]
     volumes:
       - ./osrm-data:/data:ro

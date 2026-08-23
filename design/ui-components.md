@@ -1,10 +1,10 @@
-# 🎛️ UI Components, Buttons & Micro-Interactions
+# UI Components, Buttons & Micro-Interactions
 
 Every component in the LaBar Taxi application adheres to strict states: **Default**, **Hover / Focus**, **Active / Pressed**, and **Disabled**, powered by physics-based cubic-bezier transitions.
 
 ---
 
-## 🔘 Button Components & State System
+## Button Components & State System
 
 ### 1. Royal Gold Primary CTA Button (`btn-royal-gold`)
 
@@ -86,7 +86,7 @@ Used for emergency panic triggers and immediate police/guardian alerts.
 
 ---
 
-## 📱 Dynamic Cards & Bottom Sheets
+## Dynamic Cards & Bottom Sheets
 
 - **Ride Booking Bottom Sheet**: Smooth draggable gesture with snap points at 25%, 50%, and 85% height.
 - **Dynamic Meter HUD**: Floating semi-transparent glass card (`backdrop-filter: blur(12px)`) with real-time fare, distance, and speed.

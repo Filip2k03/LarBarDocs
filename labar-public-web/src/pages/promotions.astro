@@ -1,0 +1,112 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { PromotionsService } from '@/services/promotions.service';
+import { getTranslation, defaultLocale } from '@/i18n';
+import type { Promotion } from '@/types/promotion';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+
+let promotions: Promotion[] = [];
+try {
+  promotions = await PromotionsService.getActivePromotions();
+} catch {
+  promotions = [
+    {
+      id: 'p_welcome',
+      code: 'WELCOME50',
+      title: '50% Off Your First 3 Rides',
+      title_mm: 'ပထမဆုံး ခရီးစဥ် ၃ ကြိမ်အတွက် ၅၀% လျှော့စျေး',
+      description: 'Enjoy 50% discount up to 3,000 MMK per ride when paying with KBZPay or WavePay.',
+      description_mm: 'KBZPay သို့မဟုတ် WavePay ဖြင့် ပေးချေပါက ၅၀% (အများဆုံး ၃၀၀၀ ကျပ်) လျှော့စျေးရရှိမည်။',
+      discount_type: 'PERCENTAGE',
+      discount_value: 50,
+      max_discount_mmk: 3000,
+      min_spend_mmk: 4000,
+      valid_from: '2026-08-01',
+      valid_until: '2026-09-30',
+      applicable_cities: ['yangon', 'mandalay', 'naypyidaw'],
+      applicable_ride_types: ['standard', 'comfort', 'premium'],
+      is_active: true,
+      terms: ['Valid for new passengers only', 'Applies to KBZPay & WavePay payments', 'Maximum 3 redemptions per user'],
+      terms_mm: ['အသုံးပြုသူအသစ်များအတွက်သာ', 'ဒစ်ဂျစ်တယ်ငွေပေးချေမှုများအတွက်သာ အကျုံးဝင်ပါသည်'],
+    },
+    {
+      id: 'p_guardian',
+      code: 'LABARSAFE',
+      title: 'Flat 2,000 MMK Off Late Night Rides',
+      title_mm: 'ညဉ့်နက်ပိုင်း ခရီးစဉ်များအတွက် ၂၀၀၀ ကျပ် လျှော့စျေး',
+      description: 'Stay safe with LaBar Guardian between 10:00 PM and 5:00 AM every night.',
+      description_mm: 'ည ၁၀ နာရီမှ မနက် ၅ နာရီအတွင်း Guardian အကာအကွယ်ဖြင့် လုံခြုံစွာ စီးနင်းနိုင်ပါသည်။',
+      discount_type: 'FIXED_AMOUNT',
+      discount_value: 2000,
+      min_spend_mmk: 6000,
+      valid_from: '2026-08-01',
+      valid_until: '2026-12-31',
+      applicable_cities: ['yangon'],
+      applicable_ride_types: ['standard', 'comfort'],
+      is_active: true,
+      terms: ['Active between 22:00 and 05:00 MMT', 'Minimum fare 6,000 MMK'],
+      terms_mm: ['ည ၁၀ နာရီမှ မနက် ၅ နာရီအတွင်း အကျုံးဝင်ပါသည်'],
+    },
+  ];
+}
+---
+
+<BaseLayout
+  title="Active Promotions & Discounts — LaBar Myanmar"
+  description="Exclusive promo codes, seasonal discounts, and KBZPay cashback offers for taxi rides and parcel delivery in Yangon, Mandalay, and Naypyidaw."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="badge-red">PROMOTIONS &amp; VOUCHERS</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+        Active LaBar Promo Codes &amp; Rewards
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+        Apply these promo codes directly when booking on our website or mobile app to enjoy guaranteed ride discounts.
+      </p>
+    </div>
+
+    <!-- Promo Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+      {promotions.map((promo) => (
+        <div class="bg-white rounded-4xl p-6 border border-brand-border shadow-soft flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-3 py-1 rounded-xl bg-brand-lightRed text-brand-red font-mono font-black text-sm tracking-wider border border-brand-red/20">
+                {promo.code}
+              </span>
+              <span class="text-xs font-bold text-neutral-500">
+                Valid until {promo.valid_until}
+              </span>
+            </div>
+            <h3 class="text-lg font-extrabold text-neutral-900 mb-1">
+              {promo.title}
+            </h3>
+            <p class="text-xs text-neutral-600 leading-relaxed mb-4">
+              {promo.description}
+            </p>
+
+            <ul class="space-y-1 border-t border-neutral-100 pt-3 text-[11px] text-neutral-500">
+              {promo.terms.map((term) => (
+                <li class="flex items-center gap-1.5">
+                  <span class="text-neutral-400">•</span>
+                  <span>{term}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <a
+            href={`/ride?promo=${promo.code}`}
+            class="w-full py-3 px-4 rounded-2xl bg-neutral-900 hover:bg-brand-red text-white text-xs font-bold text-center transition-colors cursor-pointer"
+          >
+            Apply Code &amp; Book Ride
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

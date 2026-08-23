@@ -15,5 +15,11 @@
     "react-native": "0.74.0",
     "react-native-maps": "^1.14.0",
     "react-native-reanimated": "^3.9.0"
+  },
+  "devDependencies": {
+    "@react-native/babel-preset": "0.74.0",
+    "@react-native/metro-config": "0.74.0",
+    "@types/react": "^18.2.66",
+    "typescript": "^5.4.5"
   }
 }

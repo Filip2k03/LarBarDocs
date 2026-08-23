@@ -1,10 +1,10 @@
-# 🛡️ Guardian Dynamic Feature Plugin Module
+# Guardian Dynamic Feature Plugin Module
 
 To keep the core passenger application lightweight (~18MB), the **Guardian Safety Shield** is engineered as an **on-demand installable dynamic plugin package** (`com.taxi.plugin.guardian` / `GuardianPluginKit.framework`).
 
 ---
 
-## 📦 Dynamic Module Delivery Mechanics
+## Dynamic Module Delivery Mechanics
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -18,7 +18,7 @@ To keep the core passenger application lightweight (~18MB), the **Guardian Safet
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 📱 Android Play Feature Delivery (`:feature_guardian`)
+### Android Play Feature Delivery (`:feature_guardian`)
 
 ```kotlin
 class GuardianPluginInstaller(private val context: Context) {
@@ -54,7 +54,7 @@ class GuardianPluginInstaller(private val context: Context) {
 
 ---
 
-## ⚡ Core Submodules Inside Guardian Package
+## Core Submodules Inside Guardian Package
 
 1. **Family Mesh Pairing Engine**:
    - Generates 6-digit one-time pairing tokens and QR codes. Family devices pair in $< 3\text{ seconds}$ without cumbersome account setups.

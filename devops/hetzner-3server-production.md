@@ -1,10 +1,10 @@
-# ☁️ Hetzner 3-Server Production & Live Map Server Setup
+# Hetzner 3-Server Production & Live Map Server Setup
 
 This production architecture separates the LaBar Taxi Platform across **3 dedicated Hetzner Cloud VPS instances** connected over a secure **Private Cloud VPC Network (`10.0.0.0/24`)** for ultra-low latency, maximum security, and sub-$65/month operating cost.
 
 ---
 
-## 🏗️ Hetzner 3-Server Topology & Roles
+## Hetzner 3-Server Topology & Roles
 
 ```text
                                   [ Public Internet (HTTPS/WSS) ]
@@ -22,15 +22,15 @@ This production architecture separates the LaBar Taxi Platform across **3 dedica
  │ SERVER 2: LIVE MAP & SPATIAL ENGINE          │  │ SERVER 3: DATABASE & STORAGE VAULT             │
  │ (`10.0.0.2` - Hetzner CPX41 - 8 vCPU, 16GB)  │  │ (`10.0.0.3` - Hetzner CPX31 + Storage Box)     │
  │                                              │  │                                                │
- │ 🗺️ TileServer GL (OpenStreetMap Vector Tiles) │  │ 🗄️ PostgreSQL 16 + PostGIS 3.4 Spatial DB       │
- │ 🛣️ OSRM Myanmar Router (`myanmar-latest.osrm`) │  │ 📹 MinIO / S3 Encrypted CCTV Video Chunk Vault│
- │ ⚡ Redis 7 Spatial Cluster (1km-3km Radius)   │  │ 💾 Hourly Encrypted Automated Database Backup   │
+ │  TileServer GL (OpenStreetMap Vector Tiles) │  │  PostgreSQL 16 + PostGIS 3.4 Spatial DB       │
+ │  OSRM Myanmar Router (`myanmar-latest.osrm`) │  │  MinIO / S3 Encrypted CCTV Video Chunk Vault│
+ │  Redis 7 Spatial Cluster (1km-3km Radius)   │  │  Hourly Encrypted Automated Database Backup   │
  └──────────────────────────────────────────────┘  └────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 💰 3-Server Monthly Pricing Breakdown (Hetzner Cloud)
+## 3-Server Monthly Pricing Breakdown (Hetzner Cloud)
 
 | Server Node | Spec & Resources | Hetzner Cloud Model | Monthly Cost (€) | Monthly Cost (USD) |
 |---|---|---|---|---|
@@ -45,7 +45,7 @@ This production architecture separates the LaBar Taxi Platform across **3 dedica
 
 ---
 
-## 🚀 Step-by-Step Server Configurations
+## Step-by-Step Server Configurations
 
 ### 1. Server 1: API Gateway & Go Core (`docker-compose.server1.yml`)
 
@@ -73,16 +73,16 @@ services:
     restart: always
     environment:
       - APP_ENV=production
-      - DB_DSN=postgres://labar_admin:SecretPostgresPass123@10.0.0.3:5432/labar_prod?sslmode=disable
+      - DB_DSN=postgres://labar_admin:${POSTGRES_PASSWORD}@10.0.0.3:5432/labar_prod?sslmode=require
       - REDIS_ADDR=10.0.0.2:6379
       - REDIS_PASSWORD=RedisSecurePass123
       - OSRM_ROUTER_URL=http://10.0.0.2:5000
       - TILE_SERVER_URL=http://10.0.0.2:8080
       - S3_ENDPOINT=http://10.0.0.3:9000
       - S3_BUCKET=labar-cctv-vault
-      - S3_ACCESS_KEY=MinioAdminUser123
-      - S3_SECRET_KEY=MinioAdminSecretPass123
-      - JWT_SECRET=super_secret_production_jwt_signing_key
+      - S3_ACCESS_KEY=${S3_ACCESS_KEY}
+      - S3_SECRET_KEY=${S3_SECRET_KEY}
+      - JWT_SECRET=${JWT_SECRET}
     networks:
       - s1_net
 
@@ -153,7 +153,7 @@ networks:
     driver: bridge
 ```
 
-#### 🇲🇲 Downloading & Compiling Myanmar OpenStreetMap Data for OSRM:
+#### Downloading & Compiling Myanmar OpenStreetMap Data for OSRM:
 Run this on **Server 2**:
 ```bash
 # 1. Create data directory
@@ -186,7 +186,7 @@ services:
     environment:
       POSTGRES_DB: labar_prod
       POSTGRES_USER: labar_admin
-      POSTGRES_PASSWORD: SecretPostgresPass123
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -200,8 +200,8 @@ services:
     restart: always
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: MinioAdminUser123
-      MINIO_ROOT_PASSWORD: MinioAdminSecretPass123
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -221,7 +221,7 @@ networks:
 
 ---
 
-## 🔒 Hetzner Firewall Rules
+## Hetzner Firewall Rules
 
 Configure the **Hetzner Cloud Firewall** in the dashboard:
 - **Server 1 (Gateway)**:

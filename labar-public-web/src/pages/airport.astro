@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { BookingWizard } from '@/components/booking/BookingWizard';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="Airport Transfer — Yangon RGN & Mandalay MDL | Fixed Upfront Fares"
+  description="Book guaranteed airport pickups and dropoffs between Yangon International Airport (RGN) / Mandalay International (MDL) and downtown hotels. Flight tracking included."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="badge-red">FIXED AIRPORT TARIFF</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+        Reliable Airport Transfers with Flight Tracking
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+        Fixed transparent rates to and from Yangon International Airport (RGN) &amp; Mandalay (MDL). Complimentary 30-minute flight delay wait time and luggage assistance.
+      </p>
+    </div>
+
+    <!-- Booking Wizard Island -->
+    <BookingWizard client:load />
+  </div>
+</BaseLayout>

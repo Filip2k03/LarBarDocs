@@ -1,0 +1,51 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="Privacy Policy — LaBar Myanmar"
+  description="Learn how LaBar protects your personal data, location privacy, and financial information under Myanmar law."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8">
+    <div class="border-b border-neutral-200 pb-6">
+      <span class="badge-red mb-2">LEGAL COMPLIANCE</span>
+      <h1 class="text-3xl font-black text-neutral-900 tracking-tight">Privacy Policy</h1>
+      <p class="text-xs text-neutral-500 mt-1">Effective Date: 1 January 2026 • Last updated: August 2026</p>
+    </div>
+
+    <div class="prose prose-neutral max-w-none text-xs sm:text-sm text-neutral-700 space-y-6 leading-relaxed">
+      <section>
+        <h2 class="text-base font-extrabold text-neutral-900 mb-2">1. Overview &amp; Scope</h2>
+        <p>
+          LaBar Technologies Co., Ltd. ("LaBar", "we", "our") is dedicated to safeguarding the privacy and personal data of passengers, drivers, and corporate users across the Union of Myanmar. This policy outlines our data collection, encryption, and protection practices.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-base font-extrabold text-neutral-900 mb-2">2. Information We Collect</h2>
+        <p>
+          We collect personal details necessary to deliver transportation services, including your name, mobile phone number, pickup/dropoff GPS coordinates, and transaction references for KBZPay/WavePay digital settlements.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-base font-extrabold text-neutral-900 mb-2">3. Guardian Telemetry &amp; Location Data</h2>
+        <p>
+          High-precision GPS coordinates are gathered only during an active ride session to support live route navigation and 1km emergency SOS mesh response. Location streaming terminates immediately upon ride completion.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-base font-extrabold text-neutral-900 mb-2">4. Contact Our Data Protection Officer</h2>
+        <p>
+          If you have questions regarding your data rights or wish to request data deletion, please contact <a href="mailto:privacy@labar.com.mm" class="text-brand-red font-semibold">privacy@labar.com.mm</a>.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,87 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { CitiesService } from '@/services/cities.service';
+import { RideTiersGrid } from '@/components/home/RideTiersGrid';
+import { BookingWizard } from '@/components/booking/BookingWizard';
+import { getTranslation, defaultLocale } from '@/i18n';
+import type { City } from '@/types/city';
+
+export async function getStaticPaths() {
+  const defaultCities = [
+    { slug: 'yangon', name: 'Yangon', name_mm: 'ရန်ကုန်' },
+    { slug: 'mandalay', name: 'Mandalay', name_mm: 'မန္တလေး' },
+    { slug: 'naypyidaw', name: 'Naypyidaw', name_mm: 'နေပြည်တော်' },
+    { slug: 'taunggyi', name: 'Taunggyi', name_mm: 'တောင်ကြီး' },
+    { slug: 'bago', name: 'Bago', name_mm: 'ပဲခူး' },
+    { slug: 'mawlamyine', name: 'Mawlamyine', name_mm: 'မော်လမြိုင်' },
+    { slug: 'pathein', name: 'Pathein', name_mm: 'ပုသိမ်' },
+  ];
+
+  return defaultCities.map((c) => ({
+    params: { slug: c.slug },
+    props: { citySummary: c },
+  }));
+}
+
+const { slug } = Astro.params;
+const locale = defaultLocale;
+const t = getTranslation(locale);
+
+let city: City | null = null;
+try {
+  city = await CitiesService.getCityBySlug(slug as string);
+} catch {
+  // Static fallback
+  city = {
+    id: `city_${slug}`,
+    slug: slug as string,
+    name: (slug as string).charAt(0).toUpperCase() + (slug as string).slice(1),
+    name_mm: slug === 'yangon' ? 'ရန်ကုန်' : slug === 'mandalay' ? 'မန္တလေး' : 'မြို့တော်',
+    state_region: 'Myanmar Hub',
+    state_region_mm: 'မြန်မာ',
+    is_active: true,
+    services_available: ['ride', 'delivery', 'airport', 'business'],
+    center_lat: 16.8661,
+    center_lng: 96.1951,
+    zoom_level: 13,
+    active_drivers_count: 2400,
+    description: `24/7 on-demand taxi, express delivery, and airport transfers operating across all major townships of ${slug}.`,
+    description_mm: `မြို့နယ်အသီးသီးတွင် ၂၄ နာရီ ဝန်ဆောင်မှုပေးနေပါသည်။`,
+    popular_destinations: [
+      { name: 'Downtown Central Square', name_mm: 'မြို့လယ်ဗဟို', lat: 16.7794, lng: 96.1554, category: 'mall' },
+      { name: 'International Airport Terminal', name_mm: 'အပြည်ပြည်ဆိုင်ရာလေဆိပ်', lat: 16.9000, lng: 96.1300, category: 'airport' },
+      { name: 'Central Railway Station', name_mm: 'ဘူတာကြီး', lat: 16.7820, lng: 96.1600, category: 'station' },
+    ],
+    zones: [],
+  };
+}
+---
+
+<BaseLayout
+  title={`Taxi & Delivery Services in ${city.name} — LaBar Myanmar`}
+  description={`Book guaranteed rides and express parcel delivery across ${city.name} (${city.name_mm}). Transparent fares and verified local drivers.`}
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="badge-red">CITY MOBILITY GUIDE</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+        Ride with LaBar in {city.name} ({city.name_mm})
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+        {city.description}
+      </p>
+    </div>
+
+    <!-- Booking Tool -->
+    <BookingWizard client:load />
+
+    <!-- Ride Tiers in this City -->
+    <div class="space-y-6">
+      <h3 class="text-xl font-extrabold text-neutral-900">
+        Available Ride Tiers in {city.name}
+      </h3>
+      <RideTiersGrid client:visible citySlug={city.slug} locale={locale} />
+    </div>
+  </div>
+</BaseLayout>

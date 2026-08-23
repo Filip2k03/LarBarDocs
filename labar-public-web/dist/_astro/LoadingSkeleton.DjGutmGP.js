@@ -1,0 +1,1 @@
+import{j as e}from"./jsx-runtime.ClP7wGfN.js";import"./index.DK-fsZOb.js";const o=({rows:s=3,className:a=""})=>e.jsxs("div",{className:`animate-pulse space-y-3 ${a}`,children:[e.jsx("div",{className:"h-6 bg-neutral-200 rounded-lg w-1/3"}),Array.from({length:s}).map((l,r)=>e.jsx("div",{className:"h-16 bg-neutral-100 rounded-2xl w-full"},r))]});export{o as L};

@@ -1,21 +1,21 @@
-# 🧩 On-Demand Add-Ons & Dynamic Plugin Architecture
+# On-Demand Add-Ons & Dynamic Plugin Architecture
 
 The **LaBar Platform** implements an **On-Demand Add-On & Dynamic Plugin Architecture** that keeps the base mobile applications ultra-lightweight (**~18 MB** for both Passenger and Driver apps). Heavy, specialized, or optional features (such as the Guardian Family Shield, In-Car CCTV Dashcam Sentinel, and Acoustic Panic Detectors) are packaged as dynamic add-ons (**~2.4 MB – ~3.8 MB**) that users can download, install, and activate directly inside the app on demand.
 
 ---
 
-## 📱 Mobile Wireframe: In-App Add-Ons Store
+## Mobile Wireframe: In-App Add-Ons Store
 
 <div style="display: flex; justify-content: center; margin: 28px 0;">
   <img src="/wireframes/plugins_01_addons_store.svg" alt="On-Demand Add-Ons Store Screen" style="max-width: 380px; border-radius: 28px; box-shadow: 0 16px 40px rgba(0,0,0,0.7); border: 2px solid #282836;" />
 </div>
 
-- 🖼️ [View High-Resolution Vector SVG](/wireframes/plugins_01_addons_store.svg)
-- 🚀 [**Launch Interactive Add-Ons Store Prototype**](/prototypes/plugin-store.html)
+- [View High-Resolution Vector SVG](/wireframes/plugins_01_addons_store.svg)
+- [**Launch Interactive Add-Ons Store Prototype**](/prototypes/plugin-store.html)
 
 ---
 
-## 🎯 Why On-Demand Add-Ons are Essential
+## Why On-Demand Add-Ons are Essential
 
 1. **Ultra-Fast Initial App Downloads**:
    - Base app install size is reduced from **~45 MB down to ~18 MB**, enabling instant downloads over 3G/4G/5G networks in Myanmar.
@@ -26,7 +26,7 @@ The **LaBar Platform** implements an **On-Demand Add-On & Dynamic Plugin Archite
 
 ---
 
-## 📦 Dynamic Add-On Plugin Catalog
+## Dynamic Add-On Plugin Catalog
 
 | Plugin Identifier | Name & Myanmar Translation | Target Audience | Size | Key Capabilities |
 |---|---|---|---|---|
@@ -37,7 +37,7 @@ The **LaBar Platform** implements an **On-Demand Add-On & Dynamic Plugin Archite
 
 ---
 
-## ⚙️ Native Dynamic Loading Engine
+## Native Dynamic Loading Engine
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -46,7 +46,7 @@ The **LaBar Platform** implements an **On-Demand Add-On & Dynamic Plugin Archite
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │ DYNAMIC PLUGIN MANAGER (Hot-Swappable Micro-Frontend Bridge)                           │
 │                                                                                        │
-│ 1. Check Local Cache ➔ 2. Fetch CDN Dynamic Bundle ➔ 3. Verify SHA-256 ➔ 4. Mount      │
+│ 1. Check Local Cache; 2. Fetch CDN Dynamic Bundle; 3. Verify SHA-256; 4. Mount     │
 └──────────────────────────────────────────┬─────────────────────────────────────────────┘
                                            │
                     ┌──────────────────────┴──────────────────────┐
@@ -91,7 +91,7 @@ export function GuardianTabScreen() {
 
 ---
 
-## 🌐 Golang Backend Plugin Registry Endpoint
+## Golang Backend Plugin Registry Endpoint
 
 ### `GET /api/v1/plugins/manifest`
 ```json

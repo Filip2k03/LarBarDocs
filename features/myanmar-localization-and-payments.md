@@ -1,10 +1,10 @@
-# 🇲🇲 Myanmar (Burmese) Localization, E-Wallets & Compliance
+# Myanmar (Burmese) Localization, E-Wallets & Compliance
 
 LaBar is custom-engineered for Myanmar's urban transport ecosystem, supporting local Burmese Unicode typography, regional e-wallets, driver regulatory KYC verification, and city-specific road restrictions (e.g. Yangon municipal motorbike bans).
 
 ---
 
-## 🇲🇲 1. Burmese Language & Unicode Typography
+## 1. Burmese Language & Unicode Typography
 
 The mobile and web interfaces utilize **Pyidaungsu Unicode / Myanmar3** with automated legacy Zawgyi detection and real-time font rendering.
 
@@ -24,7 +24,7 @@ The mobile and web interfaces utilize **Pyidaungsu Unicode / Myanmar3** with aut
 
 ---
 
-## 💳 2. Myanmar Payment Gateways & E-Wallet Deep-Linking
+## 2. Myanmar Payment Gateways & E-Wallet Deep-Linking
 
 LaBar supports both **Cash Settlement (ငွေသားပေးချေမှု)** and **Cashless Mobile E-Wallets (ဒစ်ဂျစ်တယ် ပိုက်ဆံအိတ်)** via native OS deep-linking and SHA-256 HMAC webhook verification.
 
@@ -58,7 +58,7 @@ LaBar supports both **Cash Settlement (ငွေသားပေးချေမ�
 
 ---
 
-## 🪪 3. Driver Regulatory Compliance & KYC Standards
+## 3. Driver Regulatory Compliance & KYC Standards
 
 Drivers operating on LaBar undergo strict verification meeting the standards of the **Road Transport Administration Department (RTAD / ကညန)** and local municipal taxi authorities:
 
@@ -73,7 +73,7 @@ Drivers operating on LaBar undergo strict verification meeting the standards of 
 
 ---
 
-## 🗺️ 4. Yangon City Traffic Rules & Motorbike Restriction Geofencing
+## 4. Yangon City Traffic Rules & Motorbike Restriction Geofencing
 
 - **Yangon Municipal Motorbike Ban**: Motorbikes are strictly prohibited in the 33 municipal townships of Yangon. The routing engine defaults to 4-wheel Standard Sedans and Gold VIP VIP taxis.
 - **One-Way Downtown Grid Optimization**: Downtown Yangon (Pabedan, Kyauktada, Latha, Lanmadaw) contains strict one-way avenues (e.g. Anawrahta Rd, Maha Bandula Rd, Merchant Rd, Strand Rd). Our self-hosted OSRM router enforces directional penalties to eliminate illegal U-turns and dead-ends.

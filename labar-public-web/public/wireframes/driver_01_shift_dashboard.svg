@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
+  <defs>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="red-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#DC2626"/>
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Device Outer Border & Dynamic Island - Light Mode -->
+  <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
+  <circle cx="236" cy="26" r="5" fill="#1E293B"/>
+
+  <!-- Status Bar -->
+  <text x="36" y="32" fill="#0F172A" font-size="13" font-weight="700">9:41</text>
+  <text x="354" y="32" fill="#0F172A" font-size="11" font-weight="700" text-anchor="end">5G 🔋 100%</text>
+
+  <!-- App Header -->
+  <rect x="0" y="48" width="390" height="52" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="24" y="80" fill="#D97706" font-size="18" font-weight="900" letter-spacing="0.5">LaBar</text>
+  <rect x="92" y="66" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.12" stroke="#F59E0B" stroke-width="1"/>
+  <text x="133" y="79" fill="#F59E0B" font-size="9" font-weight="800" text-anchor="middle">LABAR NATIVE</text>
+  
+  <text x="280" y="80" fill="#0F172A" font-size="12" font-weight="800" text-anchor="middle">ယာဥ်မောင်း ပင်မစာမျက်နှာ (Driver Home)</text>
+  <circle cx="360" cy="74" r="14" fill="#F1F5F9"/>
+  <text x="360" y="79" fill="#0F172A" font-size="11" text-anchor="middle">🔔</text>
+
+  <!-- Body Content -->
+  
+    <!-- Shift Mode Toggle Card -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="110" width="358" height="96" rx="18" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+      <circle cx="48" cy="158" r="18" fill="#10B981"/>
+      <text x="48" y="164" fill="#FFFFFF" font-size="14" font-weight="900" text-anchor="middle">✓</text>
+
+      <text x="80" y="150" fill="#065F46" font-size="16" font-weight="800">အလုပ်ဆင်းနေသည် (ON DUTY)</text>
+      <text x="80" y="172" fill="#059669" font-size="12" font-weight="700">Online • 15s Cascading Offers Active</text>
+
+      <rect x="290" y="140" width="64" height="34" rx="17" fill="#10B981"/>
+      <circle cx="334" cy="157" r="13" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Today Sales & Earnings HUD -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="218" width="358" height="152" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="36" y="248" fill="#475569" font-size="12">ယနေ့ ရရှိငွေ စုစုပေါင်း (Today's Earnings)</text>
+      <text x="36" y="286" fill="#D97706" font-size="32" font-weight="900">48,500 <tspan font-size="16">MMK</tspan></text>
+
+      <line x1="36" y1="306" x2="354" y2="306" stroke="#E2E8F0" stroke-width="1"/>
+
+      <text x="36" y="338" fill="#0F172A" font-size="12">Completed: <tspan font-weight="700">12 Trips</tspan></text>
+      <text x="180" y="338" fill="#0F172A" font-size="12">Online: <tspan font-weight="700">5.4 Hours</tspan></text>
+      <text x="354" y="338" fill="#059669" font-size="12" font-weight="800" text-anchor="end">⭐ 4.96</text>
+    </g>
+
+    <!-- Quick Actions Grid -->
+    <rect x="16" y="382" width="172" height="92" rx="14" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#card-shadow)"/>
+    <text x="36" y="416" fill="#D97706" font-size="20">💳</text>
+    <text x="36" y="442" fill="#0F172A" font-size="13" font-weight="800">ငွေထုတ်ယူမည်</text>
+    <text x="36" y="460" fill="#475569" font-size="10">Instant KBZPay Payout</text>
+
+    <rect x="202" y="382" width="172" height="92" rx="14" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#card-shadow)"/>
+    <text x="222" y="416" fill="#059669" font-size="20">📹</text>
+    <text x="222" y="442" fill="#0F172A" font-size="13" font-weight="800">CCTV Protecting</text>
+    <text x="222" y="460" fill="#059669" font-size="10" font-weight="700">Active • 1080p Stream</text>
+
+    <!-- Collapsed Discreet Safety Drawer -->
+    <g filter="url(#card-shadow)">
+      <rect x="16" y="488" width="358" height="92" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="40" y="532" fill="#2563EB" font-size="28">🛡️</text>
+      <text x="80" y="530" fill="#0F172A" font-size="16" font-weight="900">Safety &amp; emergency options</text>
+      <text x="80" y="554" fill="#64748B" font-size="12">Collapsed • tap once • hold 2s for silent SOS</text>
+      <text x="350" y="538" fill="#64748B" font-size="18" font-weight="900" text-anchor="end">⌃</text>
+    </g>
+
+    <!-- Recent Rides History List -->
+    <rect x="16" y="594" width="358" height="194" rx="16" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="36" y="624" fill="#0F172A" font-size="14" font-weight="800">လတ်တလော ခရီးစဥ်များ (Recent Trips)</text>
+
+    <rect x="28" y="638" width="334" height="62" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="44" y="662" fill="#0F172A" font-size="12" font-weight="700">Sule Square ➔ Junction City</text>
+    <text x="44" y="682" fill="#475569" font-size="10">2:45 PM • Cashless (KBZPay)</text>
+    <text x="346" y="672" fill="#059669" font-size="14" font-weight="800" text-anchor="end">+2,800 MMK</text>
+
+    <rect x="28" y="710" width="334" height="62" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="44" y="734" fill="#0F172A" font-size="12" font-weight="700">Hledan Center ➔ Inya Lake</text>
+    <text x="44" y="754" fill="#475569" font-size="10">1:15 PM • Cash Collected</text>
+    <text x="346" y="744" fill="#059669" font-size="14" font-weight="800" text-anchor="end">+3,500 MMK</text>
+    
+
+  <!-- Home Indicator -->
+  <rect x="128" y="828" width="134" height="4" rx="2" fill="#CBD5E1"/>
+</svg>

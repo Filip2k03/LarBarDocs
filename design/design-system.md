@@ -1,10 +1,10 @@
-# 🎨 Red & Gold Design System (100 - 900)
+# Red & Gold Design System (100 - 900)
 
 The LaBar platform UI design language uses an **Imperial Crimson Red** and **Royal Gold** color system paired with **Noir Onyx** dark mode surfaces.
 
 ---
 
-## 🔴 Imperial Crimson Red Palette (`red-100` to `red-900`)
+## Imperial Crimson Red Palette (`red-100` to `red-900`)
 
 | Token | Hex Code | RGB / HSL | Semantic Usage & Role |
 |---|---|---|---|
@@ -32,7 +32,7 @@ The LaBar platform UI design language uses an **Imperial Crimson Red** and **Roy
 
 ---
 
-## 🟡 Royal Gold & Amber Palette (`gold-100` to `gold-900`)
+## Royal Gold & Amber Palette (`gold-100` to `gold-900`)
 
 | Token | Hex Code | RGB / HSL | Semantic Usage & Role |
 |---|---|---|---|
@@ -60,7 +60,7 @@ The LaBar platform UI design language uses an **Imperial Crimson Red** and **Roy
 
 ---
 
-## 🖤 Neutral Dark Surfaces (`neutral-100` to `neutral-900`)
+## Neutral Dark Surfaces (`neutral-100` to `neutral-900`)
 
 - `neutral-900`: `#0E0F14` (Main Application Dark Background)
 - `neutral-800`: `#181922` (Card / Bottom Sheet Surface)
@@ -69,8 +69,8 @@ The LaBar platform UI design language uses an **Imperial Crimson Red** and **Roy
 
 ---
 
-## 📦 Figma Tokens Studio JSON File
+## Figma Tokens Studio JSON File
 
 The design tokens are formatted for Figma import via [Tokens Studio](https://tokens.studio/):
 
-- 📂 Location: [`design-system/figma_tokens.json`](file:///Users/stephanfilip/Yamato_project/Labar/design-system/figma_tokens.json)
+- Location: [`design-system/figma_tokens.json`](file:///Users/stephanfilip/Yamato_project/Labar/design-system/figma_tokens.json)

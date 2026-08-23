@@ -1,10 +1,10 @@
-# ⚡ 15-Second Cascading Dispatch Engine
+# 15-Second Cascading Dispatch Engine
 
 The dispatch engine matches ride requests with optimal candidate drivers within milliseconds, utilizing a timed cascading waterfall strategy.
 
 ---
 
-## 🔄 Cascading Offer State Diagram
+## Cascading Offer State Diagram
 
 ```text
 ┌──────────────┐     Spatial Match      ┌───────────────────────┐

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { BookingWizard } from '@/components/booking/BookingWizard';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="Express Delivery & Parcel Courier — LaBar Myanmar"
+  description="Fast on-demand parcel and document delivery across Yangon and Myanmar cities. Real-time courier tracking and photo proof of delivery."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="badge-gold">ON-DEMAND PARCEL LOGISTICS</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+        Fast, Reliable Citywide Express Delivery
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+        Send business documents, e-commerce parcels, food, and urgent packages across Yangon in under 45 minutes with live digital receipt confirmation.
+      </p>
+    </div>
+
+    <!-- Live Booking Island initialized for Delivery -->
+    <BookingWizard client:load />
+  </div>
+</BaseLayout>

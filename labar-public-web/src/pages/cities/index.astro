@@ -1,0 +1,148 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { CitiesService } from '@/services/cities.service';
+import { getTranslation, defaultLocale } from '@/i18n';
+import type { City } from '@/types/city';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+
+let cities: City[] = [];
+try {
+  cities = await CitiesService.getAllCities();
+} catch {
+  cities = [
+    {
+      id: 'city_ygn',
+      slug: 'yangon',
+      name: 'Yangon',
+      name_mm: 'ရန်ကုန်',
+      state_region: 'Yangon Region',
+      state_region_mm: 'ရန်ကုန်တိုင်းဒေသကြီး',
+      is_active: true,
+      services_available: ['ride', 'delivery', 'airport', 'schedule', 'business'],
+      center_lat: 16.8661,
+      center_lng: 96.1951,
+      zoom_level: 13,
+      active_drivers_count: 3200,
+      description: 'Commercial capital of Myanmar covering 33 townships with full 24/7 taxi and parcel dispatch.',
+      description_mm: 'မြို့နယ်ပေါင်း ၃၃ မြို့နယ်လုံးတွင် ၂၄ နာရီ ဝန်ဆောင်မှုပေးနေပါသည်။',
+      popular_destinations: [],
+      zones: [],
+    },
+    {
+      id: 'city_mdy',
+      slug: 'mandalay',
+      name: 'Mandalay',
+      name_mm: 'မန္တလေး',
+      state_region: 'Mandalay Region',
+      state_region_mm: 'မန္တလေးတိုင်းဒေသကြီး',
+      is_active: true,
+      services_available: ['ride', 'delivery', 'airport', 'schedule', 'business'],
+      center_lat: 21.9588,
+      center_lng: 96.0891,
+      zoom_level: 13,
+      active_drivers_count: 1400,
+      description: 'Cultural hub and royal capital serving downtown Mandalay, Amarapura, and Mandalay International Airport.',
+      description_mm: 'မန္တလေးမြို့တွင်းနှင့် လေဆိပ်အကြိုအပို့ ဝန်ဆောင်မှုများ အပြည့်အစုံ ရရှိနိုင်ပါသည်။',
+      popular_destinations: [],
+      zones: [],
+    },
+    {
+      id: 'city_npt',
+      slug: 'naypyidaw',
+      name: 'Naypyidaw',
+      name_mm: 'နေပြည်တော်',
+      state_region: 'Union Territory',
+      state_region_mm: 'ပြည်ထောင်စုနယ်မြေ',
+      is_active: true,
+      services_available: ['ride', 'airport', 'schedule', 'business'],
+      center_lat: 19.7633,
+      center_lng: 96.0785,
+      zoom_level: 12,
+      active_drivers_count: 650,
+      description: 'Capital territory connecting ministry zones, hotel zones, and railway stations.',
+      description_mm: 'ဝန်ကြီးဌာနဇုန်များနှင့် ဟိုတယ်ဇုန်များအတွက် အဆင်ပြေစေမည့် ဝန်ဆောင်မှု။',
+      popular_destinations: [],
+      zones: [],
+    },
+    {
+      id: 'city_tgy',
+      slug: 'taunggyi',
+      name: 'Taunggyi & Inle Lake',
+      name_mm: 'တောင်ကြီးနှင့် အင်းလေး',
+      state_region: 'Shan State',
+      state_region_mm: 'ရှမ်းပြည်နယ်',
+      is_active: true,
+      services_available: ['ride', 'airport', 'schedule'],
+      center_lat: 20.7833,
+      center_lng: 97.0333,
+      zoom_level: 12,
+      active_drivers_count: 420,
+      description: 'Highland tourism gateway connecting Taunggyi, Nyaungshwe, Inle Lake, and Heho Airport.',
+      description_mm: 'တောင်ကြီး၊ ညောင်ရွှေ၊ အင်းလေးနှင့် ဟဲဟိုးလေဆိပ် ခရီးစဉ်များ။',
+      popular_destinations: [],
+      zones: [],
+    },
+  ];
+}
+---
+
+<BaseLayout
+  title="Operating Cities & Coverage Across Myanmar — LaBar"
+  description="Explore LaBar taxi, airport transfer, and delivery coverage across Yangon, Mandalay, Naypyidaw, Shan State, and regional capitals."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="badge-red">NATIONWIDE NETWORK</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+        Available Across 25+ Cities in Myanmar
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+        From the bustling downtown avenues of Yangon to the cultural heritage hubs of Mandalay and Inle Lake, LaBar is there for you.
+      </p>
+    </div>
+
+    <!-- Cities Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {cities.map((city) => (
+        <a
+          href={`/cities/${city.slug}`}
+          class="bg-white rounded-4xl p-6 border border-brand-border shadow-soft hover:shadow-soft-md hover:border-brand-red/30 transition-all flex flex-col justify-between group"
+        >
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-neutral-500">
+                {city.state_region}
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold">
+                ● {city.active_drivers_count}+ Drivers
+              </span>
+            </div>
+
+            <h3 class="text-xl font-extrabold text-neutral-900 group-hover:text-brand-red transition-colors mb-1">
+              {city.name} ({city.name_mm})
+            </h3>
+            <p class="text-xs text-neutral-600 leading-relaxed line-clamp-2 mb-4">
+              {city.description}
+            </p>
+
+            <div class="flex flex-wrap gap-1.5 pt-3 border-t border-neutral-100">
+              {city.services_available.map((srv) => (
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-700 uppercase">
+                  {srv}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between text-xs font-bold text-brand-red group-hover:underline">
+            <span>Explore City Coverage</span>
+            <span>❯</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

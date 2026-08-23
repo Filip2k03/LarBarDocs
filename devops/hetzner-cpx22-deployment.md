@@ -1,10 +1,10 @@
-# ☁️ Hetzner CPX22 Lean Single-Node Production Deployment Guide
+# Hetzner CPX22 Lean Single-Node Production Deployment Guide
 
 This guide provides the complete, production-hardened blueprint for running the entire **LaBar Taxi Platform (Go API Core, PostgreSQL 16 + PostGIS, Redis 7 Spatial, OSRM Myanmar Router, and Caddy 2 SSL Edge)** on a single **Hetzner CPX22 Cloud VPS** (€5.80 / month).
 
 ---
 
-## 🖥️ Target Server Hardware & Cost Breakdown
+## Target Server Hardware & Cost Breakdown
 
 | Parameter | Specification | Purpose & Allocation |
 |---|---|---|
@@ -17,7 +17,7 @@ This guide provides the complete, production-hardened blueprint for running the 
 
 ---
 
-## 📊 Memory Budget & Container Allocation
+## Memory Budget & Container Allocation
 
 To prevent Linux Out-Of-Memory (`OOMKilled`) panics on a 4GB RAM node, all container memory limits are strictly capped:
 
@@ -27,12 +27,12 @@ To prevent Linux Out-Of-Memory (`OOMKilled`) panics on a 4GB RAM node, all conta
 ├───────────────────────┬─────────────┬─────────────┬────────────────────┤
 │ Service               │ Min Memory  │ Max Limit   │ CPU Quota          │
 ├───────────────────────┼─────────────┼─────────────┼────────────────────┤
-│ 🗄️ PostgreSQL 16 PostGIS │ 512 MB      │ 1,400 MB    │ 0.80 vCPU          │
-│ 🛣️ OSRM Myanmar Router  │ 600 MB      │ 1,200 MB    │ 0.70 vCPU          │
-│ ⚡ Redis 7 Spatial      │ 128 MB      │ 450 MB      │ 0.40 vCPU          │
-│ 🚀 Go Core API Binary   │ 64 MB       │ 400 MB      │ 0.80 vCPU          │
-│ 🔒 Caddy 2 HTTPS Edge   │ 30 MB       │ 150 MB      │ 0.30 vCPU          │
-│ 🐧 Linux OS & Buffers │ 256 MB      │ 496 MB      │ Shared             │
+│  PostgreSQL 16 PostGIS │ 512 MB      │ 1,400 MB    │ 0.80 vCPU          │
+│  OSRM Myanmar Router  │ 600 MB      │ 1,200 MB    │ 0.70 vCPU          │
+│  Redis 7 Spatial      │ 128 MB      │ 450 MB      │ 0.40 vCPU          │
+│  Go Core API Binary   │ 64 MB       │ 400 MB      │ 0.80 vCPU          │
+│  Caddy 2 HTTPS Edge   │ 30 MB       │ 150 MB      │ 0.30 vCPU          │
+│  Linux OS & Buffers │ 256 MB      │ 496 MB      │ Shared             │
 ├───────────────────────┴─────────────┴─────────────┴────────────────────┤
 │ TOTAL PEAK COMMITTED: ~3,600 MB (Preserves 500MB headroom + 2GB Swap)  │
 └────────────────────────────────────────────────────────────────────────┘
@@ -40,7 +40,7 @@ To prevent Linux Out-Of-Memory (`OOMKilled`) panics on a 4GB RAM node, all conta
 
 ---
 
-## 🛠️ Step-by-Step Production Setup
+## Step-by-Step Production Setup
 
 ### 1. Provision Ubuntu 24.04 LTS & Enable 2GB Swap Headroom
 ```bash

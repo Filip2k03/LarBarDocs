@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { StatusLiveDashboard } from '@/components/status/StatusLiveDashboard';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="Platform Live System Status — LaBar Myanmar"
+  description="Real-time uptime status, API latencies, WebSocket driver telemetry health, and incident history across the LaBar platform."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <span class="badge-green">LIVE SYSTEM TELEMETRY</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+        LaBar Platform Health &amp; Uptime Status
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+        Real-time operational status for Core Dispatch, WebSocket streams, OSRM routing nodes, and Myanmar payment gateways.
+      </p>
+    </div>
+
+    <!-- Live Status Dashboard Island -->
+    <StatusLiveDashboard client:load />
+  </div>
+</BaseLayout>

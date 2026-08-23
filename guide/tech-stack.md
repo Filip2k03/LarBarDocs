@@ -1,10 +1,10 @@
-# 🛠️ Technology Stack & Engineering Standards
+# Technology Stack & Engineering Standards
 
 The platform adopts an enterprise-grade, high-performance technology stack designed for high throughput, sub-50ms latency, and 99.99% reliability.
 
 ---
 
-## 🏗️ Technology Matrix
+## Technology Matrix
 
 | Layer | Primary Technology | Version / Tooling | Purpose |
 |---|---|---|---|
@@ -21,7 +21,7 @@ The platform adopts an enterprise-grade, high-performance technology stack desig
 
 ---
 
-## 🏛️ Architecture Principles
+## Architecture Principles
 
 1. **Clean Architecture / Hexagonal Ports & Adapters**:
    - Complete decoupling of core business domain logic (`Domain/Entities`) from external database drivers (`PostgreSQL`), network transports (`HTTP/gRPC/WSS`), and third-party APIs (`KBZPay/AYAPay`).

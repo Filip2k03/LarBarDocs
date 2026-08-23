@@ -2,50 +2,69 @@
 layout: home
 
 hero:
-  name: "LaBar Taxi Platform"
-  text: "Next-Gen Taxi Dispatch & Dual Safety Platform"
-  tagline: "Enterprise Go Backend, Native iOS/Android Clients, Guardian Dynamic Plugins & Multi-Tier VPS Architecture"
+  name: "LaBar Product Platform"
+  text: "Taxi operations, identity, safety, and payments in one system"
+  tagline: "A Go backend, connected Passenger and Driver experiences, staff-assisted registration, Guardian protection, and auditable administration."
   image:
     src: /logo.svg
-    alt: LaBar Taxi Platform
+    alt: LaBar product mark
   actions:
     - theme: brand
-      text: 🚀 System Overview
+      text: Explore the platform
       link: /guide/getting-started
     - theme: alt
-      text: 🎨 Red & Gold Design System
-      link: /design/design-system
+      text: Open Passenger v2
+      link: /prototypes/passenger-v2.html
     - theme: alt
-      text: ☁️ VPS Deployment & Cost
-      link: /devops/vps-deployment
-
-features:
-  - icon: 🛡️
-    title: Guardian Dynamic Plugin Module
-    details: Modular on-demand installable package (~3.8MB) for passengers. Live GPS streaming, WebRTC telemetry, and off-route anomaly alerts.
-  - icon: 📹
-    title: Driver Protecting Mode & CCTV
-    details: In-car hardware video recording, high-frequency GPS telemetry, SHA-256 integrity digests, and encrypted S3 cloud archiving.
-  - icon: ⚡
-    title: 15s Cascading Dispatch Engine
-    details: Redis 7 GEO spatial indexing with intelligent multi-stop route optimization and dynamic fallback cascading.
-  - icon: 💳
-    title: E-Wallets & Driver Payouts
-    details: Seamless KBZPay, AYAPay, WavePay deep-linking, SHA-256 HMAC webhook verification, and double-entry driver wallet ledger.
-  - icon: 🎨
-    title: Red & Gold Design System
-    details: Complete 100-900 color scales, typography tokens, button hover animations, and Figma Tokens Studio compatible specifications.
-  - icon: ☁️
-    title: VPS Server Separation & Pricing
-    details: Production-ready topology across Hetzner, Hostinger, and DigitalOcean with monthly cost calculators and Docker orchestration.
+      text: Review backend plan
+      link: /guide/backend-implementation-plan
 ---
 
-<div style="margin-top: 48px; text-align: center;">
-  <a href="/architecture/uml-diagrams" class="btn-gold-action">
-    📐 View 11 UML 2.5 Draw.io Diagrams
+<div class="portal-kicker">PRODUCT SYSTEM</div>
+
+## One operating model across every application
+
+LaBar separates customer, driver, family, registration, and administrative responsibilities while keeping fare, identity, trip, payment, and safety data consistent.
+
+<div class="product-grid">
+  <a class="product-card" href="/design/passenger-product-pages">
+    <img src="/icons/passenger.svg" alt="" />
+    <div><strong>Passenger</strong><span>Nineteen pages from Splash through receipt, credit, Guardian, support, and settings.</span></div>
   </a>
-  <span style="display: inline-block; width: 16px;"></span>
-  <a href="/devops/vps-cost-calculator" class="btn-red-action">
-    💰 Calculate Monthly VPS Budget
+  <a class="product-card" href="/design/wireframes-driver">
+    <img src="/icons/driver.svg" alt="" />
+    <div><strong>Driver</strong><span>Shift, dispatch, pickup, navigation, meter, settlement, and discreet safety access.</span></div>
   </a>
+  <a class="product-card" href="/design/wireframes-guardian">
+    <img src="/icons/guardian.svg" alt="" />
+    <div><strong>Guardian</strong><span>Consent-based family pairing, live trip status, route deviation, and emergency response.</span></div>
+  </a>
+  <a class="product-card" href="/features/driver-registration-and-staff-access">
+    <img src="/icons/driverreg.svg" alt="" />
+    <div><strong>DriverReg</strong><span>NRC, licence OCR, liveness, vehicle compliance, review, and controlled activation.</span></div>
+  </a>
+  <a class="product-card" href="/design/wireframes-admin">
+    <img src="/icons/admin.svg" alt="" />
+    <div><strong>Admin Control</strong><span>KYC decisions, staff access, executive roles, session controls, and audit evidence.</span></div>
+  </a>
+  <a class="product-card" href="/guide/backend-implementation-plan">
+    <img src="/icons/settings.svg" alt="" />
+    <div><strong>Go Backend</strong><span>Clean application boundaries, versioned fares, dispatch, ledgers, and production hardening.</span></div>
+  </a>
+</div>
+
+## Current policy in one view
+
+<div class="policy-strip">
+  <div><span>Minimum payable</span><strong>6,500 MMK</strong></div>
+  <div><span>Included distance</span><strong>Up to 2 km</strong></div>
+  <div><span>Additional distance</span><strong>150 MMK / 0.1 km</strong></div>
+  <div><span>Service fee</span><strong>1,500 MMK</strong></div>
+  <div><span>Promo value</span><strong>1 credit = 10 MMK</strong></div>
+</div>
+
+<div class="portal-actions">
+  <a href="/features/fare-and-labar-credit">Read fare policy</a>
+  <a href="/guide/api-reference">View API contracts</a>
+  <a href="/design/interactive-prototype">Open prototypes</a>
 </div>

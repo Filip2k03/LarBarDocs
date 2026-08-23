@@ -1558,7 +1558,7 @@ stateDiagram-v2
         state GuardianSubsystem {
             [*] --> GuardianNotified
             GuardianNotified --> LiveLocationSharing : Send Driver & Vehicle metadata
-            
+
             state LiveLocationSharing {
                 [*] --> OnRouteNormal
                 OnRouteNormal --> RouteDeviationAlert : [Distance to planned route > 300m]
@@ -1572,7 +1572,7 @@ stateDiagram-v2
         state ProtectingCCTVSubsystem {
             [*] --> HardwareInit
             HardwareInit --> CCTVRecordingActive : Camera capture pipeline engaged
-            
+
             state CCTVRecordingActive {
                 [*] --> ChunkBuffering
                 ChunkBuffering --> EncryptedCloudSync : Every 60s chunk / 1080p
@@ -1801,8 +1801,8 @@ All architecture models are available as native **Draw.io XML (`.drawio`)** file
 
 | Filename | Type | Description |
 |---|---|---|
-| 🌟 **[`taxi_master_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/taxi_master_architecture.drawio)** | **Multi-Tab Master File (Root)** | **All 11 diagrams consolidated into one interactive master file with Guardian Plugin Tab** |
-| 🌟 **[`taxi_master_all_in_one.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/taxi_master_all_in_one.drawio)** | **Multi-Tab Master File (Diagrams)** | **Full 11-tab consolidated Draw.io file** |
+|  **[`taxi_master_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/taxi_master_architecture.drawio)** | **Multi-Tab Master File (Root)** | **All 11 diagrams consolidated into one interactive master file with Guardian Plugin Tab** |
+|  **[`taxi_master_all_in_one.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/taxi_master_all_in_one.drawio)** | **Multi-Tab Master File (Diagrams)** | **Full 11-tab consolidated Draw.io file** |
 | [`01_use_case_diagram.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/01_use_case_diagram.drawio) | Standalone Draw.io | UML 2.5 Use Case Model with Actors, Boundary & Sub-packages |
 | [`02_system_process_flowchart.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/02_system_process_flowchart.drawio) | Standalone Draw.io | 5-Swimlane End-to-End System Process Flowchart |
 | [`03_database_erd_schema.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/03_database_erd_schema.drawio) | Standalone Draw.io | Relational Database Schema with all 16 Connected Tables & Columns |
@@ -1813,7 +1813,7 @@ All architecture models are available as native **Draw.io XML (`.drawio`)** file
 | [`08_sequence_payment_and_payout.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/08_sequence_payment_and_payout.drawio) | Standalone Draw.io | UML 2.5 Sequence: E-Wallet Deep-linking, Webhooks & Payout |
 | [`09_state_machine_ride_lifecycle.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/09_state_machine_ride_lifecycle.drawio) | Standalone Draw.io | UML 2.5 State Machine: Complete Ride Lifecycle |
 | [`10_state_machine_driver_status.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/10_state_machine_driver_status.drawio) | Standalone Draw.io | UML 2.5 State Machine: Driver Status & Shift Lifecycle |
-| 🛡️ **[`11_guardian_plugin_module_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/11_guardian_plugin_module_architecture.drawio)** | **Standalone Draw.io** | **Guardian On-Demand Dynamic Plugin Package & Host Architecture** |
+|  **[`11_guardian_plugin_module_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/diagrams/drawio/11_guardian_plugin_module_architecture.drawio)** | **Standalone Draw.io** | **Guardian On-Demand Dynamic Plugin Package & Host Architecture** |
 
 ### How to Open & Edit `.drawio` Files:
 1. **Web**: Visit [app.diagrams.net](https://app.diagrams.net) and drag & drop [`taxi_master_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/taxi_master_architecture.drawio).
@@ -1842,4 +1842,20 @@ Detailed sources:
 - [`architecture/database-design.md`](architecture/database-design.md)
 - [`public/wireframes/labar_master_figma_canvas_v2.svg`](public/wireframes/labar_master_figma_canvas_v2.svg)
 
+---
 
+## 8. Go Backend Foundation and Passenger Fare Contract
+
+The implementation under `codebase/backend` now separates process bootstrap, HTTP transport, application use cases, and domain types. It provides liveness/readiness probes, strict JSON decoding, a public fare-policy endpoint, authoritative fare quotes, the Passenger screen catalog, unit tests, transport contract tests, and privacy-oriented contributor instructions.
+
+Fare policy `MM-2026-08-v1` defines a 5,000 MMK transport minimum through 2.0 km, a 1,500 MMK service fee on every route, and 150 MMK for each started 0.1 km beyond 2.0 km. Digital payments retain the exact subtotal. Cash rounds upward to the next 500 MMK. One LaBar promo credit equals 10 MMK and discounts transport without removing the service fee.
+
+The Passenger product lifecycle now contains Splash, Home, Pickup / Map, Route & Fees, Choose Ride, Payment, Finding Driver, Driver On The Way, Driver Details, On Trip, Trip Complete, My Trips, Profile, LaBar Credit, Guardian Plugin, Saved Places, Support, Schedule Ride, and Settings. Estimates and receipts must use the server quote policy version and itemized breakdown.
+
+Implementation sources:
+
+- [`codebase/backend/README.md`](codebase/backend/README.md)
+- [`guide/backend-implementation-plan.md`](guide/backend-implementation-plan.md)
+- [`features/fare-and-labar-credit.md`](features/fare-and-labar-credit.md)
+- [`design/passenger-product-pages.md`](design/passenger-product-pages.md)
+- [`public/prototypes/passenger-v2.html`](/prototypes/passenger-v2.html)

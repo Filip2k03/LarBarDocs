@@ -1,10 +1,10 @@
-# 💳 Payments, E-Wallets & Driver Financial Settlement
+# Payments, E-Wallets & Driver Financial Settlement
 
 The financial engine handles dual payment modes: **Cash Settlements** and **Cashless Mobile E-Wallets (KBZPay, AYAPay, WavePay)** with OS deep-linking and SHA-256 HMAC webhook verification.
 
 ---
 
-## 📲 E-Wallet Deep-Linking Sequence
+## E-Wallet Deep-Linking Sequence
 
 ```text
 ┌───────────────┐        ┌────────────────┐        ┌──────────────────┐
@@ -26,7 +26,7 @@ The financial engine handles dual payment modes: **Cash Settlements** and **Cash
 
 ---
 
-## 💰 Driver Wallet & Instant Payouts
+## Driver Wallet & Instant Payouts
 
 1. **Double-Entry Ledger**:
    - Every completed ride creates an immutable ledger entry.

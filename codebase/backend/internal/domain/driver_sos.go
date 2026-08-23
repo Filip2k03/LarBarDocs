@@ -9,17 +9,17 @@ import (
 type TriggerType string
 
 const (
-	TriggerTypeHardwareKey  TriggerType = "HARDWARE_KEY"
-	TriggerTypePanicButton  TriggerType = "PANIC_BUTTON"
-	TriggerTypeBluetooth    TriggerType = "BLUETOOTH_BEACON"
-	TriggerTypeCrashDetect  TriggerType = "CRASH_DETECT"
+	TriggerTypeHardwareKey TriggerType = "HARDWARE_KEY"
+	TriggerTypePanicButton TriggerType = "PANIC_BUTTON"
+	TriggerTypeBluetooth   TriggerType = "BLUETOOTH_BEACON"
+	TriggerTypeCrashDetect TriggerType = "CRASH_DETECT"
 )
 
 type BroadcastTier string
 
 const (
-	BroadcastTier1Km BroadcastTier = "TIER_1_1KM"
-	BroadcastTier3Km BroadcastTier = "TIER_2_3KM"
+	BroadcastTier1Km      BroadcastTier = "TIER_1_1KM"
+	BroadcastTier3Km      BroadcastTier = "TIER_2_3KM"
 	BroadcastTierResolved BroadcastTier = "RESOLVED"
 )
 
@@ -44,12 +44,12 @@ type DriverSOSIncident struct {
 }
 
 type DriverGuardianRelationship struct {
-	ID                uuid.UUID `json:"id"`
-	DriverID          uuid.UUID `json:"driver_id"`
-	GuardianName      string    `json:"guardian_name"`
-	GuardianPhone     string    `json:"guardian_phone"`
-	RelationshipType  string    `json:"relationship_type"` // SPOUSE, PARENT, SIBLING
-	NotifyOnShiftStart bool     `json:"notify_on_shift_start"`
-	NotifyOnSOS       bool      `json:"notify_on_sos"`
-	CreatedAt         time.Time `json:"created_at"`
+	ID                 uuid.UUID `json:"id"`
+	DriverID           uuid.UUID `json:"driver_id"`
+	GuardianName       string    `json:"guardian_name"`
+	GuardianPhone      string    `json:"guardian_phone"`
+	RelationshipType   string    `json:"relationship_type"` // SPOUSE, PARENT, SIBLING
+	NotifyOnShiftStart bool      `json:"notify_on_shift_start"`
+	NotifyOnSOS        bool      `json:"notify_on_sos"`
+	CreatedAt          time.Time `json:"created_at"`
 }

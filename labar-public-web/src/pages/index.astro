@@ -1,0 +1,59 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HeroSection from '@/components/home/HeroSection.astro';
+import QuickServicesBar from '@/components/home/QuickServicesBar.astro';
+import WhyChooseUs from '@/components/home/WhyChooseUs.astro';
+import { RideTiersGrid } from '@/components/home/RideTiersGrid';
+import FeatureBanners from '@/components/home/FeatureBanners.astro';
+import CityCoverage from '@/components/home/CityCoverage.astro';
+import { FaqSection } from '@/components/home/FaqSection';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout locale={locale}>
+  <!-- Hero Section with Illustrated Yangon Map and Floating Booking Card Island -->
+  <HeroSection locale={locale} />
+
+  <!-- 6 Quick Service Category Pills -->
+  <QuickServicesBar locale={locale} />
+
+  <!-- Why Choose LaBar 4 Safety & Trust Pillars -->
+  <WhyChooseUs locale={locale} />
+
+  <!-- Choose Your Ride Vehicle Tiers -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+      <span class="text-xs font-bold text-brand-red uppercase tracking-wider">
+        {t.rideTiers.title}
+      </span>
+      <h2 class="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight mt-1">
+        Transparent Vehicle Options for Every Journey
+      </h2>
+    </div>
+
+    <RideTiersGrid client:visible citySlug="yangon" locale={locale} />
+  </section>
+
+  <!-- 3 Highlight Banners (Guardian, Drive, App Download) -->
+  <FeatureBanners locale={locale} />
+
+  <!-- 25+ Cities Coverage Section -->
+  <CityCoverage locale={locale} />
+
+  <!-- Frequently Asked Questions Accordion -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-10">
+      <span class="text-xs font-bold text-brand-red uppercase tracking-wider">
+        {t.faq.tag}
+      </span>
+      <h2 class="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight mt-1">
+        Everything You Need to Know About LaBar
+      </h2>
+    </div>
+
+    <FaqSection client:visible locale={locale} />
+  </section>
+</BaseLayout>

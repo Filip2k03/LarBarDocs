@@ -1,10 +1,10 @@
-# 🏗️ Clean Architecture in Go (Golang)
+# Clean Architecture in Go (Golang)
 
 The backend follows Uncle Bob's **Clean Architecture** (Hexagonal / Ports & Adapters) principles. The codebase maintains strict unidirectional dependency boundaries where core business domain logic has zero dependencies on external frameworks, databases, or transport layers.
 
 ---
 
-## 🏛️ Package Layer Structure
+## Package Layer Structure
 
 ```text
 backend/
@@ -35,14 +35,14 @@ backend/
 
 ---
 
-## 🔒 Concurrency & Distributed Lock Pattern (Redlock)
+## Concurrency & Distributed Lock Pattern (Redlock)
 
 When dispatching an offer to a driver, Redis distributed locking prevents double-booking race conditions:
 
 ```go
 func (uc *RideUseCase) ClaimOffer(ctx context.Context, rideID, driverID uuid.UUID) error {
     lockKey := fmt.Sprintf("lock:ride:%s", rideID.String())
-    
+
     // Acquire distributed lock for 500ms
     mutex := uc.redsync.NewMutex(lockKey)
     if err := mutex.LockContext(ctx); err != nil {

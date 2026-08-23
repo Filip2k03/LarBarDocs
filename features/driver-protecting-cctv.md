@@ -1,10 +1,10 @@
-# 📹 Driver Protecting Mode & CCTV Pipeline
+# Driver Protecting Mode & CCTV Pipeline
 
 **Driver Protecting Mode** provides hardware-level recording, telemetry logging, and cryptographic cloud archival to protect drivers against false claims, accidents, and security incidents.
 
 ---
 
-## 🎥 Video Recording & Streaming Pipeline
+## Video Recording & Streaming Pipeline
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐

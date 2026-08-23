@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 112" role="img" aria-label="LaBar taxi safety mark">
+  <path fill="#ef1720" d="M48 3C24 3 7 20 7 43c0 28 30 51 41 65 11-14 41-37 41-65C89 20 72 3 48 3z"/>
+  <path fill="#fff" d="M48 10c20 0 34 14 34 33 0 20-20 39-34 55C34 82 14 63 14 43c0-19 14-33 34-33z"/>
+  <circle cx="48" cy="42" r="28" fill="#ef1720"/>
+  <circle cx="48" cy="42" r="22" fill="#fff"/>
+  <path fill="#111827" d="M27 49h42l-4-14c-1-5-6-8-11-8H42c-5 0-10 3-11 8zm8-13h26l2 7H33z"/>
+  <path fill="#facc15" d="M39 21h18v7H39z"/>
+  <path fill="#111827" d="M41 21h5v7h-5zm10 0h5v7h-5z"/>
+  <circle cx="35" cy="50" r="4" fill="#111827"/><circle cx="61" cy="50" r="4" fill="#111827"/>
+  <path fill="#ef1720" stroke="#fff" stroke-width="2" d="M48 64 65 70v12c0 11-8 17-17 22-9-5-17-11-17-22V70z"/>
+  <path fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m40 83 6 6 11-13"/>
+</svg>

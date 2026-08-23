@@ -1,10 +1,10 @@
-# 🛠️ Production Deployment & Docker Setup
+# Production Deployment & Docker Setup
 
 Follow this step-by-step procedure to deploy the LaBar Taxi Platform services on your VPS infrastructure.
 
 ---
 
-## 🐳 Docker Compose Multi-Service Configuration
+## Docker Compose Multi-Service Configuration
 
 Create a `docker-compose.prod.yml` file on your application server:
 
@@ -35,7 +35,7 @@ services:
       - DB_DSN=postgres://taxi_admin:SecurePass123@postgres_db:5432/taxi_prod?sslmode=disable
       - REDIS_ADDR=redis_cluster:6379
       - S3_ENDPOINT=https://storage.labartaxi.com
-      - JWT_SECRET=your_super_secret_jwt_key_here
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - postgres_db
       - redis_cluster
@@ -88,7 +88,7 @@ networks:
 
 ---
 
-## 🚀 Deployment Commands
+## Deployment Commands
 
 ```bash
 # 1. Pull latest Docker images

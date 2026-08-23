@@ -1,0 +1,69 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="LaBar Guardian — Dual-Shield Safety Ecosystem for Myanmar"
+  description="Discover LaBar Guardian: 60fps route telemetry, 1km SOS mesh emergency intercept, family trip sharing, and in-cabin CCTV video sentinel protection."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="badge-red">DUAL-SHIELD SAFETY STANDARD</span>
+      <h1 class="text-3xl sm:text-5xl font-black text-neutral-900 tracking-tight leading-tight">
+        Safety for Passengers. <br />
+        <span class="text-brand-red">Protection for Drivers &amp; Families.</span>
+      </h1>
+      <p class="text-sm sm:text-base text-neutral-600 leading-relaxed max-w-2xl mx-auto">
+        LaBar Guardian is Myanmar’s first intelligent dual-shield safety architecture designed specifically for municipal road security and family peace of mind.
+      </p>
+    </div>
+
+    <!-- 4 Guardian Safety Modules -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
+        <div class="w-14 h-14 rounded-3xl bg-red-50 text-brand-red flex items-center justify-center text-2xl font-bold">
+          🚨
+        </div>
+        <h3 class="text-xl font-extrabold text-neutral-900">1.0 km SOS Distress Mesh Intercept</h3>
+        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+          When an emergency SOS is triggered by a passenger or driver, our server broadcasts high-priority distress alerts to the 5 nearest on-duty drivers within 1,000 meters while alerting our 24/7 central emergency operations room.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
+        <div class="w-14 h-14 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+          📡
+        </div>
+        <h3 class="text-xl font-extrabold text-neutral-900">60fps Real-Time Route Telemetry</h3>
+        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+          Continuous low-latency GPS position streaming with automated cross-track deviation detection. If a vehicle veers more than 300 meters off the planned navigation route or stops unexpectedly, an automated safety check is initiated.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
+        <div class="w-14 h-14 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold">
+          👨‍👩‍👧
+        </div>
+        <h3 class="text-xl font-extrabold text-neutral-900">Family QR Guardian Shield Pairing</h3>
+        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+          Spouses and parents can scan a private pairing QR code to track trips live on their own devices without needing an active account or entering card details. Remote siren triggers allow trusted contacts to alert in-cabin occupants.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
+        <div class="w-14 h-14 rounded-3xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold">
+          📹
+        </div>
+        <h3 class="text-xl font-extrabold text-neutral-900">In-Cabin CCTV Sentinel Recording</h3>
+        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+          Continuous 1080p rolling loop video buffer stored securely in encrypted local device storage. Video evidence is only decrypted and transmitted to legal authorities if a safety incident or dispute is officially filed.
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

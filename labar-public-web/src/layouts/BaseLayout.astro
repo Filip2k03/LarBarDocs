@@ -1,0 +1,92 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/common/Header.astro';
+import Footer from '@/components/common/Footer.astro';
+import { ChatbotIsland } from '@/components/help/ChatbotIsland';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  locale?: 'en' | 'my';
+}
+
+const {
+  title = 'LaBar — Your ride. Our care. | Premium Myanmar Taxi & Delivery',
+  description = 'Safe, reliable and transparent taxi, ride-hailing and parcel delivery platform across Myanmar. Background-verified drivers, 1km SOS mesh protection, and guaranteed upfront fares.',
+  image = '/logo.png',
+  canonical = 'https://labar.com.mm',
+  locale = defaultLocale,
+} = Astro.props;
+
+const t = getTranslation(locale);
+---
+
+<!DOCTYPE html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/logo.png" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonical} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+
+    <!-- Google Fonts: Poppins, Inter, Pyidaungsu -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&family=Pyidaungsu:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Organization Structured Data -->
+    <script type="application/ld+json" is:inline>
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "LaBar Taxi & Mobility Myanmar",
+        "url": "https://labar.com.mm",
+        "logo": "https://labar.com.mm/logo.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+95-9-798-421092",
+          "contactType": "customer service",
+          "areaServed": "MM",
+          "availableLanguage": ["en", "my"]
+        },
+        "sameAs": [
+          "https://facebook.com/labartaxi",
+          "https://instagram.com/labartaxi",
+          "https://tiktok.com/@labartaxi"
+        ]
+      }
+    </script>
+  </head>
+  <body class="bg-brand-bg text-brand-text font-sans antialiased min-h-screen flex flex-col selection:bg-brand-red selection:text-white">
+    <Header locale={locale} />
+    
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <Footer locale={locale} />
+    <ChatbotIsland client:idle />
+  </body>
+</html>

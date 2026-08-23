@@ -1,0 +1,19 @@
+{
+  email {$ACME_EMAIL}
+  admin off
+}
+
+{$API_DOMAIN:api.localhost} {
+  encode zstd gzip
+  reverse_proxy go_api_core:8080
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "no-referrer"
+  }
+  log {
+    output stdout
+    format json
+  }
+}

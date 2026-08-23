@@ -9,19 +9,30 @@ export interface GeoPoint {
 }
 
 export interface QuoteRequest {
-  pickup: GeoPoint;
-  waypoints?: GeoPoint[];
-  destination: GeoPoint;
-  vehicleClass: 'STANDARD' | 'VIP_GOLD';
+  distance_km: number;
+  payment_method: 'CASH' | 'KBZPAY' | 'WAVEPAY' | 'AYAPAY';
+  promo_credits: number;
 }
 
 export interface QuoteResponse {
-  quoteId: string;
-  distanceKm: number;
-  durationMin: number;
-  estimatedFareMMK: number;
+  quote_id: string;
+  policy_version: string;
+  requested_distance_km: number;
+  billable_distance_km: number;
+  payment_method: QuoteRequest['payment_method'];
   currency: 'MMK';
-  expiresAt: string;
+  breakdown: {
+    transport_fare_mmk: number;
+    extra_distance_steps: number;
+    extra_distance_fare_mmk: number;
+    service_fee_mmk: number;
+    promo_credits_applied: number;
+    promo_discount_mmk: number;
+    subtotal_mmk: number;
+    cash_rounding_mmk: number;
+    payable_mmk: number;
+  };
+  expires_at: string;
 }
 
 export interface DriverSOSPayload {
@@ -45,7 +56,7 @@ export class LaBarApiClient {
   }
 
   public async getRideQuote(req: QuoteRequest): Promise<QuoteResponse> {
-    const res = await fetch(`${this.baseUrl}/api/v1/rides/quote`, {
+    const res = await fetch(`${this.baseUrl}/api/v1/fares/quote`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

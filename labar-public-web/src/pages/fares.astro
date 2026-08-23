@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { FareEstimator } from '@/components/booking/FareEstimator';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="Transparent Fares & Tariff Rules — LaBar Myanmar"
+  description="Explore LaBar's transparent taxi meter fares. Base rates, per-kilometer pricing, late-night surcharges, and instant fare simulator."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="badge-gold">TRANSPARENT MUNICIPAL PRICING</span>
+      <h1 class="text-3xl sm:text-5xl font-black text-neutral-900 tracking-tight leading-tight">
+        Zero Hidden Fees. <br />
+        <span class="text-brand-red">Guaranteed Upfront Transparent Fares.</span>
+      </h1>
+      <p class="text-sm sm:text-base text-neutral-600 leading-relaxed max-w-2xl mx-auto">
+        No unexpected price haggling or roadside negotiations. Fares are calculated dynamically based on distance, duration, and municipal transport tariffs.
+      </p>
+    </div>
+
+    <!-- Fare Rules Table -->
+    <div class="bg-white rounded-4xl p-6 sm:p-8 border border-brand-border shadow-soft max-w-4xl mx-auto space-y-6">
+      <h3 class="text-lg font-extrabold text-neutral-900">
+        Standard Tariff Structure (Yangon Municipal Region)
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-neutral-200 text-neutral-500 uppercase tracking-wider text-[10px]">
+              <th class="py-3 px-4 font-bold">Vehicle Tier</th>
+              <th class="py-3 px-4 font-bold">Base Fare</th>
+              <th class="py-3 px-4 font-bold">Rate / KM</th>
+              <th class="py-3 px-4 font-bold">Rate / Min</th>
+              <th class="py-3 px-4 font-bold">Minimum Fare</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-100 font-semibold text-neutral-800">
+            <tr>
+              <td class="py-3.5 px-4 font-extrabold text-neutral-900">Standard Taxi (Probox)</td>
+              <td class="py-3.5 px-4">5,800 MMK</td>
+              <td class="py-3.5 px-4">850 MMK</td>
+              <td class="py-3.5 px-4">120 MMK</td>
+              <td class="py-3.5 px-4">5,800 MMK</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-extrabold text-neutral-900">Comfort Sedan (Axio/Premio)</td>
+              <td class="py-3.5 px-4">7,800 MMK</td>
+              <td class="py-3.5 px-4">1,100 MMK</td>
+              <td class="py-3.5 px-4">150 MMK</td>
+              <td class="py-3.5 px-4">7,800 MMK</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-extrabold text-neutral-900">Royal Gold VIP (Crown/Alphard)</td>
+              <td class="py-3.5 px-4">12,500 MMK</td>
+              <td class="py-3.5 px-4">1,800 MMK</td>
+              <td class="py-3.5 px-4">250 MMK</td>
+              <td class="py-3.5 px-4">12,500 MMK</td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-extrabold text-neutral-900">XL Family Van (7 Seats)</td>
+              <td class="py-3.5 px-4">15,800 MMK</td>
+              <td class="py-3.5 px-4">2,200 MMK</td>
+              <td class="py-3.5 px-4">300 MMK</td>
+              <td class="py-3.5 px-4">15,800 MMK</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Live Interactive Fare Estimator Island -->
+    <FareEstimator client:visible />
+  </div>
+</BaseLayout>

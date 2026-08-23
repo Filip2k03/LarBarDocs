@@ -1,10 +1,10 @@
-# 🌐 REST & WebSocket API Reference
+# REST & WebSocket API Reference
 
 The LaBar Taxi Platform exposes high-throughput, low-latency REST endpoints (JSON over HTTP/2) and real-time WebSockets over TLS 1.3.
 
 ---
 
-## 🔐 1. Authentication & Session Endpoints
+## 1. Authentication & Session Endpoints
 
 ### `POST /api/v1/auth/passenger/otp`
 Initiates mobile number OTP verification for passengers.
@@ -31,37 +31,65 @@ Initiates mobile number OTP verification for passengers.
 
 ---
 
-## 🚖 2. Ride Dispatch & Multi-Stop Bookings
+## 2. Fare Quote and Ride Booking
 
-### `POST /api/v1/rides/quote`
-Calculates dynamic multi-stop route estimation, distance, and tiered fares.
+### `GET /api/v1/fares/policy`
 
-- **Request Body**:
+Returns the active versioned public fare constants.
+
 ```json
 {
-  "pickup": { "lat": 16.8661, "lng": 96.1561, "address": "Sule Square, Yangon" },
-  "waypoints": [
-    { "stop_order": 1, "lat": 16.7800, "lng": 96.1600, "address": "Bogyoke Market" }
-  ],
-  "destination": { "lat": 16.8052, "lng": 96.1554, "address": "Junction City" },
-  "vehicle_class": "STANDARD_SEDAN"
+  "version": "MM-2026-08-v1",
+  "minimum_transport_fare_mmk": 5000,
+  "included_distance_km": 2,
+  "distance_step_km": 0.1,
+  "distance_step_fare_mmk": 150,
+  "service_fee_mmk": 1500,
+  "cash_rounding_unit_mmk": 500,
+  "promo_credit_value_mmk": 10
 }
 ```
-- **Response `200 OK`**:
+
+### `POST /api/v1/fares/quote`
+
+Calculates the authoritative payable amount. `/api/v1/rides/quote` remains a compatibility alias.
+
+Request:
+
 ```json
 {
-  "status": "success",
-  "data": {
-    "quote_id": "q-8849-ab12",
-    "distance_km": 6.8,
-    "duration_min": 18,
-    "estimated_fare": 3800.00,
-    "currency": "MMK",
-    "surge_multiplier": 1.0,
-    "expires_at": "2026-08-20T16:45:00Z"
-  }
+  "distance_km": 2.1,
+  "payment_method": "CASH",
+  "promo_credits": 0
 }
 ```
+
+Response `200 OK`:
+
+```json
+{
+  "quote_id": "ddf64f1d-0a77-45e2-a9da-fcf32f774ed3",
+  "policy_version": "MM-2026-08-v1",
+  "requested_distance_km": 2.1,
+  "billable_distance_km": 2.1,
+  "payment_method": "CASH",
+  "currency": "MMK",
+  "breakdown": {
+    "transport_fare_mmk": 5150,
+    "extra_distance_steps": 1,
+    "extra_distance_fare_mmk": 150,
+    "service_fee_mmk": 1500,
+    "promo_credits_applied": 0,
+    "promo_discount_mmk": 0,
+    "subtotal_mmk": 6650,
+    "cash_rounding_mmk": 350,
+    "payable_mmk": 7000
+  },
+  "expires_at": "2026-08-24T08:05:00Z"
+}
+```
+
+The 5,000 MMK transport minimum includes up to 2 km. Every started 0.1 km after that costs 150 MMK. The 1,500 MMK service fee is added once to every route. Cash rounds upward to the next 500 MMK; digital payments remain exact. One promo credit equals 10 MMK and cannot remove the service fee.
 
 ---
 
@@ -79,10 +107,10 @@ Submits ride request and triggers 15-second cascading dispatch in Redis.
 
 ---
 
-## 🚨 3. Driver Emergency SOS & Mesh Broadcast
+## 3. Driver Emergency SOS & Mesh Broadcast
 
 ### `POST /api/v1/driver/emergency/sos`
-Triggered by driver panic action. Initiates **1.0 km ➔ 3.0 km tiered proximity broadcast** to fellow drivers and driver family guardians.
+Triggered by driver panic action. Initiates a **1.0 km to 3.0 km tiered proximity broadcast** to fellow drivers and driver family guardians.
 
 - **Headers**: `Authorization: Bearer <driver_jwt>`
 - **Request Body**:
@@ -126,7 +154,7 @@ Allows nearby drivers to accept and intercept the victim driver.
 
 ---
 
-## 🛡️ 4. Dynamic Plugin Delivery & Family Mesh WebSockets
+## 4. Dynamic Plugin Delivery & Family Mesh WebSockets
 
 ### `GET /api/v1/plugins/manifest`
 Delivers available on-demand plugins for dynamic download (~3.8MB).

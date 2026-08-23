@@ -1,4 +1,4 @@
-# 📱 Native Mobile Architecture (iOS & Android)
+# Native Mobile Architecture (iOS & Android)
 
 The client tier comprises 100% **Native Applications** engineered for maximum hardware integration, 60fps fluid rendering, and on-demand dynamic plugin delivery:
 - **Native Android**: Kotlin 2.0 + Jetpack Compose + MVI + Play Feature Delivery.
@@ -6,7 +6,7 @@ The client tier comprises 100% **Native Applications** engineered for maximum ha
 
 ---
 
-## 🤖 Android Dynamic Feature Delivery (`SplitInstallManager`)
+## Android Dynamic Feature Delivery (`SplitInstallManager`)
 
 The core application remains ultra-compact (~18MB). High-value safety modules (Passenger Guardian and Driver Guardian) are delivered dynamically on demand.
 
@@ -47,7 +47,7 @@ class PluginInstallerManager(private val context: Context) {
 
 ---
 
-## 🍏 iOS Dynamic Framework Loading & On-Demand Resources
+## iOS Dynamic Framework Loading & On-Demand Resources
 
 On iOS, modules are loaded as dynamic XCFrameworks using `NSBundleResourceRequest`:
 
@@ -75,7 +75,7 @@ final class DynamicGuardianLoader: ObservableObject {
 
 ---
 
-## 🚨 Driver Covert Hardware Key Interceptor (Android)
+## Driver Covert Hardware Key Interceptor (Android)
 
 Allows drivers to trigger emergency SOS silently by triple-clicking physical volume buttons:
 
@@ -87,7 +87,7 @@ class CovertSOSAccessibilityService : AccessibilityService() {
     override fun onKeyEvent(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_DOWN &&
             (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP || event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
-            
+
             val currentTime = System.currentTimeMillis()
             if (currentTime - lastClickTime < 500) {
                 clickCount++

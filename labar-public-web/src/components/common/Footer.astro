@@ -1,0 +1,123 @@
+---
+import { getTranslation, defaultLocale } from '@/i18n';
+
+interface Props {
+  locale?: 'en' | 'my';
+}
+
+const { locale = defaultLocale } = Astro.props;
+const t = getTranslation(locale);
+---
+
+<footer class="bg-white border-t border-brand-border/80 pt-16 pb-12 mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 pb-12 border-b border-neutral-200">
+      <!-- Brand & Mission Column (Col 1-2) -->
+      <div class="lg:col-span-2 space-y-4">
+        <a href="/" class="flex items-center gap-3">
+          <img src="/logo.png" alt="LaBar Logo" class="h-9 w-auto object-contain" />
+          <span class="text-2xl font-black tracking-tight text-neutral-900">
+            La<span class="text-brand-red">Bar</span>
+          </span>
+        </a>
+        <p class="text-xs text-neutral-500 font-medium leading-relaxed max-w-sm">
+          {t.footer.tagline} Safe, reliable, and transparent mobility across Myanmar with verified drivers and live safety guardian mesh.
+        </p>
+
+        <!-- Social Icons -->
+        <div class="flex items-center gap-3 pt-2 text-neutral-400">
+          <a href="https://facebook.com" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-brand-red hover:text-white flex items-center justify-center transition-colors">
+            <span class="text-xs font-black">f</span>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-brand-red hover:text-white flex items-center justify-center transition-colors">
+            <span class="text-xs font-black">ig</span>
+          </a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-brand-red hover:text-white flex items-center justify-center transition-colors">
+            <span class="text-xs font-black">tk</span>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-brand-red hover:text-white flex items-center justify-center transition-colors">
+            <span class="text-xs font-black">in</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Services Column -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-neutral-900">
+          {t.footer.servicesTitle}
+        </h4>
+        <ul class="space-y-2 text-xs font-medium text-neutral-600">
+          <li><a href="/ride" class="hover:text-brand-red transition-colors">Ride</a></li>
+          <li><a href="/drive" class="hover:text-brand-red transition-colors">Drive</a></li>
+          <li><a href="/delivery" class="hover:text-brand-red transition-colors">Delivery</a></li>
+          <li><a href="/airport" class="hover:text-brand-red transition-colors">Airport Transfer</a></li>
+          <li><a href="/schedule" class="hover:text-brand-red transition-colors">Schedule Ride</a></li>
+          <li><a href="/business" class="hover:text-brand-red transition-colors">Business Fleet</a></li>
+        </ul>
+      </div>
+
+      <!-- Company Column -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-neutral-900">
+          {t.footer.companyTitle}
+        </h4>
+        <ul class="space-y-2 text-xs font-medium text-neutral-600">
+          <li><a href="/about" class="hover:text-brand-red transition-colors">About LaBar</a></li>
+          <li><a href="/careers" class="hover:text-brand-red transition-colors">Careers</a></li>
+          <li><a href="/cities" class="hover:text-brand-red transition-colors">Cities &amp; Coverage</a></li>
+          <li><a href="/fares" class="hover:text-brand-red transition-colors">Fare Structure</a></li>
+          <li><a href="/contact" class="hover:text-brand-red transition-colors">Contact Us</a></li>
+          <li><a href="/status" class="hover:text-brand-red transition-colors">Platform Status</a></li>
+        </ul>
+      </div>
+
+      <!-- Support & Safety Column -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-neutral-900">
+          {t.footer.supportTitle}
+        </h4>
+        <ul class="space-y-2 text-xs font-medium text-neutral-600">
+          <li><a href="/help" class="hover:text-brand-red transition-colors">Help Center</a></li>
+          <li><a href="/safety" class="hover:text-brand-red transition-colors">LaBar Guardian</a></li>
+          <li><a href="/legal/terms" class="hover:text-brand-red transition-colors">{t.footer.terms}</a></li>
+          <li><a href="/legal/privacy" class="hover:text-brand-red transition-colors">{t.footer.privacy}</a></li>
+          <li><a href="/legal/cookies" class="hover:text-brand-red transition-colors">{t.footer.cookies}</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter Column -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-neutral-900">
+          {t.footer.newsletterTitle}
+        </h4>
+        <p class="text-[11px] text-neutral-500 font-medium">
+          {t.footer.newsletterSub}
+        </p>
+        <form onsubmit="event.preventDefault(); alert('Subscribed to LaBar Myanmar news and promotion updates!');" class="space-y-2">
+          <input
+            type="email"
+            required
+            placeholder="Enter your email"
+            class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs text-neutral-900 outline-none focus:border-brand-red"
+          />
+          <button
+            type="submit"
+            class="w-full py-2 px-4 rounded-xl bg-brand-red hover:bg-brand-deepRed text-white text-xs font-bold transition-all cursor-pointer"
+          >
+            {t.footer.subscribe}
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-neutral-500">
+      <div>
+        © 2026 LaBar Taxi Technologies Co., Ltd. {t.footer.rights}
+      </div>
+      <div class="flex items-center gap-1">
+        <span>{t.footer.madeIn}</span>
+      </div>
+    </div>
+  </div>
+</footer>

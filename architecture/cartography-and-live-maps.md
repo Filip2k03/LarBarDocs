@@ -1,10 +1,10 @@
-# 🗺️ Cartography, Live Maps & Turn-by-Turn Routing Engine
+# Cartography, Live Maps & Turn-by-Turn Routing Engine
 
 The **LaBar Platform** operates a self-hosted, enterprise-grade cartography and spatial routing pipeline designed to provide sub-10ms route calculations, real-time 60fps vector map rendering, and 1-second GPS breadcrumb smoothing without relying on expensive recurring third-party map APIs (e.g. Google Maps or Mapbox).
 
 ---
 
-## 🏗️ Cartography Architecture Blueprint
+## Cartography Architecture Blueprint
 
 ```text
                                   ┌──────────────────────────────────────────────┐
@@ -35,7 +35,7 @@ The **LaBar Platform** operates a self-hosted, enterprise-grade cartography and 
 
 ---
 
-## 📍 Key Cartography & Navigation Features
+## Key Cartography & Navigation Features
 
 ### 1. Real Yangon Cartography & Landmark Layer
 - **Downtown Sule Square (`16.7794, 96.1554`)**: Center of the colonial downtown grid with turn-by-turn routing along Merchant, Maha Bandula, Anawrahta, and Bogyoke Aung San Roads.
@@ -52,12 +52,12 @@ $$\hat{x}_{k} = \hat{x}_{k}^- + K_k (z_k - H \hat{x}_{k}^-)$$
 
 ---
 
-## 🖥️ Interactive Live Map Prototypes
+## Interactive Live Map Prototypes
 
 Experience the live Leaflet.js cartography and interactive routing directly:
 
 | Prototype View | Direct Launch Link | Simulated Features |
 |---|---|---|
-| 🚖 **Passenger App** | [**Launch Passenger Live Map**](/prototypes/passenger-app.html) | Sule ➔ Bogyoke ➔ Junction City live route, 15s cascading search, in-trip taximeter, and in-app driver chat. |
-| 🚗 **Driver App** | [**Launch Driver Live Map**](/prototypes/driver-app.html) | Shift mode, incoming 15s offer modal, in-car CCTV turn HUD, and 1km fellow driver emergency SOS intercept radar. |
-| 🛡️ **Guardian Safety** | [**Launch Guardian Live Map**](/prototypes/guardian-shield.html) | 60fps live route stream with cross-track anomaly alerts ($d_{xt} > 300\text{m}$), driver spouse shift health, and QR pairing. |
+|  **Passenger App** | [**Launch Passenger Live Map**](/prototypes/passenger-app.html) | Sule  Bogyoke  Junction City live route, 15s cascading search, in-trip taximeter, and in-app driver chat. |
+|  **Driver App** | [**Launch Driver Live Map**](/prototypes/driver-app.html) | Shift mode, incoming 15s offer modal, in-car CCTV turn HUD, and 1km fellow driver emergency SOS intercept radar. |
+|  **Guardian Safety** | [**Launch Guardian Live Map**](/prototypes/guardian-shield.html) | 60fps live route stream with cross-track anomaly alerts ($d_{xt} > 300\text{m}$), driver spouse shift health, and QR pairing. |

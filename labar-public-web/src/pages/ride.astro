@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { BookingWizard } from '@/components/booking/BookingWizard';
+import { getTranslation, defaultLocale } from '@/i18n';
+
+const locale = defaultLocale;
+const t = getTranslation(locale);
+---
+
+<BaseLayout
+  title="Book a Ride — LaBar | Guaranteed Upfront Fares in Myanmar"
+  description="Book an instant taxi or schedule a ride across Yangon, Mandalay, and Naypyidaw. Transparent pricing, verified drivers, and live GPS route tracking."
+  locale={locale}
+>
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
+      <span class="badge-red">ONLINE DISPATCH GATEWAY</span>
+      <h1 class="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+        Book a Ride with Upfront Guaranteed Fares
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+        Specify your pickup and dropoff points in Myanmar to view instant quotes and connect with the nearest verified LaBar driver.
+      </p>
+    </div>
+
+    <!-- Booking Wizard Island -->
+    <BookingWizard client:load />
+  </div>
+</BaseLayout>

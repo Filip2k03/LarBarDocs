@@ -1,4 +1,4 @@
-# 🛡️ Guardian Safety Shield Wireframes & UX Flow
+# Guardian Safety Shield Wireframes & UX Flow
 
 The **LaBar Guardian Safety Plugin Ecosystem** provides an on-demand, lightweight safety layer (~3.8MB) for passengers, driver families (spouses/parents), and rapid emergency response teams.
 
@@ -11,9 +11,9 @@ The **LaBar Guardian Safety Plugin Ecosystem** provides an on-demand, lightweigh
   <img src="/wireframes/guardian_01_passenger_shield.svg" alt="Passenger Guardian Shield Screen" style="max-width: 380px; border-radius: 28px; box-shadow: 0 16px 40px rgba(0,0,0,0.7); border: 2px solid #282836;" />
 </div>
 
-- 🖼️ [View High-Resolution Vector SVG](/wireframes/guardian_01_passenger_shield.svg)
+- [View High-Resolution Vector SVG](/wireframes/guardian_01_passenger_shield.svg)
 - **UX & Functional Specification**:
-  - **Live Status Header**: Confirms ride state (`🟢 RIDE IN PROGRESS`), passenger name (*Ma Thiri*), driver details (*U Aung Kyaw, Toyota Fielder 3A-8492*), and active CCTV status.
+  - **Live Status Header**: Confirms ride state (` RIDE IN PROGRESS`), passenger name (*Ma Thiri*), driver details (*U Aung Kyaw, Toyota Fielder 3A-8492*), and active CCTV status.
   - **Real-Time 60fps Route HUD**: Vector polyline rendering current position between Pickup (*Sule*) and Destination (*Junction City*).
   - **Telemetry Floating Pill**: Live calculation of cross-track deviation (*$d_{xt} = 12\text{m}$ - SAFE*), vehicle speed (*38 km/h*), and heading.
   - **DND-Override Emergency Siren**: Remote panic trigger button that sounds a high-decibel alarm on the passenger's phone even if set to silent or Do Not Disturb.
@@ -28,9 +28,9 @@ The **LaBar Guardian Safety Plugin Ecosystem** provides an on-demand, lightweigh
   <img src="/wireframes/guardian_02_driver_family_shield.svg" alt="Driver Family Guardian Shield Screen" style="max-width: 380px; border-radius: 28px; box-shadow: 0 16px 40px rgba(0,0,0,0.7); border: 2px solid #282836;" />
 </div>
 
-- 🖼️ [View High-Resolution Vector SVG](/wireframes/guardian_02_driver_family_shield.svg)
+- [View High-Resolution Vector SVG](/wireframes/guardian_02_driver_family_shield.svg)
 - **UX & Functional Specification**:
-  - **Driver Shift Health Card**: Shows driver status (`🟢 STATUS: ON-DUTY`), driver name (*Ko Aung Kyaw - Husband*), vehicle plate (*3A-8492*), and phone battery level (*86% with strong 5G signal*).
+  - **Driver Shift Health Card**: Shows driver status (` STATUS: ON-DUTY`), driver name (*Ko Aung Kyaw - Husband*), vehicle plate (*3A-8492*), and phone battery level (*86% with strong 5G signal*).
   - **Live Shift Tracking Map**: Visual marker showing vehicle moving on Pyay Road at 38 km/h with 1-second GPS breadcrumb refresh.
   - **Shift Metrics**: Elapsed shift time (*4 hours 20 mins*) and GPS accuracy (*2.8m*).
   - **Remote Emergency Alarm**: 1-Tap trigger **"အရေးပေါ် အချက်ပြသံ မြည်စေမည် (SOS SIREN)"** to alert the driver in critical danger.
@@ -45,7 +45,7 @@ The **LaBar Guardian Safety Plugin Ecosystem** provides an on-demand, lightweigh
   <img src="/wireframes/guardian_03_pairing_qr_mesh.svg" alt="Family Mesh QR Pairing Screen" style="max-width: 380px; border-radius: 28px; box-shadow: 0 16px 40px rgba(0,0,0,0.7); border: 2px solid #282836;" />
 </div>
 
-- 🖼️ [View High-Resolution Vector SVG](/wireframes/guardian_03_pairing_qr_mesh.svg)
+- [View High-Resolution Vector SVG](/wireframes/guardian_03_pairing_qr_mesh.svg)
 - **UX & Functional Specification**:
   - **High-Contrast QR Code Card**: Center-shielded QR code for camera scanning.
   - **6-Digit OTP Token Display**: Large formatted security PIN (`8 4 9 2 0 1`) valid for 10 minutes.

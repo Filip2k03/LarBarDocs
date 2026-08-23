@@ -1,10 +1,10 @@
-# 🚨 Driver Emergency SOS & Family Guardian Shield
+# Driver Emergency SOS & Family Guardian Shield
 
-The **LaBar Driver Emergency Ecosystem** combines an **instant 1km ➔ 3km tiered driver-mesh assistance network** with a **Driver Family Guardian Plugin Module**, providing complete physical protection for drivers in hazardous situations (e.g. passenger assault, robbery, hijack attempt, or medical distress).
+The **LaBar Driver Emergency Ecosystem** combines an **instant 1km to 3km tiered driver-mesh assistance network** with a **Driver Family Guardian Plugin Module**, providing complete physical protection for drivers in hazardous situations (e.g. passenger assault, robbery, hijack attempt, or medical distress).
 
 ---
 
-## ⚡ 1km ➔ 3km Tiered Driver-Mesh Broadcast Algorithm
+## 1km to 3km Tiered Driver-Mesh Broadcast Algorithm
 
 When a driver activates the emergency panic trigger, the backend initiates an automated, phased proximity broadcast to mobilize nearby drivers and emergency services.
 
@@ -31,7 +31,7 @@ When a driver activates the emergency panic trigger, the backend initiates an au
 
 ---
 
-## 🔘 Driver SOS Panic Trigger Mechanisms
+## Driver SOS Panic Trigger Mechanisms
 
 To ensure drivers can call for help even under duress, the app supports multiple trigger modes:
 
@@ -42,7 +42,7 @@ To ensure drivers can call for help even under duress, the app supports multiple
 
 ---
 
-## 👨‍👩‍👧 Driver Family Guardian Plugin Module (`:plugin_driver_guardian`)
+## Driver Family Guardian Plugin Module (`:plugin_driver_guardian`)
 
 Just like passengers, drivers can register their **spouse, parents, or designated next of kin** through the on-demand **Driver Guardian Plugin Package** (~3.2MB).
 
@@ -56,7 +56,7 @@ Just like passengers, drivers can register their **spouse, parents, or designate
 
 ---
 
-## 🗄️ Database Schema Additions (DDL)
+## Database Schema Additions (DDL)
 
 ```sql
 -- Driver Family Guardian Links
@@ -92,7 +92,7 @@ CREATE TABLE driver_sos_incidents (
 
 ---
 
-## 💻 Go Backend Redis 1km ➔ 3km Spatial Broadcast Engine
+## Go Backend Redis 1km to 3km Spatial Broadcast Engine
 
 ```go
 func (s *EmergencyService) BroadcastDriverSOS(ctx context.Context, incident *domain.DriverSOSIncident) error {

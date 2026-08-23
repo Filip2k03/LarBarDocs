@@ -2,94 +2,108 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
+	"errors"
+	"github.com/Filip2k03/labar-backend/internal/admin"
+	"github.com/Filip2k03/labar-backend/internal/auth"
+	"github.com/Filip2k03/labar-backend/internal/content"
+	"github.com/Filip2k03/labar-backend/internal/devices"
+	"github.com/Filip2k03/labar-backend/internal/dispatch"
+	"github.com/Filip2k03/labar-backend/internal/driverreg"
+	"github.com/Filip2k03/labar-backend/internal/drivers"
+	"github.com/Filip2k03/labar-backend/internal/platform/config"
+	"github.com/Filip2k03/labar-backend/internal/platform/database"
+	"github.com/Filip2k03/labar-backend/internal/platform/maps"
+	platformredis "github.com/Filip2k03/labar-backend/internal/platform/redis"
+	"github.com/Filip2k03/labar-backend/internal/platform/sms"
+	"github.com/Filip2k03/labar-backend/internal/platform/storage"
+	"github.com/Filip2k03/labar-backend/internal/pricing"
+	"github.com/Filip2k03/labar-backend/internal/realtime"
+	"github.com/Filip2k03/labar-backend/internal/rides"
+	"github.com/Filip2k03/labar-backend/internal/safety"
+	"github.com/Filip2k03/labar-backend/internal/support"
+	"github.com/Filip2k03/labar-backend/internal/tracking"
+	"github.com/Filip2k03/labar-backend/internal/transport/httpapi"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/cors"
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	if len(os.Args) == 2 && os.Args[1] == "--healthcheck" {
+		healthcheck()
+		return
 	}
-
-	r := chi.NewRouter()
-
-	// Middleware Stack
-	r.Use(middleware.RequestID)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
-	r.Use(middleware.Timeout(30 * time.Second))
-
-	// CORS Configuration for Mobile & Web
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
-		MaxAge:           300,
-	}))
-
-	// Health Check & Root
-	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status":"healthy","service":"labar-core-api","time":"` + time.Now().Format(time.RFC3339) + `"}`))
-	})
-
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"app":"LaBar Taxi Platform","version":"1.0.0","docs":"https://lar-bar-docs.vercel.app"}`))
-	})
-
-	// API v1 Routes Mounting
-	r.Route("/api/v1", func(r chi.Router) {
-		r.Get("/plugins/manifest", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			w.Write([]byte(`{
-				"plugins": [
-					{"id":"com.labar.plugin.guardian.passenger","version":"1.4.0","size_bytes":3984512},
-					{"id":"com.labar.plugin.guardian.driver","version":"1.2.0","size_bytes":3355443}
-				]
-			}`))
-		})
-	})
-
-	srv := &http.Server{
-		Addr:         ":" + port,
-		Handler:      r,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  60 * time.Second,
+	zerolog.TimeFieldFormat = time.RFC3339Nano
+	log.Logger = zerolog.New(os.Stdout).With().Timestamp().Str("service", "labar-api").Logger()
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatal().Err(err).Msg("invalid configuration")
 	}
-
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	db, err := database.Open(ctx, cfg.DatabaseURL, cfg.EncryptionKey)
+	if err != nil {
+		cancel()
+		log.Fatal().Err(err).Msg("database unavailable")
+	}
+	redisClient, err := platformredis.Open(ctx, cfg.RedisURL)
+	cancel()
+	if err != nil {
+		db.Close()
+		log.Fatal().Err(err).Msg("Redis unavailable")
+	}
+	defer db.Close()
+	defer redisClient.Close()
+	minioClient, err := minio.New(cfg.StorageEndpoint, &minio.Options{Creds: credentials.NewStaticV4(cfg.StorageAccessKey, cfg.StorageSecretKey, ""), Secure: cfg.StorageUseTLS})
+	if err != nil {
+		log.Fatal().Err(err).Msg("object storage configuration invalid")
+	}
+	storageService := storage.NewService(db, minioClient, cfg.StorageBucket)
+	bucketCtx, bucketCancel := context.WithTimeout(context.Background(), 10*time.Second)
+	err = storageService.EnsureBucket(bucketCtx)
+	bucketCancel()
+	if err != nil {
+		log.Fatal().Err(err).Msg("object storage unavailable")
+	}
+	authService := auth.NewService(db, redisClient, sms.NewDevelopment(cfg.DevelopmentOTP), cfg.JWTSecret, cfg.OTPSecret, cfg.AccessTokenTTL, cfg.RefreshTokenTTL)
+	deps := httpapi.Dependencies{DB: db, Redis: redisClient, Origins: cfg.PublicWebOrigins, Auth: authService, Devices: devices.NewService(db), Pricing: pricing.NewService(db, maps.NewOSRM(cfg.MapBaseURL)), Rides: rides.NewService(db), Drivers: drivers.NewService(db), Dispatch: dispatch.NewService(db, redisClient), Tracking: tracking.NewService(db, redisClient), DriverReg: driverreg.NewService(db), Storage: storageService, Safety: safety.NewService(db), Support: support.NewService(db), Content: content.NewService(db), Admin: admin.NewService(db), Realtime: realtime.NewGateway(db, redisClient)}
+	server := &http.Server{Addr: cfg.HTTPAddr, Handler: httpapi.NewRouter(deps), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 30 * time.Second, IdleTimeout: 75 * time.Second, MaxHeaderBytes: 1 << 20}
 	go func() {
-		log.Printf("🚀 LaBar Core Go API Server starting on port %s...", port)
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Server failed to start: %v", err)
+		log.Info().Str("addr", cfg.HTTPAddr).Str("environment", cfg.Environment).Msg("API listening")
+		if serveErr := server.ListenAndServe(); serveErr != nil && !errors.Is(serveErr, http.ErrServerClosed) {
+			log.Fatal().Err(serveErr).Msg("API stopped unexpectedly")
 		}
 	}()
-
-	// Graceful Shutdown
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-	log.Println("Shutting down LaBar API Server gracefully...")
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGTERM, syscall.SIGINT)
+	<-signals
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer shutdownCancel()
+	if err = server.Shutdown(shutdownCtx); err != nil {
+		log.Error().Err(err).Msg("graceful shutdown failed")
 	}
-	fmt.Println("LaBar API Server exited successfully.")
+	log.Info().Msg("API stopped")
+}
+func healthcheck() {
+	addr := os.Getenv("HTTP_ADDR")
+	if addr == "" {
+		addr = ":8080"
+	}
+	if addr[0] == ':' {
+		addr = "127.0.0.1" + addr
+	}
+	client := http.Client{Timeout: 2 * time.Second}
+	response, err := client.Get("http://" + addr + "/health")
+	if err != nil {
+		os.Exit(1)
+	}
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusOK {
+		os.Exit(1)
+	}
 }

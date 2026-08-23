@@ -1,10 +1,10 @@
-# 🛠️ Recommended Production Tech Stack & Library Standards
+# Recommended Production Tech Stack & Library Standards
 
 This document establishes the definitive, benchmarked technology matrix and framework standards for developing the **LaBar Taxi Platform & Dual-Shield Safety Ecosystem**.
 
 ---
 
-## 🏛️ 1. Backend: Golang 1.22 Ecosystem
+## 1. Backend: Golang 1.22 Ecosystem
 
 The backend services are designed using **Go Clean Architecture** (Domain, UseCase, Delivery, Repository) to achieve sub-millisecond response times, zero-allocation spatial hashing, and high-concurrency 60fps WebSocket broadcasting.
 
@@ -31,7 +31,7 @@ The backend services are designed using **Go Clean Architecture** (Domain, UseCa
 
 ---
 
-## 📱 2. Frontend: React Native 0.74+ Mobile Architecture
+## 2. Frontend: React Native 0.74+ Mobile Architecture
 
 Both the **Passenger App**, **Driver App**, and the **On-Demand Guardian Plugin** are built with **React Native (TypeScript)** utilizing the new **Fabric Native Renderer** and **TurboModules**.
 
@@ -59,7 +59,7 @@ Both the **Passenger App**, **Driver App**, and the **On-Demand Guardian Plugin*
 
 ---
 
-## 💾 3. Database Schema Compiler Config (`sqlc.yaml`)
+## 3. Database Schema Compiler Config (`sqlc.yaml`)
 
 ```yaml
 version: "2"
