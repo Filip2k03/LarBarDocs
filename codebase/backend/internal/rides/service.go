@@ -5,11 +5,13 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/subtle"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
 	"math/big"
+	"strings"
 	"time"
 
 	"github.com/Filip2k03/labar-backend/internal/domain"
@@ -66,6 +68,75 @@ type Event struct {
 	ActorID   *uuid.UUID     `json:"actor_id,omitempty"`
 	Metadata  map[string]any `json:"metadata"`
 	CreatedAt time.Time      `json:"created_at"`
+}
+
+type HistoryItem struct {
+	ID                uuid.UUID        `json:"id"`
+	Status            Status           `json:"status"`
+	PickupLat         float64          `json:"pickup_lat"`
+	PickupLng         float64          `json:"pickup_lng"`
+	DestinationLat    float64          `json:"destination_lat"`
+	DestinationLng    float64          `json:"destination_lng"`
+	EstimatedTotalMMK domain.MoneyMMK  `json:"estimated_total_mmk"`
+	FinalTotalMMK     *domain.MoneyMMK `json:"final_total_mmk,omitempty"`
+	RequestedAt       time.Time        `json:"requested_at"`
+	CompletedAt       *time.Time       `json:"completed_at,omitempty"`
+}
+
+func (s *Service) History(ctx context.Context, userID uuid.UUID, driver bool, cursor string, limit int) ([]HistoryItem, string, bool, error) {
+	if limit <= 0 || limit > 100 {
+		limit = 20
+	}
+	beforeTime := time.Now().UTC().Add(time.Hour)
+	beforeID := uuid.MustParse("ffffffff-ffff-ffff-ffff-ffffffffffff")
+	if cursor != "" {
+		decoded, err := base64.RawURLEncoding.DecodeString(cursor)
+		if err != nil {
+			return nil, "", false, errors.New("invalid cursor")
+		}
+		parts := strings.SplitN(string(decoded), "|", 2)
+		if len(parts) != 2 {
+			return nil, "", false, errors.New("invalid cursor")
+		}
+		beforeTime, err = time.Parse(time.RFC3339Nano, parts[0])
+		if err != nil {
+			return nil, "", false, errors.New("invalid cursor")
+		}
+		beforeID, err = uuid.Parse(parts[1])
+		if err != nil {
+			return nil, "", false, errors.New("invalid cursor")
+		}
+	}
+	owner := `r.passenger_id=$1`
+	if driver {
+		owner = `r.driver_id IN(SELECT id FROM drivers WHERE user_id=$1)`
+	}
+	rows, err := s.db.Query(ctx, `SELECT r.id,r.status,ST_Y(r.pickup::geometry),ST_X(r.pickup::geometry),ST_Y(r.destination::geometry),ST_X(r.destination::geometry),r.estimated_total_mmk,r.final_total_mmk,r.requested_at,r.completed_at FROM rides r WHERE `+owner+` AND (r.requested_at<$2 OR (r.requested_at=$2 AND r.id<$3)) ORDER BY r.requested_at DESC,r.id DESC LIMIT $4`, userID, beforeTime, beforeID, limit+1)
+	if err != nil {
+		return nil, "", false, err
+	}
+	defer rows.Close()
+	var items []HistoryItem
+	for rows.Next() {
+		var item HistoryItem
+		if err = rows.Scan(&item.ID, &item.Status, &item.PickupLat, &item.PickupLng, &item.DestinationLat, &item.DestinationLng, &item.EstimatedTotalMMK, &item.FinalTotalMMK, &item.RequestedAt, &item.CompletedAt); err != nil {
+			return nil, "", false, err
+		}
+		items = append(items, item)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, "", false, err
+	}
+	hasMore := len(items) > limit
+	if hasMore {
+		items = items[:limit]
+	}
+	next := ""
+	if hasMore && len(items) > 0 {
+		last := items[len(items)-1]
+		next = base64.RawURLEncoding.EncodeToString([]byte(last.RequestedAt.Format(time.RFC3339Nano) + "|" + last.ID.String()))
+	}
+	return items, next, hasMore, nil
 }
 
 func (s *Service) Create(ctx context.Context, passengerID uuid.UUID, idempotencyKey string, request CreateRequest) (Ride, bool, error) {

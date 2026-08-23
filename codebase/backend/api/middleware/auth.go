@@ -5,6 +5,7 @@ import (
 	"github.com/Filip2k03/labar-backend/api/response"
 	"github.com/Filip2k03/labar-backend/internal/auth"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"net/http"
 	"strings"
 )
@@ -14,6 +15,24 @@ type Principal struct {
 	UserID    uuid.UUID
 	SessionID uuid.UUID
 	Roles     []string
+}
+
+func RequirePermission(db *pgxpool.Pool, permission string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			p, ok := PrincipalFrom(r.Context())
+			if !ok {
+				response.Error(w, r, http.StatusUnauthorized, "UNAUTHORIZED", "Authentication is required.")
+				return
+			}
+			var allowed bool
+			if err := db.QueryRow(r.Context(), `SELECT EXISTS(SELECT 1 FROM user_roles ur JOIN role_permissions rp ON rp.role_id=ur.role_id JOIN permissions p ON p.id=rp.permission_id WHERE ur.user_id=$1 AND p.name=$2)`, p.UserID, permission).Scan(&allowed); err != nil || !allowed {
+				response.Error(w, r, http.StatusForbidden, "FORBIDDEN", "You do not have permission for this action.")
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
 }
 
 func Authenticate(service *auth.Service) func(http.Handler) http.Handler {

@@ -20,6 +20,7 @@ import (
 	"github.com/Filip2k03/labar-backend/internal/dispatch"
 	"github.com/Filip2k03/labar-backend/internal/driverreg"
 	"github.com/Filip2k03/labar-backend/internal/drivers"
+	"github.com/Filip2k03/labar-backend/internal/notifications"
 	"github.com/Filip2k03/labar-backend/internal/passengers"
 	"github.com/Filip2k03/labar-backend/internal/payments"
 	platformmaps "github.com/Filip2k03/labar-backend/internal/platform/maps"
@@ -42,28 +43,29 @@ import (
 )
 
 type Dependencies struct {
-	DB         *pgxpool.Pool
-	Redis      *redisv9.Client
-	Origins    []string
-	Auth       *auth.Service
-	Devices    *devices.Service
-	Pricing    *pricing.Service
-	Rides      *rides.Service
-	Drivers    *drivers.Service
-	Passengers *passengers.Service
-	Dispatch   *dispatch.Service
-	Tracking   *tracking.Service
-	DriverReg  *driverreg.Service
-	Storage    *storage.Service
-	Safety     *safety.Service
-	Support    *support.Service
-	Content    *content.Service
-	Admin      *admin.Service
-	Realtime   *realtime.Gateway
-	Maps       platformmaps.Provider
-	Geocoder   platformmaps.Geocoder
-	Wallet     *wallet.Service
-	Payments   *payments.Service
+	DB            *pgxpool.Pool
+	Redis         *redisv9.Client
+	Origins       []string
+	Auth          *auth.Service
+	Devices       *devices.Service
+	Pricing       *pricing.Service
+	Rides         *rides.Service
+	Drivers       *drivers.Service
+	Passengers    *passengers.Service
+	Dispatch      *dispatch.Service
+	Tracking      *tracking.Service
+	DriverReg     *driverreg.Service
+	Storage       *storage.Service
+	Safety        *safety.Service
+	Support       *support.Service
+	Content       *content.Service
+	Admin         *admin.Service
+	Realtime      *realtime.Gateway
+	Maps          platformmaps.Provider
+	Geocoder      platformmaps.Geocoder
+	Wallet        *wallet.Service
+	Payments      *payments.Service
+	Notifications *notifications.Service
 }
 type API struct{ deps Dependencies }
 
@@ -134,6 +136,8 @@ func (api API) authenticatedRoutes(r chi.Router) {
 	r.Post("/devices/register", api.registerDevice)
 	r.Delete("/devices/{id}", api.deleteDevice)
 	r.Get("/realtime", api.realtime)
+	r.Get("/notifications", api.userNotifications)
+	r.Post("/notifications/{id}/read", api.readNotification)
 	r.Route("/passenger", func(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("passenger", "admin", "super_admin"))
 		r.Get("/profile", api.passengerProfile)
@@ -149,6 +153,7 @@ func (api API) authenticatedRoutes(r chi.Router) {
 		r.Delete("/places/{id}", api.deletePassengerPlace)
 		r.Post("/rides/quote", api.passengerQuote)
 		r.Post("/rides", api.createRide)
+		r.Get("/rides", api.passengerRideHistory)
 		r.Get("/rides/{id}", api.getRide)
 		r.Post("/rides/{id}/cancel", api.cancelPassengerRide)
 		r.Get("/rides/{id}/receipt", api.receipt)
@@ -163,6 +168,8 @@ func (api API) authenticatedRoutes(r chi.Router) {
 	r.Route("/driver", func(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("driver", "admin", "super_admin"))
 		r.Get("/dashboard", api.driverDashboard)
+		r.Get("/rides", api.driverRideHistory)
+		r.Get("/rides/{id}", api.getRide)
 		r.Post("/availability", api.driverAvailability)
 		r.Post("/heartbeat", api.driverHeartbeat)
 		r.Post("/location", api.driverLocation)
@@ -192,18 +199,42 @@ func (api API) authenticatedRoutes(r chi.Router) {
 	r.Route("/admin", func(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("super_admin", "admin", "operations_manager", "driver_verifier", "dispatcher"))
 		r.Get("/dashboard", api.adminDashboard)
-		r.Get("/driver-applications", api.adminApplications)
-		r.Get("/driver-applications/{id}", api.adminApplicationDetail)
-		r.Post("/driver-applications/{id}/request-documents", api.adminRequestDocuments)
-		r.Post("/driver-applications/{id}/documents/{document_id}/decision", api.adminDocumentDecision)
-		r.Post("/driver-applications/{id}/approve", api.adminApprove)
-		r.Post("/driver-applications/{id}/reject", api.adminReject)
-		r.Get("/audit-logs", api.auditLogs)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "ride.read")).Get("/rides", api.adminRides)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "ride.read")).Get("/rides/{id}", api.getRide)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "ride.cancel")).Post("/rides/{id}/cancel", api.adminCancelRide)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.approve")).Get("/driver-applications", api.adminApplications)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.approve")).Get("/driver-applications/{id}", api.adminApplicationDetail)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.approve")).Post("/driver-applications/{id}/request-documents", api.adminRequestDocuments)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.approve")).Post("/driver-applications/{id}/documents/{document_id}/decision", api.adminDocumentDecision)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.approve")).Post("/driver-applications/{id}/approve", api.adminApprove)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.approve")).Post("/driver-applications/{id}/reject", api.adminReject)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "audit.read")).Get("/audit-logs", api.auditLogs)
 	})
 	r.Route("/operations", func(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("super_admin", "admin", "operations_manager", "dispatcher"))
 		r.Get("/dashboard", api.adminDashboard)
 	})
+}
+
+func (api API) userNotifications(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Notifications.List(r.Context(), principal(r).UserID, 50)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+
+func (api API) readNotification(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	if err := api.deps.Notifications.MarkRead(r.Context(), principal(r).UserID, id); err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, map[string]bool{"read": true})
 }
 
 func (api API) rateLimit(scope string, limit int64, window time.Duration) func(http.Handler) http.Handler {
@@ -535,6 +566,20 @@ func (api API) getRide(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	response.JSON(w, r, 200, map[string]any{"ride": ride, "events": events})
+}
+func (api API) passengerRideHistory(w http.ResponseWriter, r *http.Request) {
+	api.rideHistory(w, r, false)
+}
+func (api API) driverRideHistory(w http.ResponseWriter, r *http.Request) {
+	api.rideHistory(w, r, true)
+}
+func (api API) rideHistory(w http.ResponseWriter, r *http.Request, driver bool) {
+	items, next, more, err := api.deps.Rides.History(r.Context(), principal(r).UserID, driver, r.URL.Query().Get("cursor"), int(parseInt(r.URL.Query().Get("limit"))))
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, map[string]any{"items": items, "next_cursor": next, "has_more": more})
 }
 
 func (api API) passengerProfile(w http.ResponseWriter, r *http.Request) {
@@ -981,6 +1026,32 @@ func (api API) adminDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	response.JSON(w, r, 200, data)
+}
+func (api API) adminRides(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Admin.Rides(r.Context(), r.URL.Query().Get("status"), int(parseInt(r.URL.Query().Get("limit"))))
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+func (api API) adminCancelRide(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	var body struct {
+		Reason string `json:"reason"`
+	}
+	if err := validation.Decode(w, r, &body); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	if err := api.deps.Admin.CancelRide(r.Context(), principal(r).UserID, id, body.Reason, chimiddleware.GetReqID(r.Context())); err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, map[string]string{"status": "system_cancelled"})
 }
 func (api API) adminApplications(w http.ResponseWriter, r *http.Request) {
 	data, err := api.deps.DriverReg.List(r.Context(), r.URL.Query().Get("status"), 50)

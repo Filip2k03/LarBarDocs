@@ -3,6 +3,12 @@ package admin
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"time"
+
+	"github.com/Filip2k03/labar-backend/internal/rides"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -20,6 +26,71 @@ func (s *Service) Dashboard(ctx context.Context) (map[string]any, error) {
 		return nil, err
 	}
 	return result, nil
+}
+
+func (s *Service) Rides(ctx context.Context, status string, limit int) ([]map[string]any, error) {
+	if limit <= 0 || limit > 200 {
+		limit = 50
+	}
+	rows, err := s.db.Query(ctx, `SELECT r.id,r.status,r.passenger_id,r.driver_id,r.estimated_total_mmk,r.final_total_mmk,r.requested_at,r.completed_at FROM rides r WHERE ($1='' OR r.status=$1) ORDER BY r.requested_at DESC LIMIT $2`, status, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var result []map[string]any
+	for rows.Next() {
+		var id, passengerID uuid.UUID
+		var driverID *uuid.UUID
+		var rideStatus string
+		var estimate int64
+		var final *int64
+		var requested time.Time
+		var completed *time.Time
+		if err = rows.Scan(&id, &rideStatus, &passengerID, &driverID, &estimate, &final, &requested, &completed); err != nil {
+			return nil, err
+		}
+		result = append(result, map[string]any{"id": id, "status": rideStatus, "passenger_id": passengerID, "driver_id": driverID, "estimated_total_mmk": estimate, "final_total_mmk": final, "requested_at": requested, "completed_at": completed})
+	}
+	return result, rows.Err()
+}
+
+func (s *Service) CancelRide(ctx context.Context, adminID, rideID uuid.UUID, reason, requestID string) error {
+	if reason == "" {
+		return errors.New("cancellation reason required")
+	}
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+	var from rides.Status
+	var driverID *uuid.UUID
+	var sequence int64
+	err = tx.QueryRow(ctx, `SELECT status,driver_id,coalesce((SELECT max(sequence) FROM ride_events WHERE ride_id=$1),0) FROM rides WHERE id=$1 FOR UPDATE`, rideID).Scan(&from, &driverID, &sequence)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return pgx.ErrNoRows
+	}
+	if err != nil {
+		return err
+	}
+	if err = rides.ValidateTransition(from, rides.SystemCancelled); err != nil {
+		return err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE rides SET status='system_cancelled',updated_at=now(),version=version+1 WHERE id=$1`, rideID); err != nil {
+		return err
+	}
+	if driverID != nil {
+		if _, err = tx.Exec(ctx, `UPDATE drivers SET availability='available' WHERE id=$1`, *driverID); err != nil {
+			return err
+		}
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id,metadata) VALUES($1,$2,'ride.system_cancelled','admin',$3,jsonb_build_object('reason',$4))`, rideID, sequence+1, adminID, reason); err != nil {
+		return err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO audit_logs(actor_id,actor_type,action,resource_type,resource_id,before_data,after_data,request_id) VALUES($1,'admin','ride.cancel','ride',$2::text,jsonb_build_object('status',$3),jsonb_build_object('status','system_cancelled','reason',$4),$5)`, adminID, rideID, from, reason, requestID); err != nil {
+		return err
+	}
+	return tx.Commit(ctx)
 }
 func (s *Service) Audit(ctx context.Context, limit int) ([]map[string]any, error) {
 	if limit <= 0 || limit > 200 {
