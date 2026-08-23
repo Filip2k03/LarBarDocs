@@ -41,7 +41,7 @@ func (g *Gateway) ServeHTTP(w http.ResponseWriter, r *http.Request, userID uuid.
 	defer g.connections.Add(-1)
 	connection.SetReadLimit(1 << 16)
 	channels := []string{"user:" + userID.String()}
-	rows, err := g.db.Query(r.Context(), `SELECT id FROM rides WHERE passenger_id=$1 OR driver_id IN(SELECT id FROM drivers WHERE user_id=$1) AND status IN ('searching','driver_offered','driver_assigned','driver_enroute','driver_arrived','pickup_confirmed','in_progress')`, userID)
+	rows, err := g.db.Query(r.Context(), `SELECT id FROM rides WHERE (passenger_id=$1 OR driver_id IN(SELECT id FROM drivers WHERE user_id=$1)) AND status IN ('searching','driver_offered','driver_assigned','driver_enroute','driver_arrived','pickup_confirmed','in_progress')`, userID)
 	if err == nil {
 		for rows.Next() {
 			var id uuid.UUID

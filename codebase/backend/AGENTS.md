@@ -6,7 +6,7 @@ These instructions apply to every file under `codebase/backend`.
 
 - Preserve dependency direction: transport and adapters may depend on use cases and domain; domain must not import infrastructure.
 - Keep business rules deterministic and testable. Monetary values are integer MMK, never floating-point.
-- Treat the fare policy in `internal/usecase/fare_calculator.go` as the executable source of truth until a versioned policy repository replaces it.
+- Treat active `fare_versions` and `fare_plans` rows as the executable pricing source of truth. Never bypass `internal/pricing` from ride handlers.
 - Introduce PostgreSQL, Redis, object storage, OCR, biometric, payment, and notification integrations behind interfaces.
 - Require idempotency keys for externally retried commands that create rides, payments, payouts, KYC decisions, or safety incidents.
 - Use structured logs without raw NRC, licence, biometric, token, password, payment-account, or precise-location data.

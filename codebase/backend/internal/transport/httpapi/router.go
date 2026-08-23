@@ -20,6 +20,7 @@ import (
 	"github.com/Filip2k03/labar-backend/internal/dispatch"
 	"github.com/Filip2k03/labar-backend/internal/driverreg"
 	"github.com/Filip2k03/labar-backend/internal/drivers"
+	"github.com/Filip2k03/labar-backend/internal/passengers"
 	"github.com/Filip2k03/labar-backend/internal/platform/storage"
 	"github.com/Filip2k03/labar-backend/internal/pricing"
 	"github.com/Filip2k03/labar-backend/internal/realtime"
@@ -38,23 +39,24 @@ import (
 )
 
 type Dependencies struct {
-	DB        *pgxpool.Pool
-	Redis     *redisv9.Client
-	Origins   []string
-	Auth      *auth.Service
-	Devices   *devices.Service
-	Pricing   *pricing.Service
-	Rides     *rides.Service
-	Drivers   *drivers.Service
-	Dispatch  *dispatch.Service
-	Tracking  *tracking.Service
-	DriverReg *driverreg.Service
-	Storage   *storage.Service
-	Safety    *safety.Service
-	Support   *support.Service
-	Content   *content.Service
-	Admin     *admin.Service
-	Realtime  *realtime.Gateway
+	DB         *pgxpool.Pool
+	Redis      *redisv9.Client
+	Origins    []string
+	Auth       *auth.Service
+	Devices    *devices.Service
+	Pricing    *pricing.Service
+	Rides      *rides.Service
+	Drivers    *drivers.Service
+	Passengers *passengers.Service
+	Dispatch   *dispatch.Service
+	Tracking   *tracking.Service
+	DriverReg  *driverreg.Service
+	Storage    *storage.Service
+	Safety     *safety.Service
+	Support    *support.Service
+	Content    *content.Service
+	Admin      *admin.Service
+	Realtime   *realtime.Gateway
 }
 type API struct{ deps Dependencies }
 
@@ -113,11 +115,18 @@ func (api API) authenticatedRoutes(r chi.Router) {
 	r.Get("/realtime", api.realtime)
 	r.Route("/passenger", func(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("passenger", "admin", "super_admin"))
+		r.Get("/profile", api.passengerProfile)
+		r.Patch("/profile", api.patchPassengerProfile)
+		r.Get("/places", api.passengerPlaces)
+		r.Post("/places", api.createPassengerPlace)
+		r.Patch("/places/{id}", api.updatePassengerPlace)
+		r.Delete("/places/{id}", api.deletePassengerPlace)
 		r.Post("/rides/quote", api.passengerQuote)
 		r.Post("/rides", api.createRide)
 		r.Get("/rides/{id}", api.getRide)
 		r.Post("/rides/{id}/cancel", api.cancelPassengerRide)
 		r.Get("/rides/{id}/receipt", api.receipt)
+		r.Post("/rides/{id}/rating", api.rateDriver)
 		r.Post("/rides/{id}/share", api.shareRide)
 		r.Post("/rides/{id}/sos", api.sos)
 		r.Post("/live-activities/register", api.liveActivity)
@@ -399,6 +408,103 @@ func (api API) getRide(w http.ResponseWriter, r *http.Request) {
 	}
 	response.JSON(w, r, 200, map[string]any{"ride": ride, "events": events})
 }
+
+func (api API) passengerProfile(w http.ResponseWriter, r *http.Request) {
+	profile, err := api.deps.Passengers.Profile(r.Context(), principal(r).UserID)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, profile)
+}
+
+func (api API) patchPassengerProfile(w http.ResponseWriter, r *http.Request) {
+	var input passengers.ProfilePatch
+	if err := validation.Decode(w, r, &input); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	profile, err := api.deps.Passengers.PatchProfile(r.Context(), principal(r).UserID, input)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, profile)
+}
+
+func (api API) passengerPlaces(w http.ResponseWriter, r *http.Request) {
+	places, err := api.deps.Passengers.Places(r.Context(), principal(r).UserID)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, places)
+}
+
+func (api API) createPassengerPlace(w http.ResponseWriter, r *http.Request) {
+	var input passengers.PlaceInput
+	if err := validation.Decode(w, r, &input); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	place, err := api.deps.Passengers.CreatePlace(r.Context(), principal(r).UserID, input)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusCreated, place)
+}
+
+func (api API) updatePassengerPlace(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	var input passengers.PlaceInput
+	if err := validation.Decode(w, r, &input); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	place, err := api.deps.Passengers.UpdatePlace(r.Context(), principal(r).UserID, id, input)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, place)
+}
+
+func (api API) deletePassengerPlace(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	if err := api.deps.Passengers.DeletePlace(r.Context(), principal(r).UserID, id); err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, map[string]bool{"deleted": true})
+}
+
+func (api API) rateDriver(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	var input struct {
+		Stars   int      `json:"stars"`
+		Tags    []string `json:"tags"`
+		Comment string   `json:"comment"`
+	}
+	if err := validation.Decode(w, r, &input); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	if err := api.deps.Passengers.RateDriver(r.Context(), principal(r).UserID, id, input.Stars, input.Tags, input.Comment); err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusCreated, map[string]bool{"recorded": true})
+}
 func (api API) cancelPassengerRide(w http.ResponseWriter, r *http.Request) {
 	api.cancelRide(w, r, "passenger")
 }
@@ -562,7 +668,23 @@ func (api API) driverArrived(w http.ResponseWriter, r *http.Request) {
 	api.driverTransition(w, r, rides.DriverArrived)
 }
 func (api API) pickupConfirmed(w http.ResponseWriter, r *http.Request) {
-	api.driverTransition(w, r, rides.PickupConfirmed)
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	var body struct {
+		PIN string `json:"pin"`
+	}
+	if err := validation.Decode(w, r, &body); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	ride, err := api.deps.Rides.VerifyPickupPIN(r.Context(), principal(r).UserID, id, body.PIN)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, 200, ride)
 }
 func (api API) startTrip(w http.ResponseWriter, r *http.Request) {
 	api.driverTransition(w, r, rides.InProgress)

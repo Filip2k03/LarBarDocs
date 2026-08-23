@@ -1,4 +1,5 @@
 ---
+import Icon from '@/components/common/Icon.astro';
 import { getTranslation, defaultLocale } from '@/i18n';
 
 interface Props {
@@ -115,8 +116,10 @@ const t = getTranslation(locale);
       <div>
         © 2026 LaBar Taxi Technologies Co., Ltd. {t.footer.rights}
       </div>
-      <div class="flex items-center gap-1">
-        <span>{t.footer.madeIn}</span>
+      <div class="flex items-center gap-1.5 text-neutral-600">
+        <span>Made with</span>
+        <Icon name="heart" size={13} color="#E53935" class="text-brand-red" />
+        <span>in Myanmar</span>
       </div>
     </div>
   </div>

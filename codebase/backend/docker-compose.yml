@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.5-alpine
+    environment:
+      POSTGRES_DB: labar
+      POSTGRES_USER: labar
+      POSTGRES_PASSWORD: labar-local-only
+    ports: ["5432:5432"]
+    volumes: ["labar_postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labar -d labar"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server","--appendonly","yes"]
+    ports: ["6379:6379"]
+    volumes: ["labar_redis:/data"]
+    healthcheck:
+      test: ["CMD","redis-cli","ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  minio:
+    image: minio/minio:latest
+    command: ["server","/data","--console-address",":9001"]
+    environment:
+      MINIO_ROOT_USER: labar-minio
+      MINIO_ROOT_PASSWORD: labar-minio-local-only
+    ports: ["9000:9000","9001:9001"]
+    volumes: ["labar_minio:/data"]
+    healthcheck:
+      test: ["CMD","mc","ready","local"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+volumes:
+  labar_postgres:
+  labar_redis:
+  labar_minio:

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/common/Icon.astro';
 import { getTranslation, defaultLocale } from '@/i18n';
 
 const locale = defaultLocale;
@@ -23,11 +24,11 @@ const t = getTranslation(locale);
       </p>
     </div>
 
-    <!-- 4 Guardian Safety Modules -->
+    <!-- 4 Guardian Safety Modules with Vector SVG Icons -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
-        <div class="w-14 h-14 rounded-3xl bg-red-50 text-brand-red flex items-center justify-center text-2xl font-bold">
-          🚨
+        <div class="w-14 h-14 rounded-3xl bg-red-50 text-brand-red flex items-center justify-center border border-red-100">
+          <Icon name="sos" size={26} />
         </div>
         <h3 class="text-xl font-extrabold text-neutral-900">1.0 km SOS Distress Mesh Intercept</h3>
         <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
@@ -36,8 +37,8 @@ const t = getTranslation(locale);
       </div>
 
       <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
-        <div class="w-14 h-14 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold">
-          📡
+        <div class="w-14 h-14 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+          <Icon name="telemetry" size={26} />
         </div>
         <h3 class="text-xl font-extrabold text-neutral-900">60fps Real-Time Route Telemetry</h3>
         <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
@@ -46,8 +47,8 @@ const t = getTranslation(locale);
       </div>
 
       <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
-        <div class="w-14 h-14 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold">
-          👨‍👩‍👧
+        <div class="w-14 h-14 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
+          <Icon name="family" size={26} />
         </div>
         <h3 class="text-xl font-extrabold text-neutral-900">Family QR Guardian Shield Pairing</h3>
         <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
@@ -56,8 +57,8 @@ const t = getTranslation(locale);
       </div>
 
       <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
-        <div class="w-14 h-14 rounded-3xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold">
-          📹
+        <div class="w-14 h-14 rounded-3xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
+          <Icon name="cctv" size={26} />
         </div>
         <h3 class="text-xl font-extrabold text-neutral-900">In-Cabin CCTV Sentinel Recording</h3>
         <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">

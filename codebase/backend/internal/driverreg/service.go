@@ -120,8 +120,18 @@ func (s *Service) Submit(ctx context.Context, userID uuid.UUID) (Application, er
 	if documents < 4 {
 		return Application{}, ErrDocumentsRequired
 	}
-	_, err = s.db.Exec(ctx, `UPDATE driver_applications SET status='submitted',submitted_at=now(),updated_at=now() WHERE id=$1;INSERT INTO jobs(type,payload) VALUES('notification.driver_application_submitted',jsonb_build_object('application_id',$1::text))`, a.ID)
+	tx, err := s.db.Begin(ctx)
 	if err != nil {
+		return Application{}, err
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+	if _, err = tx.Exec(ctx, `UPDATE driver_applications SET status='submitted',submitted_at=now(),updated_at=now() WHERE id=$1`, a.ID); err != nil {
+		return Application{}, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload) VALUES('notification.driver_application_submitted',jsonb_build_object('application_id',$1::text))`, a.ID); err != nil {
+		return Application{}, err
+	}
+	if err = tx.Commit(ctx); err != nil {
 		return Application{}, err
 	}
 	return s.GetOrCreate(ctx, userID)
@@ -190,9 +200,21 @@ func (s *Service) Approve(ctx context.Context, adminID, applicationID uuid.UUID,
 	}
 	driverID := uuid.New()
 	driverNumber := "LBR-" + time.Now().UTC().Format("060102") + "-" + applicationID.String()[:6]
-	_, err = tx.Exec(ctx, `UPDATE driver_applications SET status='approved',reviewed_by=$1,reviewed_at=now(),decision_reason=$2,updated_at=now() WHERE id=$3;INSERT INTO drivers(id,user_id,driver_number,status,approved_at) VALUES($4,$5,$6,'approved',now());INSERT INTO user_roles(user_id,role_id,granted_by) SELECT $5,id,$1 FROM roles WHERE name='driver' ON CONFLICT DO NOTHING;INSERT INTO audit_logs(actor_id,actor_type,action,resource_type,resource_id,after_data,request_id) VALUES($1,'admin','driver.approve','driver_application',$3::text,jsonb_build_object('status','approved','driver_id',$4::text),$7);INSERT INTO jobs(type,payload) VALUES('notification.driver_approved',jsonb_build_object('application_id',$3::text,'user_id',$5::text))`, adminID, reason, applicationID, driverID, applicantID, driverNumber, requestID)
+	_, err = tx.Exec(ctx, `UPDATE driver_applications SET status='approved',reviewed_by=$1,reviewed_at=now(),decision_reason=$2,updated_at=now() WHERE id=$3`, adminID, reason, applicationID)
 	if err != nil {
 		return fmt.Errorf("approve driver: %w", err)
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO drivers(id,user_id,driver_number,status,approved_at) VALUES($1,$2,$3,'approved',now())`, driverID, applicantID, driverNumber); err != nil {
+		return fmt.Errorf("create driver: %w", err)
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO user_roles(user_id,role_id,granted_by) SELECT $1,id,$2 FROM roles WHERE name='driver' ON CONFLICT DO NOTHING`, applicantID, adminID); err != nil {
+		return fmt.Errorf("grant driver role: %w", err)
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO audit_logs(actor_id,actor_type,action,resource_type,resource_id,after_data,request_id) VALUES($1,'admin','driver.approve','driver_application',$2::text,jsonb_build_object('status','approved','driver_id',$3::text),$4)`, adminID, applicationID, driverID, requestID); err != nil {
+		return fmt.Errorf("audit driver approval: %w", err)
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload) VALUES('notification.driver_approved',jsonb_build_object('application_id',$1::text,'user_id',$2::text))`, applicationID, applicantID); err != nil {
+		return fmt.Errorf("queue driver approval notification: %w", err)
 	}
 	return tx.Commit(ctx)
 }

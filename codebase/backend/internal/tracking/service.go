@@ -88,8 +88,24 @@ func (s *Service) Record(ctx context.Context, userID uuid.UUID, p Sample) ([]str
 		return flags, err
 	}
 	if rideID != nil {
-		_, err = s.db.Exec(ctx, `INSERT INTO trip_location_samples(ride_id,driver_id,location,heading,speed_kph,accuracy_meters,client_timestamp,risk_flags) VALUES($1,$2,ST_SetSRID(ST_MakePoint($3,$4),4326)::geography,$5,$6,$7,$8,$9);UPDATE rides SET trip_distance_meters=trip_distance_meters+$10,trip_duration_seconds=trip_duration_seconds+$11,low_speed_seconds=low_speed_seconds+$12,updated_at=now() WHERE id=$1 AND status='in_progress';UPDATE drivers SET last_heartbeat_at=now() WHERE id=$2`, *rideID, driverID, p.Longitude, p.Latitude, p.Heading, p.SpeedKPH, p.AccuracyMeters, p.Timestamp, flags, incrementMeters, incrementSeconds, lowSpeedSeconds)
+		tx, txErr := s.db.Begin(ctx)
+		if txErr != nil {
+			return flags, txErr
+		}
+		defer func() { _ = tx.Rollback(ctx) }()
+		_, err = tx.Exec(ctx, `INSERT INTO trip_location_samples(ride_id,driver_id,location,heading,speed_kph,accuracy_meters,client_timestamp,risk_flags) VALUES($1,$2,ST_SetSRID(ST_MakePoint($3,$4),4326)::geography,$5,$6,$7,$8,$9)`, *rideID, driverID, p.Longitude, p.Latitude, p.Heading, p.SpeedKPH, p.AccuracyMeters, p.Timestamp, flags)
 		if err != nil {
+			return flags, err
+		}
+		_, err = tx.Exec(ctx, `UPDATE rides SET trip_distance_meters=trip_distance_meters+$2,trip_duration_seconds=trip_duration_seconds+$3,low_speed_seconds=low_speed_seconds+$4,updated_at=now() WHERE id=$1 AND status='in_progress'`, *rideID, incrementMeters, incrementSeconds, lowSpeedSeconds)
+		if err != nil {
+			return flags, err
+		}
+		_, err = tx.Exec(ctx, `UPDATE drivers SET last_heartbeat_at=now() WHERE id=$1`, driverID)
+		if err != nil {
+			return flags, err
+		}
+		if err = tx.Commit(ctx); err != nil {
 			return flags, err
 		}
 		event, _ := json.Marshal(map[string]any{"event_id": uuid.New(), "type": "trip.location", "ride_id": rideID, "driver_id": driverID, "lat": p.Latitude, "lng": p.Longitude, "heading": p.Heading, "server_timestamp": s.now().UTC()})

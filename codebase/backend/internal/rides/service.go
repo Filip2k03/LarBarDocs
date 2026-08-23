@@ -2,11 +2,14 @@ package rides
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/sha256"
+	"crypto/subtle"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
+	"math/big"
 	"time"
 
 	"github.com/Filip2k03/labar-backend/internal/domain"
@@ -52,6 +55,7 @@ type Ride struct {
 	StartedAt         *time.Time       `json:"started_at,omitempty"`
 	CompletedAt       *time.Time       `json:"completed_at,omitempty"`
 	Version           int64            `json:"version"`
+	PickupPIN         string           `json:"pickup_pin,omitempty"`
 }
 type Event struct {
 	ID        uuid.UUID      `json:"id"`
@@ -98,6 +102,9 @@ func (s *Service) Create(ctx context.Context, passengerID uuid.UUID, idempotency
 		if err = json.Unmarshal(response, &ride); err != nil {
 			return Ride{}, false, err
 		}
+		if ride.Status != PickupConfirmed && ride.Status != InProgress && ride.Status != Completed {
+			_ = tx.QueryRow(ctx, `SELECT pgp_sym_decrypt(pickup_pin_ciphertext,current_setting('app.encryption_key')) FROM rides WHERE id=$1 AND passenger_id=$2`, ride.ID, passengerID).Scan(&ride.PickupPIN)
+		}
 		return ride, true, nil
 	}
 	var cityID, versionID uuid.UUID
@@ -114,8 +121,13 @@ func (s *Service) Create(ctx context.Context, passengerID uuid.UUID, idempotency
 	if !s.now().Before(expires) {
 		return Ride{}, false, errors.New("quote expired")
 	}
-	ride := Ride{ID: uuid.New(), PassengerID: passengerID, QuoteID: request.QuoteID, RideTypeID: request.RideTypeID, Status: Searching, PickupLat: pickupLat, PickupLng: pickupLng, DestinationLat: destLat, DestinationLng: destLng, PaymentMethod: request.PaymentMethod, EstimatedTotalMMK: domain.MoneyMMK(total), RequestedAt: s.now().UTC(), Version: 2}
-	_, err = tx.Exec(ctx, `INSERT INTO rides(id,passenger_id,quote_id,ride_type_id,city_id,pricing_version_id,status,pickup,destination,notes,payment_method,estimated_total_mmk,requested_at,version) VALUES($1,$2,$3,$4,$5,$6,$7,ST_SetSRID(ST_MakePoint($8,$9),4326)::geography,ST_SetSRID(ST_MakePoint($10,$11),4326)::geography,$12,$13,$14,$15,2)`, ride.ID, passengerID, request.QuoteID, request.RideTypeID, cityID, versionID, Searching, pickupLng, pickupLat, destLng, destLat, request.Notes, request.PaymentMethod, total, ride.RequestedAt)
+	pin, err := newPickupPIN()
+	if err != nil {
+		return Ride{}, false, err
+	}
+	pinHash := sha256.Sum256([]byte(pin))
+	ride := Ride{ID: uuid.New(), PassengerID: passengerID, QuoteID: request.QuoteID, RideTypeID: request.RideTypeID, Status: Searching, PickupLat: pickupLat, PickupLng: pickupLng, DestinationLat: destLat, DestinationLng: destLng, PaymentMethod: request.PaymentMethod, EstimatedTotalMMK: domain.MoneyMMK(total), RequestedAt: s.now().UTC(), Version: 2, PickupPIN: pin}
+	_, err = tx.Exec(ctx, `INSERT INTO rides(id,passenger_id,quote_id,ride_type_id,city_id,pricing_version_id,status,pickup,destination,notes,payment_method,estimated_total_mmk,requested_at,version,pickup_pin_hash,pickup_pin_ciphertext) VALUES($1,$2,$3,$4,$5,$6,$7,ST_SetSRID(ST_MakePoint($8,$9),4326)::geography,ST_SetSRID(ST_MakePoint($10,$11),4326)::geography,$12,$13,$14,$15,2,$16,pgp_sym_encrypt($17,current_setting('app.encryption_key')))`, ride.ID, passengerID, request.QuoteID, request.RideTypeID, cityID, versionID, Searching, pickupLng, pickupLat, destLng, destLat, request.Notes, request.PaymentMethod, total, ride.RequestedAt, pinHash[:], pin)
 	if err != nil {
 		return Ride{}, false, err
 	}
@@ -128,7 +140,9 @@ func (s *Service) Create(ctx context.Context, passengerID uuid.UUID, idempotency
 	if err != nil {
 		return Ride{}, false, err
 	}
-	encoded, _ := json.Marshal(ride)
+	storedRide := ride
+	storedRide.PickupPIN = ""
+	encoded, _ := json.Marshal(storedRide)
 	_, err = tx.Exec(ctx, `UPDATE idempotency_keys SET response_status=201,response_body=$1 WHERE scope='ride.create' AND actor_id=$2 AND key=$3`, encoded, passengerID, idempotencyKey)
 	if err != nil {
 		return Ride{}, false, err
@@ -152,7 +166,57 @@ func (s *Service) Get(ctx context.Context, rideID, userID uuid.UUID, roles []str
 	if errors.Is(err, pgx.ErrNoRows) {
 		return Ride{}, ErrRideNotFound
 	}
+	if err == nil && r.PassengerID == userID && r.Status != PickupConfirmed && r.Status != InProgress && r.Status != Completed {
+		_ = s.db.QueryRow(ctx, `SELECT pgp_sym_decrypt(pickup_pin_ciphertext,current_setting('app.encryption_key')) FROM rides WHERE id=$1 AND passenger_id=$2`, rideID, userID).Scan(&r.PickupPIN)
+	}
 	return r, err
+}
+
+func (s *Service) VerifyPickupPIN(ctx context.Context, userID, rideID uuid.UUID, pin string) (Ride, error) {
+	if len(pin) != 4 {
+		return Ride{}, errors.New("pickup PIN must contain four digits")
+	}
+	tx, err := s.db.BeginTx(ctx, pgx.TxOptions{})
+	if err != nil {
+		return Ride{}, err
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+	var stored []byte
+	var from Status
+	var driverID uuid.UUID
+	var sequence int64
+	err = tx.QueryRow(ctx, `SELECT r.pickup_pin_hash,r.status,r.driver_id,coalesce((SELECT max(sequence) FROM ride_events WHERE ride_id=r.id),0) FROM rides r JOIN drivers d ON d.id=r.driver_id WHERE r.id=$1 AND d.user_id=$2 FOR UPDATE OF r`, rideID, userID).Scan(&stored, &from, &driverID, &sequence)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return Ride{}, ErrRideNotFound
+	}
+	if err != nil {
+		return Ride{}, err
+	}
+	if err = ValidateTransition(from, PickupConfirmed); err != nil {
+		return Ride{}, err
+	}
+	digest := sha256.Sum256([]byte(pin))
+	if subtle.ConstantTimeCompare(stored, digest[:]) != 1 {
+		return Ride{}, errors.New("invalid pickup PIN")
+	}
+	if _, err = tx.Exec(ctx, `UPDATE rides SET status='pickup_confirmed',pickup_pin_ciphertext=NULL,version=version+1,updated_at=now() WHERE id=$1`, rideID); err != nil {
+		return Ride{}, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id) VALUES($1,$2,'ride.pickup_confirmed','driver',$3)`, rideID, sequence+1, driverID); err != nil {
+		return Ride{}, err
+	}
+	if err = tx.Commit(ctx); err != nil {
+		return Ride{}, err
+	}
+	return s.Get(ctx, rideID, userID, nil)
+}
+
+func newPickupPIN() (string, error) {
+	n, err := rand.Int(rand.Reader, big.NewInt(9000))
+	if err != nil {
+		return "", fmt.Errorf("generate pickup PIN: %w", err)
+	}
+	return fmt.Sprintf("%04d", n.Int64()+1000), nil
 }
 func (s *Service) Transition(ctx context.Context, rideID uuid.UUID, to Status, actorType string, actorID *uuid.UUID, metadata map[string]any) (Ride, error) {
 	tx, err := s.db.BeginTx(ctx, pgx.TxOptions{})
@@ -328,8 +392,29 @@ func (s *Service) Complete(ctx context.Context, userID, rideID uuid.UUID) (Ride,
 	if err = tx.QueryRow(ctx, `SELECT coalesce(max(sequence),0) FROM ride_events WHERE ride_id=$1`, rideID).Scan(&sequence); err != nil {
 		return Ride{}, err
 	}
-	_, err = tx.Exec(ctx, `UPDATE rides SET status='completed',final_total_mmk=$1,completed_at=now(),updated_at=now(),version=version+1 WHERE id=$2;UPDATE drivers SET availability='available',completed_rides=completed_rides+1 WHERE id=$3;UPDATE passenger_profiles SET completed_trip_count=completed_trip_count+1 WHERE user_id=$4;INSERT INTO payments(id,ride_id,user_id,method,provider,amount_mmk,status,idempotency_key) VALUES($5,$2,$4,$6,$7,$1,$8,'ride-complete-'||$2::text);INSERT INTO driver_earnings(driver_id,ride_id,gross_mmk,commission_mmk,net_mmk,pricing_version_id) VALUES($3,$2,$9,$10,$11,$12);INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id,metadata) VALUES($2,$13,'ride.completed','driver',$3,jsonb_build_object('distance_meters',$14,'duration_seconds',$15,'low_speed_seconds',$16,'final_total_mmk',$1,'payment_id',$5::text));INSERT INTO jobs(type,payload) VALUES('notification.trip_completed',jsonb_build_object('ride_id',$2::text,'payment_id',$5::text)),('receipt.create',jsonb_build_object('ride_id',$2::text))`, total, rideID, driverID, passengerID, paymentID, method, provider, paymentStatus, gross, commission, net, versionID, sequence+1, distance, duration, lowSpeed)
+	tag, err := tx.Exec(ctx, `UPDATE rides SET status='completed',final_total_mmk=$1,completed_at=now(),updated_at=now(),version=version+1 WHERE id=$2 AND status='in_progress'`, total, rideID)
 	if err != nil {
+		return Ride{}, err
+	}
+	if tag.RowsAffected() != 1 {
+		return Ride{}, ErrInvalidTransition
+	}
+	if _, err = tx.Exec(ctx, `UPDATE drivers SET availability='available',completed_rides=completed_rides+1 WHERE id=$1`, driverID); err != nil {
+		return Ride{}, err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE passenger_profiles SET completed_trip_count=completed_trip_count+1 WHERE user_id=$1`, passengerID); err != nil {
+		return Ride{}, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO payments(id,ride_id,user_id,method,provider,amount_mmk,status,idempotency_key) VALUES($1,$2,$3,$4,$5,$6,$7,'ride-complete-'||$2::text)`, paymentID, rideID, passengerID, method, provider, total, paymentStatus); err != nil {
+		return Ride{}, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO driver_earnings(driver_id,ride_id,gross_mmk,commission_mmk,net_mmk,pricing_version_id) VALUES($1,$2,$3,$4,$5,$6)`, driverID, rideID, gross, commission, net, versionID); err != nil {
+		return Ride{}, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id,metadata) VALUES($1,$2,'ride.completed','driver',$3,jsonb_build_object('distance_meters',$4,'duration_seconds',$5,'low_speed_seconds',$6,'final_total_mmk',$7,'payment_id',$8::text))`, rideID, sequence+1, driverID, distance, duration, lowSpeed, total, paymentID); err != nil {
+		return Ride{}, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload) VALUES('notification.trip_completed',jsonb_build_object('ride_id',$1::text,'payment_id',$2::text)),('receipt.create',jsonb_build_object('ride_id',$1::text))`, rideID, paymentID); err != nil {
 		return Ride{}, err
 	}
 	if err = tx.Commit(ctx); err != nil {

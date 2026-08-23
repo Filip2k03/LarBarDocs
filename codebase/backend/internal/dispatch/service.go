@@ -83,7 +83,7 @@ func (s *Service) createOffer(ctx context.Context, rideID, rideTypeID, driverID 
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
 	var eligible bool
-	err = tx.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM drivers d JOIN vehicles v ON v.driver_id=d.id AND v.active AND v.status='approved' WHERE d.id=$1 AND d.status='approved' AND d.availability='available' AND d.last_heartbeat_at>now()-interval '45 seconds' AND $2=ANY(SELECT ride_type_id FROM fare_plans WHERE ride_type_id=$2) AND NOT EXISTS(SELECT 1 FROM ride_offers WHERE driver_id=d.id AND status='pending') AND NOT EXISTS(SELECT 1 FROM rides WHERE driver_id=d.id AND status IN ('driver_assigned','driver_enroute','driver_arrived','pickup_confirmed','in_progress')))`, driverID, rideTypeID).Scan(&eligible)
+	err = tx.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM drivers d JOIN vehicles v ON v.driver_id=d.id AND v.active AND v.status='approved' JOIN ride_types rt ON rt.id=$2 WHERE d.id=$1 AND d.status='approved' AND d.availability='available' AND d.last_heartbeat_at>now()-interval '45 seconds' AND rt.service=ANY(v.services) AND NOT EXISTS(SELECT 1 FROM ride_offers WHERE driver_id=d.id AND status='pending') AND NOT EXISTS(SELECT 1 FROM rides WHERE driver_id=d.id AND status IN ('driver_assigned','driver_enroute','driver_arrived','pickup_confirmed','in_progress')))`, driverID, rideTypeID).Scan(&eligible)
 	if err != nil || !eligible {
 		return false, err
 	}
@@ -103,8 +103,20 @@ func (s *Service) createOffer(ctx context.Context, rideID, rideTypeID, driverID 
 	if err != nil || tag.RowsAffected() == 0 {
 		return false, err
 	}
-	_, err = tx.Exec(ctx, `UPDATE rides SET status='driver_offered',updated_at=now(),version=version+1 WHERE id=$1 AND status='searching';UPDATE drivers SET availability='offered' WHERE id=$2 AND availability='available';INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,metadata) VALUES($1,$3,'ride.offer','system',jsonb_build_object('offer_id',$4::text,'driver_id',$2::text,'expires_at',$5,'pickup_distance_meters',$6));INSERT INTO jobs(type,payload,run_at) VALUES('dispatch.offer_timeout',jsonb_build_object('offer_id',$4::text),$5);INSERT INTO notifications(user_id,category,title,body,data) SELECT user_id,'ride_request','New ride request','A ride offer is ready',jsonb_build_object('offer_id',$4::text,'ride_id',$1::text,'estimated_fare_mmk',$7,'expires_at',$5) FROM drivers WHERE id=$2`, rideID, driverID, sequence+1, offerID, expires, distanceMeters, fare)
+	_, err = tx.Exec(ctx, `UPDATE rides SET status='driver_offered',updated_at=now(),version=version+1 WHERE id=$1 AND status='searching'`, rideID)
 	if err != nil {
+		return false, err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE drivers SET availability='offered' WHERE id=$1 AND availability='available'`, driverID); err != nil {
+		return false, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,metadata) VALUES($1,$2,'ride.offer','system',jsonb_build_object('offer_id',$3::text,'driver_id',$4::text,'expires_at',$5,'pickup_distance_meters',$6))`, rideID, sequence+1, offerID, driverID, expires, distanceMeters); err != nil {
+		return false, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload,run_at) VALUES('dispatch.offer_timeout',jsonb_build_object('offer_id',$1::text),$2)`, offerID, expires); err != nil {
+		return false, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO notifications(user_id,category,title,body,data) SELECT user_id,'ride_request','New ride request','A ride offer is ready',jsonb_build_object('offer_id',$1::text,'ride_id',$2::text,'estimated_fare_mmk',$3,'expires_at',$4) FROM drivers WHERE id=$5`, offerID, rideID, fare, expires, driverID); err != nil {
 		return false, err
 	}
 	return true, tx.Commit(ctx)
@@ -137,9 +149,24 @@ func (s *Service) Accept(ctx context.Context, userID, offerID uuid.UUID) (uuid.U
 	if err != nil {
 		return uuid.Nil, err
 	}
-	tag, err := tx.Exec(ctx, `UPDATE ride_offers SET status='accepted' WHERE id=$1 AND status='pending';UPDATE ride_offers SET status='cancelled' WHERE ride_id=$2 AND id<>$1 AND status='pending';UPDATE rides SET driver_id=$3,vehicle_id=$4,status='driver_assigned',updated_at=now(),version=version+1 WHERE id=$2 AND status='driver_offered';UPDATE drivers SET availability='enroute_pickup' WHERE id=$3;INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id,metadata) VALUES($2,$5,'ride.accepted','driver',$3,jsonb_build_object('offer_id',$1::text));INSERT INTO jobs(type,payload) VALUES('notification.ride_assigned',jsonb_build_object('ride_id',$2::text))`, offerID, rideID, driverID, vehicleID, sequence+1)
+	tag, err := tx.Exec(ctx, `UPDATE rides SET driver_id=$1,vehicle_id=$2,status='driver_assigned',updated_at=now(),version=version+1 WHERE id=$3 AND status='driver_offered'`, driverID, vehicleID, rideID)
 	if err != nil || tag.RowsAffected() == 0 {
 		return uuid.Nil, ErrOfferTaken
+	}
+	if _, err = tx.Exec(ctx, `UPDATE ride_offers SET status='accepted' WHERE id=$1 AND status='pending'`, offerID); err != nil {
+		return uuid.Nil, err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE ride_offers SET status='cancelled' WHERE ride_id=$1 AND id<>$2 AND status='pending'`, rideID, offerID); err != nil {
+		return uuid.Nil, err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE drivers SET availability='enroute_pickup' WHERE id=$1`, driverID); err != nil {
+		return uuid.Nil, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id,metadata) VALUES($1,$2,'ride.accepted','driver',$3,jsonb_build_object('offer_id',$4::text))`, rideID, sequence+1, driverID, offerID); err != nil {
+		return uuid.Nil, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload) VALUES('notification.ride_assigned',jsonb_build_object('ride_id',$1::text))`, rideID); err != nil {
+		return uuid.Nil, err
 	}
 	if err = tx.Commit(ctx); err != nil {
 		return uuid.Nil, err
@@ -161,8 +188,14 @@ func (s *Service) Reject(ctx context.Context, userID, offerID uuid.UUID, reason 
 		return err
 	}
 	payload, _ := json.Marshal(map[string]any{"ride_id": rideID, "reason": reason})
-	_, err = tx.Exec(ctx, `UPDATE drivers SET availability='available' WHERE id=$1;UPDATE rides SET status='searching',updated_at=now(),version=version+1 WHERE id=$2 AND status='driver_offered';INSERT INTO jobs(type,payload) VALUES('ride.dispatch',$3)`, driverID, rideID, payload)
+	_, err = tx.Exec(ctx, `UPDATE drivers SET availability='available' WHERE id=$1`, driverID)
 	if err != nil {
+		return err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE rides SET status='searching',updated_at=now(),version=version+1 WHERE id=$1 AND status='driver_offered'`, rideID); err != nil {
+		return err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload) VALUES('ride.dispatch',$1)`, payload); err != nil {
 		return err
 	}
 	return tx.Commit(ctx)
@@ -189,8 +222,14 @@ func (s *Service) ExpireOffer(ctx context.Context, offerID uuid.UUID) error {
 	if err != nil {
 		return err
 	}
-	_, err = tx.Exec(ctx, `UPDATE drivers SET availability='available' WHERE id=$1 AND availability='offered';UPDATE rides SET status='searching',updated_at=now(),version=version+1 WHERE id=$2 AND status='driver_offered';INSERT INTO jobs(type,payload) VALUES('ride.dispatch',jsonb_build_object('ride_id',$2::text))`, driverID, rideID)
+	_, err = tx.Exec(ctx, `UPDATE drivers SET availability='available' WHERE id=$1 AND availability='offered'`, driverID)
 	if err != nil {
+		return err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE rides SET status='searching',updated_at=now(),version=version+1 WHERE id=$1 AND status='driver_offered'`, rideID); err != nil {
+		return err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload) VALUES('ride.dispatch',jsonb_build_object('ride_id',$1::text))`, rideID); err != nil {
 		return err
 	}
 	return tx.Commit(ctx)

@@ -1,4 +1,5 @@
 ---
+import Icon from '@/components/common/Icon.astro';
 import { HeroBookingWidget } from './HeroBookingWidget';
 import { getTranslation, defaultLocale } from '@/i18n';
 
@@ -44,10 +45,10 @@ const t = getTranslation(locale);
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
       <!-- Left Hero Typography -->
       <div class="lg:col-span-7 space-y-6">
-        <!-- Myanmar Heritage Badge -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 shadow-soft-sm">
-          <span class="text-sm">🇲🇲</span>
-          <span class="text-xs font-bold text-amber-900 tracking-wide">
+        <!-- Myanmar Heritage Badge with Vector Emblem -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 shadow-soft-sm text-amber-900">
+          <Icon name="myanmar-badge" size={15} color="#D97706" />
+          <span class="text-xs font-bold tracking-wide">
             {t.hero.badge}
           </span>
         </div>

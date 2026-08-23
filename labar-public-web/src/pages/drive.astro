@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/common/Icon.astro';
 import { DriverApplicationForm } from '@/components/driver/DriverApplicationForm';
 import { EarningsCalculator } from '@/components/driver/EarningsCalculator';
 import { getTranslation, defaultLocale } from '@/i18n';
@@ -26,11 +27,11 @@ const t = getTranslation(locale);
       </p>
     </div>
 
-    <!-- 4 Key Driver Benefits -->
+    <!-- 4 Key Driver Benefits with Crisp Vector SVGs -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
-        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl mb-4">
-          💰
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center mb-4 border border-amber-200">
+          <Icon name="money" size={22} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900 mb-2">15% Lowest Commission</h3>
         <p class="text-xs text-neutral-600 leading-relaxed">
@@ -39,8 +40,8 @@ const t = getTranslation(locale);
       </div>
 
       <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
-        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl mb-4">
-          ⚡
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4 border border-emerald-200">
+          <Icon name="payout" size={22} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900 mb-2">Daily Instant Payouts</h3>
         <p class="text-xs text-neutral-600 leading-relaxed">
@@ -49,8 +50,8 @@ const t = getTranslation(locale);
       </div>
 
       <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
-        <div class="w-12 h-12 rounded-2xl bg-red-50 text-brand-red flex items-center justify-center text-xl mb-4">
-          🛡️
+        <div class="w-12 h-12 rounded-2xl bg-red-50 text-brand-red flex items-center justify-center mb-4 border border-red-200">
+          <Icon name="sos" size={22} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900 mb-2">1km SOS Distress Mesh</h3>
         <p class="text-xs text-neutral-600 leading-relaxed">
@@ -59,8 +60,8 @@ const t = getTranslation(locale);
       </div>
 
       <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
-        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center text-xl mb-4">
-          🕒
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center mb-4 border border-blue-200">
+          <Icon name="flexible" size={22} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900 mb-2">100% Flexible Hours</h3>
         <p class="text-xs text-neutral-600 leading-relaxed">

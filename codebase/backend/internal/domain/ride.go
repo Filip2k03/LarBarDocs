@@ -54,10 +54,10 @@ type Ride struct {
 	Waypoints            []Waypoint    `json:"waypoints,omitempty"`
 	EstimatedDistanceKm  float64       `json:"estimated_distance_km"`
 	EstimatedDurationMin int           `json:"estimated_duration_min"`
-	EstimatedFareMMK     float64       `json:"estimated_fare_mmk"`
+	EstimatedFareMMK     MoneyMMK      `json:"estimated_fare_mmk"`
 	ActualDistanceKm     float64       `json:"actual_distance_km"`
 	ActualDurationMin    int           `json:"actual_duration_min"`
-	ActualFareMMK        float64       `json:"actual_fare_mmk"`
+	ActualFareMMK        MoneyMMK      `json:"actual_fare_mmk"`
 	PaymentMethod        PaymentMethod `json:"payment_method"`
 	PaymentStatus        string        `json:"payment_status"`
 	GuardianStreamActive bool          `json:"guardian_stream_active"`

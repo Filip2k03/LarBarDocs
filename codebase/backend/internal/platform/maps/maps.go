@@ -34,6 +34,10 @@ type OSRM struct {
 func NewOSRM(baseURL string) *OSRM {
 	return &OSRM{baseURL: strings.TrimRight(baseURL, "/"), client: &http.Client{Timeout: 8 * time.Second}}
 }
+
+func newOSRMWithClient(baseURL string, client *http.Client) *OSRM {
+	return &OSRM{baseURL: strings.TrimRight(baseURL, "/"), client: client}
+}
 func (o *OSRM) Route(ctx context.Context, pickup, destination Point) (Route, error) {
 	if !valid(pickup) || !valid(destination) {
 		return Route{}, errors.New("invalid route coordinates")

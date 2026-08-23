@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/common/Icon.astro';
 import { HelpSearch } from '@/components/help/HelpSearch';
 import { SupportTicketForm } from '@/components/help/SupportTicketForm';
 import { HelpService } from '@/services/help.service';
@@ -14,12 +15,12 @@ try {
   categories = await HelpService.getCategories();
 } catch {
   categories = [
-    { id: 'cat_1', slug: 'rides', name: 'Rides & Booking', name_mm: 'ခရီးစဉ်များ', description: 'Booking, cancellation, multi-stop trips, and route tracking.', description_mm: 'ခရီးစဉ်ခေါ်ယူခြင်းနှင့် လမ်းကြောင်းအကြောင်း။', icon_name: 'car', article_count: 14 },
-    { id: 'cat_2', slug: 'payments', name: 'Payments & Pricing', name_mm: 'ငွေပေးချေမှု', description: 'KBZPay, WavePay, promo vouchers, and refunds.', description_mm: 'ဒစ်ဂျစ်တယ်ငွေပေးချေခြင်းနှင့် လျှော့စျေးများ။', icon_name: 'credit-card', article_count: 12 },
-    { id: 'cat_3', slug: 'driver', name: 'Driver Partners', name_mm: 'ယာဉ်မောင်းအကူအညီ', description: 'Earnings, KYC onboarding, ratings, and vehicle inspection.', description_mm: 'ယာဉ်မောင်းစာရင်းသွင်းခြင်းနှင့် ဝင်ငွေ။', icon_name: 'user', article_count: 18 },
-    { id: 'cat_4', slug: 'safety', name: 'Safety & Guardian', name_mm: 'လုံခြုံရေး', description: 'LaBar Guardian, 1km SOS mesh, and emergency response.', description_mm: 'အရေးပေါ်အကာအကွယ်နှင့် လုံခြုံရေး။', icon_name: 'shield', article_count: 8 },
-    { id: 'cat_5', slug: 'lost-items', name: 'Lost & Found', name_mm: 'ပစ္စည်းကျန်ရှိမှု', description: 'Recover items left in vehicles with 24/7 support.', description_mm: 'ကားပေါ်တွင် ပစ္စည်းကျန်ခဲ့ပါက ပြန်လည်ရှာဖွေခြင်း။', icon_name: 'briefcase', article_count: 5 },
-    { id: 'cat_6', slug: 'business', name: 'Corporate Business', name_mm: 'စီးပွားရေးလုပ်ငန်းသုံး', description: 'Centralized billing, tax invoices, and company rides.', description_mm: 'ကုမ္ပဏီသုံး ဘေလ်ရှင်းစနစ်နှင့် ပြေစာများ။', icon_name: 'building', article_count: 7 },
+    { id: 'cat_1', slug: 'rides', name: 'Rides & Booking', name_mm: 'ခရီးစဉ်များ', description: 'Booking, cancellation, multi-stop trips, and route tracking.', description_mm: 'ခရီးစဉ်ခေါ်ယူခြင်းနှင့် လမ်းကြောင်းအကြောင်း။', icon_name: 'taxi', article_count: 14 },
+    { id: 'cat_2', slug: 'payments', name: 'Payments & Pricing', name_mm: 'ငွေပေးချေမှု', description: 'KBZPay, WavePay, promo vouchers, and refunds.', description_mm: 'ဒစ်ဂျစ်တယ်ငွေပေးချေခြင်းနှင့် လျှော့စျေးများ။', icon_name: 'money', article_count: 12 },
+    { id: 'cat_3', slug: 'driver', name: 'Driver Partners', name_mm: 'ယာဉ်မောင်းအကူအညီ', description: 'Earnings, KYC onboarding, ratings, and vehicle inspection.', description_mm: 'ယာဉ်မောင်းစာရင်းသွင်းခြင်းနှင့် ဝင်ငွေ။', icon_name: 'driver', article_count: 18 },
+    { id: 'cat_4', slug: 'safety', name: 'Safety & Guardian', name_mm: 'လုံခြုံရေး', description: 'LaBar Guardian, 1km SOS mesh, and emergency response.', description_mm: 'အရေးပေါ်အကာအကွယ်နှင့် လုံခြုံရေး။', icon_name: 'guardian', article_count: 8 },
+    { id: 'cat_5', slug: 'lost-items', name: 'Lost & Found', name_mm: 'ပစ္စည်းကျန်ရှိမှု', description: 'Recover items left in vehicles with 24/7 support.', description_mm: 'ကားပေါ်တွင် ပစ္စည်းကျန်ခဲ့ပါက ပြန်လည်ရှာဖွေခြင်း။', icon_name: 'business', article_count: 5 },
+    { id: 'cat_6', slug: 'business', name: 'Corporate Business', name_mm: 'စီးပွားရေးလုပ်ငန်းသုံး', description: 'Centralized billing, tax invoices, and company rides.', description_mm: 'ကုမ္ပဏီသုံး ဘေလ်ရှင်းစနစ်နှင့် ပြေစာများ။', icon_name: 'business', article_count: 7 },
   ];
 }
 ---
@@ -43,7 +44,7 @@ try {
     <!-- Live Search Island -->
     <HelpSearch client:load />
 
-    <!-- Help Categories Grid -->
+    <!-- Help Categories Grid with Vector Icons -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
       {categories.map((cat) => (
         <a
@@ -51,8 +52,8 @@ try {
           class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft hover:shadow-soft-md hover:border-brand-red/30 transition-all flex flex-col justify-between group"
         >
           <div>
-            <div class="w-10 h-10 rounded-2xl bg-neutral-100 group-hover:bg-brand-lightRed group-hover:text-brand-red flex items-center justify-center text-lg mb-3 transition-colors">
-              📁
+            <div class="w-10 h-10 rounded-2xl bg-neutral-100 group-hover:bg-brand-lightRed group-hover:text-brand-red flex items-center justify-center mb-3 transition-colors border border-neutral-200">
+              <Icon name="folder" size={20} />
             </div>
             <h3 class="text-base font-extrabold text-neutral-900 group-hover:text-brand-red transition-colors mb-1">
               {cat.name}

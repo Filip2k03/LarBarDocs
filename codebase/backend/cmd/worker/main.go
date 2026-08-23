@@ -10,8 +10,10 @@ import (
 	"time"
 
 	"github.com/Filip2k03/labar-backend/internal/dispatch"
+	"github.com/Filip2k03/labar-backend/internal/notifications"
 	"github.com/Filip2k03/labar-backend/internal/platform/config"
 	"github.com/Filip2k03/labar-backend/internal/platform/database"
+	"github.com/Filip2k03/labar-backend/internal/platform/push"
 	platformredis "github.com/Filip2k03/labar-backend/internal/platform/redis"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -43,6 +45,21 @@ func main() {
 	}
 	defer redisClient.Close()
 	dispatcher := dispatch.NewService(db, redisClient)
+	var fcmProvider push.Provider
+	if cfg.FCMProjectID != "" && cfg.FCMCredentials != "" {
+		fcmProvider, err = push.NewFCM(cfg.FCMProjectID, cfg.FCMCredentials)
+		if err != nil {
+			log.Fatal().Err(err).Msg("FCM configuration invalid")
+		}
+	}
+	var apnsProvider push.Provider
+	if cfg.APNSTeamID != "" && cfg.APNSKeyID != "" && cfg.APNSBundleID != "" && cfg.APNSKeyFile != "" {
+		apnsProvider, err = push.NewAPNS(cfg.APNSTeamID, cfg.APNSKeyID, cfg.APNSBundleID, cfg.APNSKeyFile, cfg.Environment == "production")
+		if err != nil {
+			log.Fatal().Err(err).Msg("APNs configuration invalid")
+		}
+	}
+	notificationWorker := notifications.NewWorker(db, fcmProvider, apnsProvider)
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 	go func() { <-signals; cancel() }()
@@ -50,6 +67,13 @@ func main() {
 	for ctx.Err() == nil {
 		j, claimErr := claim(ctx, db, workerID)
 		if errors.Is(claimErr, pgx.ErrNoRows) {
+			processed, deliveryErr := notificationWorker.ProcessOne(ctx)
+			if deliveryErr != nil {
+				log.Error().Err(deliveryErr).Msg("push delivery failed")
+			}
+			if processed {
+				continue
+			}
 			select {
 			case <-ctx.Done():
 			case <-time.After(500 * time.Millisecond):
@@ -61,7 +85,7 @@ func main() {
 			time.Sleep(time.Second)
 			continue
 		}
-		processErr := process(ctx, dispatcher, j)
+		processErr := process(ctx, db, dispatcher, j)
 		if finishErr := finish(ctx, db, j, processErr); finishErr != nil {
 			log.Error().Err(finishErr).Str("job_id", j.ID.String()).Msg("finish job failed")
 		}
@@ -84,7 +108,7 @@ func claim(ctx context.Context, db *pgxpool.Pool, workerID string) (job, error) 
 	}
 	return j, tx.Commit(ctx)
 }
-func process(ctx context.Context, dispatcher *dispatch.Service, j job) error {
+func process(ctx context.Context, db *pgxpool.Pool, dispatcher *dispatch.Service, j job) error {
 	var payload struct {
 		RideID  uuid.UUID `json:"ride_id"`
 		OfferID uuid.UUID `json:"offer_id"`
@@ -97,8 +121,23 @@ func process(ctx context.Context, dispatcher *dispatch.Service, j job) error {
 		return dispatcher.Dispatch(ctx, payload.RideID)
 	case "dispatch.offer_timeout":
 		return dispatcher.ExpireOffer(ctx, payload.OfferID)
-	default:
+	case "notification.ride_assigned":
+		_, err := db.Exec(ctx, `INSERT INTO notifications(user_id,category,title,body,data) SELECT passenger_id,'driver_arriving','Driver assigned','Your driver is on the way',jsonb_build_object('ride_id',id::text) FROM rides WHERE id=$1`, payload.RideID)
+		return err
+	case "notification.trip_completed":
+		_, err := db.Exec(ctx, `INSERT INTO notifications(user_id,category,title,body,data) SELECT passenger_id,'trip_completed','Trip completed','Your receipt is ready',jsonb_build_object('ride_id',id::text) FROM rides WHERE id=$1`, payload.RideID)
+		return err
+	case "notification.driver_application_submitted":
+		_, err := db.Exec(ctx, `INSERT INTO notifications(user_id,category,title,body,data) SELECT user_id,'driver_registration','Application submitted','We received your driver application',jsonb_build_object('application_id',id::text) FROM driver_applications WHERE id=(($1::jsonb->>'application_id')::uuid)`, string(j.Payload))
+		return err
+	case "notification.driver_approved":
+		_, err := db.Exec(ctx, `INSERT INTO notifications(user_id,category,title,body,data) SELECT user_id,'driver_registration','Application approved','Your LaBar driver application was approved',jsonb_build_object('application_id',id::text) FROM driver_applications WHERE id=(($1::jsonb->>'application_id')::uuid)`, string(j.Payload))
+		return err
+	case "receipt.create":
+		// Receipts are immutable projections of ride, pricing and payment rows and are served on demand.
 		return nil
+	default:
+		return errors.New("unsupported job type: " + j.Type)
 	}
 }
 func finish(ctx context.Context, db *pgxpool.Pool, j job, processErr error) error {

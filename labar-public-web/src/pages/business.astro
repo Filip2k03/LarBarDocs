@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/common/Icon.astro';
 import { BusinessInquiryForm } from '@/components/business/BusinessInquiryForm';
 import { getTranslation, defaultLocale } from '@/i18n';
 
@@ -24,11 +25,11 @@ const t = getTranslation(locale);
       </p>
     </div>
 
-    <!-- 3 Corporate Pillars -->
+    <!-- 3 Corporate Pillars with Vector SVG Icons -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
-        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl mb-4">
-          📑
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center mb-4 border border-amber-200">
+          <Icon name="business" size={22} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900 mb-2">Consolidated Monthly Invoicing</h3>
         <p class="text-xs text-neutral-600 leading-relaxed">
@@ -37,8 +38,8 @@ const t = getTranslation(locale);
       </div>
 
       <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
-        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl mb-4">
-          👔
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4 border border-emerald-200">
+          <Icon name="driver" size={22} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900 mb-2">Executive VIP Fleet</h3>
         <p class="text-xs text-neutral-600 leading-relaxed">
@@ -47,8 +48,8 @@ const t = getTranslation(locale);
       </div>
 
       <div class="bg-white rounded-3xl p-6 border border-brand-border shadow-soft">
-        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center text-xl mb-4">
-          🛡️
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center mb-4 border border-blue-200">
+          <Icon name="guardian" size={22} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900 mb-2">Duty of Care &amp; Safety</h3>
         <p class="text-xs text-neutral-600 leading-relaxed">

@@ -80,7 +80,7 @@ func (s *Service) Presign(ctx context.Context, userID uuid.UUID, request Presign
 func (s *Service) Complete(ctx context.Context, userID, uploadID uuid.UUID) (string, error) {
 	var key, mime, checksum, status, docType string
 	var expectedSize int64
-	err := s.db.QueryRow(ctx, `SELECT object_key,mime_type,size_bytes,checksum_sha256,status,document_type FROM uploads WHERE id=$1 AND owner_user_id=$2 FOR UPDATE`, uploadID, userID).Scan(&key, &mime, &expectedSize, &checksum, &status, &docType)
+	err := s.db.QueryRow(ctx, `SELECT object_key,mime_type,size_bytes,checksum_sha256,status,document_type FROM uploads WHERE id=$1 AND owner_user_id=$2`, uploadID, userID).Scan(&key, &mime, &expectedSize, &checksum, &status, &docType)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return "", ErrUploadNotFound
 	}
@@ -114,7 +114,14 @@ func (s *Service) Complete(ctx context.Context, userID, uploadID uuid.UUID) (str
 		return "", err
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
-	_, err = tx.Exec(ctx, `UPDATE uploads SET status='uploaded',completed_at=now() WHERE id=$1;INSERT INTO driver_documents(application_id,upload_id,type) SELECT id,$1,$2 FROM driver_applications WHERE user_id=$3 ORDER BY created_at DESC LIMIT 1 ON CONFLICT DO NOTHING`, uploadID, docType, userID)
+	tag, err := tx.Exec(ctx, `UPDATE uploads SET status='uploaded',completed_at=now() WHERE id=$1 AND owner_user_id=$2 AND status='pending'`, uploadID, userID)
+	if err != nil {
+		return "", err
+	}
+	if tag.RowsAffected() == 0 {
+		return "", ErrUploadInvalid
+	}
+	_, err = tx.Exec(ctx, `INSERT INTO driver_documents(application_id,upload_id,type) SELECT id,$1,$2 FROM driver_applications WHERE user_id=$3 ORDER BY created_at DESC LIMIT 1 ON CONFLICT DO NOTHING`, uploadID, docType, userID)
 	if err != nil {
 		return "", err
 	}

@@ -56,7 +56,7 @@ func (s *Service) SetAvailability(ctx context.Context, userID uuid.UUID, target 
 			return "", ErrNotApproved
 		}
 		var eligible bool
-		err = tx.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM vehicles v WHERE v.driver_id=$1 AND v.active AND v.status='approved') AND NOT EXISTS(SELECT 1 FROM driver_documents d JOIN driver_applications a ON a.id=d.application_id WHERE a.user_id=$2 AND d.status IN ('expired','rejected') OR (d.expires_on IS NOT NULL AND d.expires_on<CURRENT_DATE)) AND NOT EXISTS(SELECT 1 FROM rides WHERE driver_id=$1 AND status IN ('driver_assigned','driver_enroute','driver_arrived','pickup_confirmed','in_progress'))`, driverID, userID).Scan(&eligible)
+		err = tx.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM vehicles v WHERE v.driver_id=$1 AND v.active AND v.status='approved') AND NOT EXISTS(SELECT 1 FROM driver_documents d JOIN driver_applications a ON a.id=d.application_id WHERE a.user_id=$2 AND (d.status IN ('expired','rejected') OR (d.expires_on IS NOT NULL AND d.expires_on<CURRENT_DATE))) AND NOT EXISTS(SELECT 1 FROM rides WHERE driver_id=$1 AND status IN ('driver_assigned','driver_enroute','driver_arrived','pickup_confirmed','in_progress'))`, driverID, userID).Scan(&eligible)
 		if err != nil {
 			return "", err
 		}

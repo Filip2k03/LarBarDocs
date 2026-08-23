@@ -505,16 +505,18 @@ export const BookingWizard: React.FC = () => {
             <button
               type="button"
               onClick={() => alert(`Connecting encrypted VoIP call to driver ${confirmedBooking.assigned_driver?.phone}...`)}
-              className="flex-1 py-3 px-4 rounded-2xl bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold transition-all"
+              className="flex-1 py-3 px-4 rounded-2xl bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-2"
             >
-              📞 Call Driver
+              <Phone size={14} />
+              <span>Call Driver</span>
             </button>
             <button
               type="button"
               onClick={() => alert('Opening in-app encrypted instant chat...')}
-              className="flex-1 py-3 px-4 rounded-2xl bg-brand-red hover:bg-brand-deepRed text-white text-xs font-bold transition-all"
+              className="flex-1 py-3 px-4 rounded-2xl bg-brand-red hover:bg-brand-deepRed text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2"
             >
-              💬 In-App Chat
+              <Sparkles size={14} />
+              <span>In-App Chat</span>
             </button>
           </div>
 

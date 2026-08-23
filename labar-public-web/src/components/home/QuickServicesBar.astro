@@ -1,4 +1,5 @@
 ---
+import Icon from '@/components/common/Icon.astro';
 import { getTranslation, defaultLocale } from '@/i18n';
 
 interface Props {
@@ -12,44 +13,44 @@ const services = [
   {
     title: t.services.quickRide,
     sub: t.services.quickRideSub,
-    icon: '🚖',
+    iconName: 'taxi' as const,
     href: '/ride',
-    bg: 'bg-red-50 text-brand-red border-red-100',
+    bg: 'bg-red-50 text-brand-red border-red-200',
   },
   {
     title: t.services.airportTransfer,
     sub: t.services.airportTransferSub,
-    icon: '✈️',
+    iconName: 'airport' as const,
     href: '/airport',
-    bg: 'bg-blue-50 text-blue-600 border-blue-100',
+    bg: 'bg-blue-50 text-blue-600 border-blue-200',
   },
   {
     title: t.services.delivery,
     sub: t.services.deliverySub,
-    icon: '📦',
+    iconName: 'delivery' as const,
     href: '/delivery',
-    bg: 'bg-amber-50 text-amber-600 border-amber-100',
+    bg: 'bg-amber-50 text-amber-600 border-amber-200',
   },
   {
     title: t.services.schedule,
     sub: t.services.scheduleSub,
-    icon: '🕒',
+    iconName: 'schedule' as const,
     href: '/schedule',
-    bg: 'bg-purple-50 text-purple-600 border-purple-100',
+    bg: 'bg-purple-50 text-purple-600 border-purple-200',
   },
   {
     title: t.services.business,
     sub: t.services.businessSub,
-    icon: '💼',
+    iconName: 'business' as const,
     href: '/business',
-    bg: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+    bg: 'bg-emerald-50 text-emerald-600 border-emerald-200',
   },
   {
     title: t.services.guardian,
     sub: t.services.guardianSub,
-    icon: '🛡️',
+    iconName: 'guardian' as const,
     href: '/safety',
-    bg: 'bg-rose-50 text-rose-600 border-rose-100',
+    bg: 'bg-rose-50 text-rose-600 border-rose-200',
   },
 ];
 ---
@@ -61,8 +62,8 @@ const services = [
         href={s.href}
         class="bg-white rounded-3xl p-4 sm:p-5 border border-brand-border/80 shadow-soft hover:shadow-soft-md hover:border-brand-red/30 transition-all duration-200 flex flex-col justify-between group"
       >
-        <div class={`w-10 h-10 rounded-2xl flex items-center justify-center text-lg mb-3 border ${s.bg}`}>
-          <span>{s.icon}</span>
+        <div class={`w-10 h-10 rounded-2xl flex items-center justify-center mb-3 border ${s.bg}`}>
+          <Icon name={s.iconName} size={20} />
         </div>
         <div>
           <div class="text-xs sm:text-sm font-extrabold text-neutral-900 group-hover:text-brand-red transition-colors">

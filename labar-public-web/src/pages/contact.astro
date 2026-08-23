@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/common/Icon.astro';
 import { SupportTicketForm } from '@/components/help/SupportTicketForm';
 import { getTranslation, defaultLocale } from '@/i18n';
 
@@ -23,45 +24,48 @@ const t = getTranslation(locale);
       </p>
     </div>
 
-    <!-- 3 Office Contact Cards -->
+    <!-- 3 Office Contact Cards with Vector Icons -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
       <div class="bg-white rounded-4xl p-6 border border-brand-border shadow-soft space-y-3">
-        <div class="w-10 h-10 rounded-2xl bg-red-50 text-brand-red flex items-center justify-center text-lg">
-          📍
+        <div class="w-10 h-10 rounded-2xl bg-red-50 text-brand-red flex items-center justify-center border border-red-100">
+          <Icon name="location" size={20} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900">Yangon Central HQ</h3>
         <p class="text-xs text-neutral-500 leading-relaxed">
           No. 142, Sule Pagoda Road, Kyauktada Township, Yangon Region, Myanmar.
         </p>
-        <div class="pt-2 text-xs font-bold text-neutral-800">
-          📞 +95 9 798 421092
+        <div class="pt-2 text-xs font-bold text-neutral-800 flex items-center gap-1.5">
+          <Icon name="phone" size={14} class="text-brand-red" />
+          <span>+95 9 798 421092</span>
         </div>
       </div>
 
       <div class="bg-white rounded-4xl p-6 border border-brand-border shadow-soft space-y-3">
-        <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-lg">
-          📍
+        <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-100">
+          <Icon name="location" size={20} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900">Mandalay Regional Hub</h3>
         <p class="text-xs text-neutral-500 leading-relaxed">
           78th Street, Between 30th &amp; 31st Street, Chanayethazan, Mandalay.
         </p>
-        <div class="pt-2 text-xs font-bold text-neutral-800">
-          📞 +95 9 450 012948
+        <div class="pt-2 text-xs font-bold text-neutral-800 flex items-center gap-1.5">
+          <Icon name="phone" size={14} class="text-amber-600" />
+          <span>+95 9 450 012948</span>
         </div>
       </div>
 
       <div class="bg-white rounded-4xl p-6 border border-brand-border shadow-soft space-y-3">
-        <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center text-lg">
-          ✉️
+        <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-100">
+          <Icon name="mail" size={20} />
         </div>
         <h3 class="text-base font-extrabold text-neutral-900">Direct Inquiries</h3>
         <p class="text-xs text-neutral-500 leading-relaxed">
           Support: <a href="mailto:support@labar.com.mm" class="text-brand-red font-semibold">support@labar.com.mm</a> <br />
           Enterprise: <a href="mailto:business@labar.com.mm" class="text-brand-red font-semibold">business@labar.com.mm</a>
         </p>
-        <div class="pt-2 text-xs font-bold text-emerald-600">
-          ● 24/7 Response Time &lt; 15 mins
+        <div class="pt-2 text-xs font-bold text-emerald-600 flex items-center gap-1.5">
+          <Icon name="check" size={14} />
+          <span>24/7 Response Time &lt; 15 mins</span>
         </div>
       </div>
     </div>
