@@ -2,12 +2,12 @@
 layout: home
 
 hero:
-  name: "LarBar Taxi Platform"
+  name: "LaBar Taxi Platform"
   text: "Next-Gen Taxi Dispatch & Dual Safety Platform"
   tagline: "Enterprise Go Backend, Native iOS/Android Clients, Guardian Dynamic Plugins & Multi-Tier VPS Architecture"
   image:
     src: /logo.svg
-    alt: LarBar Taxi Platform
+    alt: LaBar Taxi Platform
   actions:
     - theme: brand
       text: 🚀 System Overview

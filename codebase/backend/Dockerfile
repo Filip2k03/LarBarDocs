@@ -10,7 +10,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /app/larbar-api ./cmd/api
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /app/labar-api ./cmd/api
 
 # Minimal Distroless / Alpine Runtime Stage
 FROM alpine:3.19
@@ -18,8 +18,8 @@ FROM alpine:3.19
 RUN apk --no-cache add ca-certificates tzdata
 
 WORKDIR /app
-COPY --from=builder /app/larbar-api /app/larbar-api
+COPY --from=builder /app/labar-api /app/labar-api
 
 EXPOSE 8080
 
-CMD ["/app/larbar-api"]
+CMD ["/app/labar-api"]

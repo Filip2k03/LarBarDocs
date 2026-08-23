@@ -1,6 +1,6 @@
 # 💰 VPS Provider Benchmark & Monthly Cost Calculator
 
-We evaluated the top three cloud VPS providers for hosting the LarBar Taxi Platform: **Hetzner Cloud**, **Hostinger KVM**, and **DigitalOcean**.
+We evaluated the top three cloud VPS providers for hosting the LaBar Taxi Platform: **Hetzner Cloud**, **Hostinger KVM**, and **DigitalOcean**.
 
 ---
 

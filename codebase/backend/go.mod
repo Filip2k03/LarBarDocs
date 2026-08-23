@@ -1,4 +1,4 @@
-module github.com/Filip2k03/larbar-backend
+module github.com/Filip2k03/labar-backend
 
 go 1.22
 

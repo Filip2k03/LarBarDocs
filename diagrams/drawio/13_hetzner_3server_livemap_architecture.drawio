@@ -14,7 +14,7 @@
 - IP Rate Limiting &amp; DDoS Shield" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontColor=#000000;fontSize=11;" parent="h3_s1" vertex="1">
           <mxGeometry x="80" y="80" width="390" height="85" as="geometry"/>
         </mxCell>
-        <mxCell id="h3_go_core" value="&lt;b&gt;Go Backend Engine Core (`larbar-core-api`)&lt;/b&gt;
+        <mxCell id="h3_go_core" value="&lt;b&gt;Go Backend Engine Core (`labar-core-api`)&lt;/b&gt;
 - JWT Authentication &amp; RBAC Authorization
 - 15s Cascading Dispatch Coordinator
 - Driver Emergency SOS Tier 1/2 Engine

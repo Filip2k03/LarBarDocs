@@ -1,6 +1,6 @@
 # ☁️ Hetzner CPX22 Lean Single-Node Production Deployment Guide
 
-This guide provides the complete, production-hardened blueprint for running the entire **LarBar Taxi Platform (Go API Core, PostgreSQL 16 + PostGIS, Redis 7 Spatial, OSRM Myanmar Router, and Caddy 2 SSL Edge)** on a single **Hetzner CPX22 Cloud VPS** (€5.80 / month).
+This guide provides the complete, production-hardened blueprint for running the entire **LaBar Taxi Platform (Go API Core, PostgreSQL 16 + PostGIS, Redis 7 Spatial, OSRM Myanmar Router, and Caddy 2 SSL Edge)** on a single **Hetzner CPX22 Cloud VPS** (€5.80 / month).
 
 ---
 
@@ -69,8 +69,8 @@ sudo ufw enable
 ### 3. Clone Repository & Deploy Docker Compose
 ```bash
 # Clone the repository
-git clone https://github.com/Filip2k03/LarBarDocs.git /opt/larbar
-cd /opt/larbar/codebase/backend
+git clone https://github.com/Filip2k03/LaBarDocs.git /opt/labar
+cd /opt/labar/codebase/backend
 
 # Launch all production containers
 docker-compose -f docker-compose.cpx22.yml up -d --build

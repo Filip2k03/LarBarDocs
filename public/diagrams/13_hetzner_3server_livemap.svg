@@ -54,7 +54,7 @@
     <text x="230" y="132" class="txt" text-anchor="middle">Let's Encrypt SSL &amp; DDoS Rate Limit</text>
 
     <rect x="50" y="165" width="360" height="95" class="box"/>
-    <text x="230" y="193" class="lbl" text-anchor="middle">Go Core API Engine (`larbar-core-api`)</text>
+    <text x="230" y="193" class="lbl" text-anchor="middle">Go Core API Engine (`labar-core-api`)</text>
     <text x="230" y="213" class="txt" text-anchor="middle">JWT Auth &amp; 15s Cascading Dispatch</text>
     <text x="230" y="227" class="txt" text-anchor="middle">Driver Emergency SOS Tier 1/2 Engine</text>
     <text x="230" y="241" class="txt" text-anchor="middle">FCM / APNs Myanmar Telco Push Gateway</text>

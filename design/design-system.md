@@ -1,6 +1,6 @@
 # 🎨 Red & Gold Design System (100 - 900)
 
-The LarBar platform UI design language uses an **Imperial Crimson Red** and **Royal Gold** color system paired with **Noir Onyx** dark mode surfaces.
+The LaBar platform UI design language uses an **Imperial Crimson Red** and **Royal Gold** color system paired with **Noir Onyx** dark mode surfaces.
 
 ---
 

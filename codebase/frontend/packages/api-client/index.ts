@@ -1,5 +1,5 @@
 /**
- * Typed API Client & WebSocket Gateway for LarBar Mobile Clients
+ * Typed API Client & WebSocket Gateway for LaBar Mobile Clients
  */
 
 export interface GeoPoint {
@@ -32,11 +32,11 @@ export interface DriverSOSPayload {
   speedKmh: number;
 }
 
-export class LarBarApiClient {
+export class LaBarApiClient {
   private baseUrl: string;
   private authToken?: string;
 
-  constructor(baseUrl: string = 'https://api.larbartaxi.com') {
+  constructor(baseUrl: string = 'https://api.labartaxi.com') {
     this.baseUrl = baseUrl;
   }
 

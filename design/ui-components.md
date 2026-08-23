@@ -1,6 +1,6 @@
 # 🎛️ UI Components, Buttons & Micro-Interactions
 
-Every component in the LarBar Taxi application adheres to strict states: **Default**, **Hover / Focus**, **Active / Pressed**, and **Disabled**, powered by physics-based cubic-bezier transitions.
+Every component in the LaBar Taxi application adheres to strict states: **Default**, **Hover / Focus**, **Active / Pressed**, and **Disabled**, powered by physics-based cubic-bezier transitions.
 
 ---
 

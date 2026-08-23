@@ -924,7 +924,7 @@ def build_driver_sos_tab(root):
     add_cell(root, "ds_mesh_1km", "<b>Tier 1 Fellow Drivers (Within 1.0 km)</b>\n- Instant Alert: 'Driver U Aung Kyaw Needs Help!'\n- Exact Distance, Plate (3A-8492) & Driving Directions\n- 1-Tap 'I Am Responding / En Route' Button", c_style, 1060, 80, 380, 95, parent="ds_resp_node")
     add_cell(root, "ds_mesh_3km", "<b>Tier 2 Extended Drivers (Within 3.0 km)</b>\n- Broadcasts to 50 Nearby Online Drivers\n- Perimeter Interception Routing", c_style, 1060, 200, 380, 85, parent="ds_resp_node")
     add_cell(root, "ds_fam_guard", "<b>Driver Family Guardian (Spouse / Parents)</b>\n- DND Override Siren Sound Alarm\n- Real-Time Live Location on Family Map\n- 1-Tap Emergency Police/Dispatch Contact", c_style, 1060, 310, 380, 95, parent="ds_resp_node")
-    add_cell(root, "ds_ert_unit", "<b>LarBar Rapid Response Team (ERT)</b>\n- Real-Time Fleet Security Dashboard HUD", c_style, 1060, 430, 380, 60, parent="ds_resp_node")
+    add_cell(root, "ds_ert_unit", "<b>LaBar Rapid Response Team (ERT)</b>\n- Real-Time Fleet Security Dashboard HUD", c_style, 1060, 430, 380, 60, parent="ds_resp_node")
 
     # Connectors
     add_edge(root, "dse_1", "1. Trigger Panic Event", edge_alert, "ds_trig_1", "ds_be_hub", exit_xy=(1, 0.5), entry_xy=(0, 0.5))
@@ -951,7 +951,7 @@ def build_hetzner_3server_tab(root):
     # 1. Server 1: Edge Gateway & Go Core
     add_cell(root, "h3_s1", "<b>SERVER 1: API & REVERSE PROXY GATEWAY (10.0.0.1 - Hetzner CPX31)</b>", red_box, 50, 40, 450, 680)
     add_cell(root, "h3_caddy", "<b>Caddy 2 Reverse Proxy (Auto TLS 1.3)</b>\n- Ports 80 & 443 Public Listeners\n- Let's Encrypt / ZeroSSL Automated Issuance\n- IP Rate Limiting & DDoS Shield", c_style, 80, 80, 390, 85, parent="h3_s1")
-    add_cell(root, "h3_go_core", "<b>Go Backend Engine Core (`larbar-core-api`)</b>\n- JWT Authentication & RBAC Authorization\n- 15s Cascading Dispatch Coordinator\n- Driver Emergency SOS Tier 1/2 Engine\n- FCM / APNs Push Relay for Myanmar Telcos", c_style, 80, 195, 390, 110, parent="h3_s1")
+    add_cell(root, "h3_go_core", "<b>Go Backend Engine Core (`labar-core-api`)</b>\n- JWT Authentication & RBAC Authorization\n- 15s Cascading Dispatch Coordinator\n- Driver Emergency SOS Tier 1/2 Engine\n- FCM / APNs Push Relay for Myanmar Telcos", c_style, 80, 195, 390, 110, parent="h3_s1")
     add_cell(root, "h3_ws_gateway", "<b>Real-Time WebSocket Gateway</b>\n- 60fps Bidirectional Telemetry Gateway\n- Passenger & Driver In-Trip Chat Relay", c_style, 80, 335, 390, 80, parent="h3_s1")
     add_cell(root, "h3_pay_hub", "<b>Myanmar E-Wallet Hub</b>\n- KBZPay, WavePay, AYAPay Webhook Verifier\n- Double-Entry Driver Wallet Accounting", c_style, 80, 445, 390, 85, parent="h3_s1")
 

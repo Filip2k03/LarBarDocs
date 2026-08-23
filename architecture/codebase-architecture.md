@@ -1,6 +1,6 @@
 # 🏛️ Codebase & Monorepo Architecture
 
-The **LarBar Platform** uses a modern, modular monorepo architecture combining a high-performance **Golang Clean Architecture** backend with a cross-platform **React Native (TypeScript)** mobile workspace.
+The **LaBar Platform** uses a modern, modular monorepo architecture combining a high-performance **Golang Clean Architecture** backend with a cross-platform **React Native (TypeScript)** mobile workspace.
 
 ---
 

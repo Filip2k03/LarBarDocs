@@ -1,11 +1,11 @@
 {
-  "name": "@larbar/guardian-plugin",
+  "name": "@labar/guardian-plugin",
   "version": "1.4.0",
-  "description": "LarBar On-Demand Dynamic Guardian Safety Plugin Package (~3.8MB)",
+  "description": "LaBar On-Demand Dynamic Guardian Safety Plugin Package (~3.8MB)",
   "main": "index.js",
   "dependencies": {
-    "@larbar/api-client": "*",
-    "@larbar/ui-tokens": "*",
+    "@labar/api-client": "*",
+    "@labar/ui-tokens": "*",
     "react": "18.2.0",
     "react-native": "0.74.0",
     "react-native-webrtc": "^118.0.0"

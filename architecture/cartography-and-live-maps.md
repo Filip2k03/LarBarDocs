@@ -1,6 +1,6 @@
 # 🗺️ Cartography, Live Maps & Turn-by-Turn Routing Engine
 
-The **LarBar Platform** operates a self-hosted, enterprise-grade cartography and spatial routing pipeline designed to provide sub-10ms route calculations, real-time 60fps vector map rendering, and 1-second GPS breadcrumb smoothing without relying on expensive recurring third-party map APIs (e.g. Google Maps or Mapbox).
+The **LaBar Platform** operates a self-hosted, enterprise-grade cartography and spatial routing pipeline designed to provide sub-10ms route calculations, real-time 60fps vector map rendering, and 1-second GPS breadcrumb smoothing without relying on expensive recurring third-party map APIs (e.g. Google Maps or Mapbox).
 
 ---
 

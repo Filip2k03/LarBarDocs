@@ -1,6 +1,6 @@
 # 📱 Interactive UI/UX Mobile Prototype Showcase
 
-Experience the complete **LarBar Taxi & Safety Ecosystem** directly inside the interactive mobile viewer below. Click on any screen tab to preview the high-fidelity UI states across Passenger, Driver, and Guardian applications.
+Experience the complete **LaBar Taxi & Safety Ecosystem** directly inside the interactive mobile viewer below. Click on any screen tab to preview the high-fidelity UI states across Passenger, Driver, and Guardian applications.
 
 ---
 
@@ -129,5 +129,5 @@ function selectApp(app) {
 
 ## 🎨 Design System & Token Integration
 - 📂 **Figma Tokens Studio JSON**: [`design-system/figma_tokens.json`](file:///Users/stephanfilip/Yamato_project/Labar/design-system/figma_tokens.json)
-- 🌟 **Master 12-Screen Figma Canvas**: [`larbar_master_figma_canvas.svg`](/wireframes/larbar_master_figma_canvas.svg)
+- 🌟 **Master 12-Screen Figma Canvas**: [`labar_master_figma_canvas.svg`](/wireframes/labar_master_figma_canvas.svg)
 - 📖 [**Red & Gold 100-900 Color Palette Specifications**](/design/design-system)

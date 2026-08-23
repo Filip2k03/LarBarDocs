@@ -706,7 +706,7 @@ def generate_12_driver_sos():
     <rect x="490" y="260" width="370" height="75" class="box"/>
     <text x="675" y="288" class="lbl" text-anchor="middle">30s Escalation Engine (Tier 2: 3.0 km)</text>
     <text x="675" y="308" class="txt" text-anchor="middle">Auto-Cascades if &lt; 2 Responders Acknowledge</text>
-    <text x="675" y="322" class="txt" text-anchor="middle">Police Webhook &amp; LarBar Rapid Response</text>
+    <text x="675" y="322" class="txt" text-anchor="middle">Police Webhook &amp; LaBar Rapid Response</text>
 
     <!-- Column 3: Fellow Driver Mesh & Family Guardian -->
     <rect x="920" y="20" width="400" height="620" class="box-highlight"/>
@@ -729,7 +729,7 @@ def generate_12_driver_sos():
     <text x="1120" y="322" class="txt" text-anchor="middle">Real-Time Live Map &amp; Direct Navigation</text>
 
     <rect x="940" y="355" width="360" height="50" class="box"/>
-    <text x="1120" y="380" class="lbl" text-anchor="middle">Police &amp; LarBar Rapid Response Team</text>
+    <text x="1120" y="380" class="lbl" text-anchor="middle">Police &amp; LaBar Rapid Response Team</text>
     <text x="1120" y="395" class="txt" text-anchor="middle">Fleet Security Dashboard HUD</text>
 
     <!-- Connectors -->
@@ -757,7 +757,7 @@ def generate_13_hetzner_3server():
     <text x="230" y="132" class="txt" text-anchor="middle">Let's Encrypt SSL &amp; DDoS Rate Limit</text>
 
     <rect x="50" y="165" width="360" height="95" class="box"/>
-    <text x="230" y="193" class="lbl" text-anchor="middle">Go Core API Engine (`larbar-core-api`)</text>
+    <text x="230" y="193" class="lbl" text-anchor="middle">Go Core API Engine (`labar-core-api`)</text>
     <text x="230" y="213" class="txt" text-anchor="middle">JWT Auth &amp; 15s Cascading Dispatch</text>
     <text x="230" y="227" class="txt" text-anchor="middle">Driver Emergency SOS Tier 1/2 Engine</text>
     <text x="230" y="241" class="txt" text-anchor="middle">FCM / APNs Myanmar Telco Push Gateway</text>

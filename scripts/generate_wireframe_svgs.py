@@ -60,7 +60,7 @@ def rich_map_canvas(w=358, h=236, route_polyline="", pins=""):
     </g>
     """
 
-def screen_frame(content, title, status_bar="9:41", battery="100%", badge_color="#F59E0B", badge_text="LARBAR NATIVE"):
+def screen_frame(content, title, status_bar="9:41", battery="100%", badge_color="#F59E0B", badge_text="LABAR NATIVE"):
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#0A0B0E; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
   <defs>
     <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -95,7 +95,7 @@ def screen_frame(content, title, status_bar="9:41", battery="100%", badge_color=
 
   <!-- App Header -->
   <rect x="0" y="48" width="390" height="52" fill="#181924" fill-opacity="0.95"/>
-  <text x="24" y="80" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="0.5">LarBar</text>
+  <text x="24" y="80" fill="#F59E0B" font-size="18" font-weight="900" letter-spacing="0.5">LaBar</text>
   <rect x="92" y="66" width="82" height="18" rx="9" fill="{badge_color}" fill-opacity="0.15" stroke="{badge_color}" stroke-width="1"/>
   <text x="133" y="79" fill="{badge_color}" font-size="9" font-weight="800" text-anchor="middle">{badge_text}</text>
   
@@ -721,7 +721,7 @@ def gen_guardian_03_pairing_qr():
 
       <!-- Pairing Instructions -->
       <rect x="36" y="570" width="318" height="100" rx="12" fill="#232532"/>
-      <text x="50" y="595" fill="#FFFFFF" font-size="12" font-weight="700">1. Install LarBar Guardian Plugin (~3.8MB)</text>
+      <text x="50" y="595" fill="#FFFFFF" font-size="12" font-weight="700">1. Install LaBar Guardian Plugin (~3.8MB)</text>
       <text x="50" y="618" fill="#FFFFFF" font-size="12" font-weight="700">2. Scan this QR or type code 849201</text>
       <text x="50" y="641" fill="#10B981" font-size="12" font-weight="700">3. Enjoy 24/7 Live GPS &amp; Emergency Alarms</text>
 
@@ -822,7 +822,7 @@ def gen_master_figma_canvas(screens_dict):
   </defs>
 
   <!-- Canvas Header -->
-  <text x="60" y="60" fill="#F59E0B" font-size="32" font-weight="900">LARBAR TAXI PLATFORM — MASTER FIGMA / SKETCH WIREFRAME CANVAS</text>
+  <text x="60" y="60" fill="#F59E0B" font-size="32" font-weight="900">LABAR TAXI PLATFORM — MASTER FIGMA / SKETCH WIREFRAME CANVAS</text>
   <text x="60" y="90" fill="#94A3B8" font-size="16">13 Production Mobile Screen Prototypes with Real Yangon Vector Cartography &amp; Add-On Store • Red &amp; Gold Design System</text>
 """]
 
@@ -881,7 +881,7 @@ def generate_all_wireframes():
         print(f"Generated Wireframe Screen: {target}")
 
     master_canvas = gen_master_figma_canvas(screens)
-    master_target = os.path.join(OUTPUT_DIR, "larbar_master_figma_canvas.svg")
+    master_target = os.path.join(OUTPUT_DIR, "labar_master_figma_canvas.svg")
     with open(master_target, "w", encoding="utf-8") as f:
         f.write(master_canvas)
     print(f"Generated Master Figma Canvas: {master_target}")

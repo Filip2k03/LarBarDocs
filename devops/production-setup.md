@@ -1,6 +1,6 @@
 # 🛠️ Production Deployment & Docker Setup
 
-Follow this step-by-step procedure to deploy the LarBar Taxi Platform services on your VPS infrastructure.
+Follow this step-by-step procedure to deploy the LaBar Taxi Platform services on your VPS infrastructure.
 
 ---
 
@@ -27,14 +27,14 @@ services:
       - taxi_net
 
   go_api_backend:
-    image: larbar/taxi-backend:latest
+    image: labar/taxi-backend:latest
     container_name: taxi_go_backend
     restart: always
     environment:
       - APP_ENV=production
       - DB_DSN=postgres://taxi_admin:SecurePass123@postgres_db:5432/taxi_prod?sslmode=disable
       - REDIS_ADDR=redis_cluster:6379
-      - S3_ENDPOINT=https://storage.larbartaxi.com
+      - S3_ENDPOINT=https://storage.labartaxi.com
       - JWT_SECRET=your_super_secret_jwt_key_here
     depends_on:
       - postgres_db

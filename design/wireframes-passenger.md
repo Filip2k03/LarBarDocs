@@ -1,6 +1,6 @@
 # 🚖 Passenger Application Wireframes & UX Flow
 
-The **LarBar Passenger Application** provides a seamless ride-hailing experience across Myanmar, featuring multi-waypoint route estimation, 15-second cascading dispatch matching, real-time in-trip metering, and automated KBZPay/WavePay digital settlement.
+The **LaBar Passenger Application** provides a seamless ride-hailing experience across Myanmar, featuring multi-waypoint route estimation, 15-second cascading dispatch matching, real-time in-trip metering, and automated KBZPay/WavePay digital settlement.
 
 ---
 

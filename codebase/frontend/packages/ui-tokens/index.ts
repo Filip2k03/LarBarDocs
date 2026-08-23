@@ -1,5 +1,5 @@
 /**
- * LarBar Red & Gold Design System Tokens for React Native (iOS & Android)
+ * LaBar Red & Gold Design System Tokens for React Native (iOS & Android)
  */
 
 export const Colors = {

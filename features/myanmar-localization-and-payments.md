@@ -1,6 +1,6 @@
 # 🇲🇲 Myanmar (Burmese) Localization, E-Wallets & Compliance
 
-LarBar is custom-engineered for Myanmar's urban transport ecosystem, supporting local Burmese Unicode typography, regional e-wallets, driver regulatory KYC verification, and city-specific road restrictions (e.g. Yangon municipal motorbike bans).
+LaBar is custom-engineered for Myanmar's urban transport ecosystem, supporting local Burmese Unicode typography, regional e-wallets, driver regulatory KYC verification, and city-specific road restrictions (e.g. Yangon municipal motorbike bans).
 
 ---
 
@@ -26,7 +26,7 @@ The mobile and web interfaces utilize **Pyidaungsu Unicode / Myanmar3** with aut
 
 ## 💳 2. Myanmar Payment Gateways & E-Wallet Deep-Linking
 
-LarBar supports both **Cash Settlement (ငွေသားပေးချေမှု)** and **Cashless Mobile E-Wallets (ဒစ်ဂျစ်တယ် ပိုက်ဆံအိတ်)** via native OS deep-linking and SHA-256 HMAC webhook verification.
+LaBar supports both **Cash Settlement (ငွေသားပေးချေမှု)** and **Cashless Mobile E-Wallets (ဒစ်ဂျစ်တယ် ပိုက်ဆံအိတ်)** via native OS deep-linking and SHA-256 HMAC webhook verification.
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -39,7 +39,7 @@ LarBar supports both **Cash Settlement (ငွေသားပေးချေမ�
 │  [ Bank App Opens ] ──────────────────────────► [ Bank Gateway Core ]                            │
 │                                                           │                                      │
 │                                                           ▼ (Server-to-Server HMAC SHA-256)      │
-│  [ LarBar Double-Entry Ledger ] ◄────────────── [ Webhook Listener ]                             │
+│  [ LaBar Double-Entry Ledger ] ◄────────────── [ Webhook Listener ]                             │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -60,7 +60,7 @@ LarBar supports both **Cash Settlement (ငွေသားပေးချေမ�
 
 ## 🪪 3. Driver Regulatory Compliance & KYC Standards
 
-Drivers operating on LarBar undergo strict verification meeting the standards of the **Road Transport Administration Department (RTAD / ကညန)** and local municipal taxi authorities:
+Drivers operating on LaBar undergo strict verification meeting the standards of the **Road Transport Administration Department (RTAD / ကညန)** and local municipal taxi authorities:
 
 1. **National Registration Card (NRC / နိုင်ငံသားစိစစ်ရေးကတ်ပြား)**:
    - Structured format: `[State_Code]/[Township_Code](N)[6_Digits]` (e.g. `12/DAGAMA(N)123456`).

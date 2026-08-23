@@ -1,6 +1,6 @@
 # 🧩 On-Demand Add-Ons & Dynamic Plugin Architecture
 
-The **LarBar Platform** implements an **On-Demand Add-On & Dynamic Plugin Architecture** that keeps the base mobile applications ultra-lightweight (**~18 MB** for both Passenger and Driver apps). Heavy, specialized, or optional features (such as the Guardian Family Shield, In-Car CCTV Dashcam Sentinel, and Acoustic Panic Detectors) are packaged as dynamic add-ons (**~2.4 MB – ~3.8 MB**) that users can download, install, and activate directly inside the app on demand.
+The **LaBar Platform** implements an **On-Demand Add-On & Dynamic Plugin Architecture** that keeps the base mobile applications ultra-lightweight (**~18 MB** for both Passenger and Driver apps). Heavy, specialized, or optional features (such as the Guardian Family Shield, In-Car CCTV Dashcam Sentinel, and Acoustic Panic Detectors) are packaged as dynamic add-ons (**~2.4 MB – ~3.8 MB**) that users can download, install, and activate directly inside the app on demand.
 
 ---
 
@@ -30,10 +30,10 @@ The **LarBar Platform** implements an **On-Demand Add-On & Dynamic Plugin Archit
 
 | Plugin Identifier | Name & Myanmar Translation | Target Audience | Size | Key Capabilities |
 |---|---|---|---|---|
-| `com.larbar.plugin.guardian` | **Guardian Safety Shield**<br>(မိသားစု အကာအကွယ်) | Passenger & Driver Families | **~3.8 MB** | 60fps real-time live route tracking, cross-track anomaly alerts ($d_{xt} > 300\text{m}$), DND-override remote siren alarms, emergency contact auto-dialer. |
-| `com.larbar.plugin.cctv` | **In-Car CCTV Sentinel**<br>(ကားတွင်း CCTV စနစ်) | Professional Drivers | **~3.2 MB** | 1080p 30fps continuous loop recording, rolling cloud video buffer, G-sensor collision impact lock, SHA-256 tamper-proofing. |
-| `com.larbar.plugin.audio` | **Silent Voice Panic Sentinel**<br>(အသံဖမ်း အရေးပေါ် စနစ်) | Passengers & Drivers | **~2.4 MB** | On-device acoustic distress keyword detector ("Help", "Save me", "ကယ်ပါ") with encrypted cloud audio vault capture. |
-| `com.larbar.plugin.telemetry` | **Street Radar & Fuel Optimizer**<br>(လမ်းကြောင်းနှင့် ဆီဆိုင်ရှာဖွေမှု) | Drivers | **~1.8 MB** | Real-time Yangon traffic heatmaps, gas/CNG station price comparison, and Yangon municipal motorbike restriction routing. |
+| `com.labar.plugin.guardian` | **Guardian Safety Shield**<br>(မိသားစု အကာအကွယ်) | Passenger & Driver Families | **~3.8 MB** | 60fps real-time live route tracking, cross-track anomaly alerts ($d_{xt} > 300\text{m}$), DND-override remote siren alarms, emergency contact auto-dialer. |
+| `com.labar.plugin.cctv` | **In-Car CCTV Sentinel**<br>(ကားတွင်း CCTV စနစ်) | Professional Drivers | **~3.2 MB** | 1080p 30fps continuous loop recording, rolling cloud video buffer, G-sensor collision impact lock, SHA-256 tamper-proofing. |
+| `com.labar.plugin.audio` | **Silent Voice Panic Sentinel**<br>(အသံဖမ်း အရေးပေါ် စနစ်) | Passengers & Drivers | **~2.4 MB** | On-device acoustic distress keyword detector ("Help", "Save me", "ကယ်ပါ") with encrypted cloud audio vault capture. |
+| `com.labar.plugin.telemetry` | **Street Radar & Fuel Optimizer**<br>(လမ်းကြောင်းနှင့် ဆီဆိုင်ရှာဖွေမှု) | Drivers | **~1.8 MB** | Real-time Yangon traffic heatmaps, gas/CNG station price comparison, and Yangon municipal motorbike restriction routing. |
 
 ---
 
@@ -62,17 +62,17 @@ The **LarBar Platform** implements an **On-Demand Add-On & Dynamic Plugin Archit
 ```typescript
 import React, { Suspense, lazy } from 'react';
 import { ActivityIndicator, View, Text } from 'react-native';
-import { PluginManager } from '@larbar/api-client';
+import { PluginManager } from '@labar/api-client';
 
 // Dynamic lazy import resolved on demand
 const DynamicGuardianView = lazy(async () => {
-  const isInstalled = await PluginManager.isPluginInstalled('com.larbar.plugin.guardian');
+  const isInstalled = await PluginManager.isPluginInstalled('com.labar.plugin.guardian');
   if (!isInstalled) {
-    await PluginManager.downloadAndInstall('com.larbar.plugin.guardian', (progress) => {
+    await PluginManager.downloadAndInstall('com.labar.plugin.guardian', (progress) => {
       console.log(`Downloading Guardian Plugin: ${progress}%`);
     });
   }
-  return import('@larbar/guardian-plugin');
+  return import('@labar/guardian-plugin');
 });
 
 export function GuardianTabScreen() {
@@ -99,14 +99,14 @@ export function GuardianTabScreen() {
   "status": "success",
   "plugins": [
     {
-      "id": "com.larbar.plugin.guardian",
+      "id": "com.labar.plugin.guardian",
       "name": "Guardian Family Safety Shield",
       "name_myanmar": "မိသားစု အကာအကွယ် စနစ်",
       "target_app": "BOTH",
       "version": "1.4.0",
       "download_size_bytes": 3984512,
       "sha256_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "bundle_url": "https://cdn.larbartaxi.com/plugins/guardian-v1.4.0.bundle",
+      "bundle_url": "https://cdn.labartaxi.com/plugins/guardian-v1.4.0.bundle",
       "required_permissions": ["BACKGROUND_LOCATION", "RECORD_AUDIO"]
     }
   ]

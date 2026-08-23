@@ -1,6 +1,6 @@
 # 🛠️ Recommended Production Tech Stack & Library Standards
 
-This document establishes the definitive, benchmarked technology matrix and framework standards for developing the **LarBar Taxi Platform & Dual-Shield Safety Ecosystem**.
+This document establishes the definitive, benchmarked technology matrix and framework standards for developing the **LaBar Taxi Platform & Dual-Shield Safety Ecosystem**.
 
 ---
 

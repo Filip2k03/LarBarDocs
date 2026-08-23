@@ -1,6 +1,6 @@
 # 🚀 Getting Started
 
-Welcome to the **LarBar Next-Generation Taxi Platform** technical documentation portal. This system is an enterprise-grade ride-hailing and real-time safety ecosystem built from the ground up to solve critical urban transportation challenges with **Clean Architecture in Go (Golang)**, **Native iOS (SwiftUI)**, **Native Android (Jetpack Compose)**, and an **On-Demand Guardian Safety Plugin Module**.
+Welcome to the **LaBar Next-Generation Taxi Platform** technical documentation portal. This system is an enterprise-grade ride-hailing and real-time safety ecosystem built from the ground up to solve critical urban transportation challenges with **Clean Architecture in Go (Golang)**, **Native iOS (SwiftUI)**, **Native Android (Jetpack Compose)**, and an **On-Demand Guardian Safety Plugin Module**.
 
 ---
 

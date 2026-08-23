@@ -1,6 +1,6 @@
-# 💻 LarBar Platform Monorepo Codebase
+# 💻 LaBar Platform Monorepo Codebase
 
-Welcome to the **LarBar Taxi & Dual Safety Platform** development codebase.
+Welcome to the **LaBar Taxi & Dual Safety Platform** development codebase.
 
 ---
 

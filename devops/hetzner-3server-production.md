@@ -1,6 +1,6 @@
 # ☁️ Hetzner 3-Server Production & Live Map Server Setup
 
-This production architecture separates the LarBar Taxi Platform across **3 dedicated Hetzner Cloud VPS instances** connected over a secure **Private Cloud VPC Network (`10.0.0.0/24`)** for ultra-low latency, maximum security, and sub-$65/month operating cost.
+This production architecture separates the LaBar Taxi Platform across **3 dedicated Hetzner Cloud VPS instances** connected over a secure **Private Cloud VPC Network (`10.0.0.0/24`)** for ultra-low latency, maximum security, and sub-$65/month operating cost.
 
 ---
 
@@ -13,7 +13,7 @@ This production architecture separates the LarBar Taxi Platform across **3 dedic
  ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
  │ SERVER 1: API & REVERSE PROXY GATEWAY (`10.0.0.1` - Hetzner CPX31)                               │
  │ - Caddy 2 Reverse Proxy (Auto TLS 1.3 Let's Encrypt / ZeroSSL)                                   │
- │ - Go Backend Engine Core (`larbar-core-api` binary in Docker)                                    │
+ │ - Go Backend Engine Core (`labar-core-api` binary in Docker)                                    │
  │ - JWT Auth, 15s Cascading Dispatch, Driver Emergency SOS Engine, FCM/APNs Notifications          │
  └───────────────────────────────┬──────────────────────────────────┬───────────────────────────────┘
                                  │ Private VPC (`10.0.0.0/24`)      │ Private VPC (`10.0.0.0/24`)
@@ -55,7 +55,7 @@ version: '3.8'
 services:
   caddy:
     image: caddy:2-alpine
-    container_name: larbar_caddy
+    container_name: labar_caddy
     restart: always
     ports:
       - "80:80"
@@ -67,19 +67,19 @@ services:
     networks:
       - s1_net
 
-  larbar_api:
-    image: larbar/taxi-backend:latest
-    container_name: larbar_go_api
+  labar_api:
+    image: labar/taxi-backend:latest
+    container_name: labar_go_api
     restart: always
     environment:
       - APP_ENV=production
-      - DB_DSN=postgres://larbar_admin:SecretPostgresPass123@10.0.0.3:5432/larbar_prod?sslmode=disable
+      - DB_DSN=postgres://labar_admin:SecretPostgresPass123@10.0.0.3:5432/labar_prod?sslmode=disable
       - REDIS_ADDR=10.0.0.2:6379
       - REDIS_PASSWORD=RedisSecurePass123
       - OSRM_ROUTER_URL=http://10.0.0.2:5000
       - TILE_SERVER_URL=http://10.0.0.2:8080
       - S3_ENDPOINT=http://10.0.0.3:9000
-      - S3_BUCKET=larbar-cctv-vault
+      - S3_BUCKET=labar-cctv-vault
       - S3_ACCESS_KEY=MinioAdminUser123
       - S3_SECRET_KEY=MinioAdminSecretPass123
       - JWT_SECRET=super_secret_production_jwt_signing_key
@@ -93,11 +93,11 @@ networks:
 
 #### Server 1 `Caddyfile`:
 ```caddy
-api.larbartaxi.com {
-    reverse_proxy larbar_api:8080
+api.labartaxi.com {
+    reverse_proxy labar_api:8080
 }
 
-maps.larbartaxi.com {
+maps.labartaxi.com {
     reverse_proxy 10.0.0.2:8080
 }
 ```
@@ -112,7 +112,7 @@ version: '3.8'
 services:
   redis_cluster:
     image: redis:7-alpine
-    container_name: larbar_redis_spatial
+    container_name: labar_redis_spatial
     restart: always
     command: ["redis-server", "--appendonly", "yes", "--requirepass", "RedisSecurePass123", "--bind", "0.0.0.0"]
     ports:
@@ -124,7 +124,7 @@ services:
 
   osrm_engine:
     image: osrm/osrm-backend:latest
-    container_name: larbar_osrm_myanmar
+    container_name: labar_osrm_myanmar
     restart: always
     command: ["osrm-routed", "--algorithm", "mld", "/data/myanmar-latest.osrm"]
     ports:
@@ -136,7 +136,7 @@ services:
 
   tileserver_gl:
     image: maptiler/tileserver-gl:latest
-    container_name: larbar_tileserver
+    container_name: labar_tileserver
     restart: always
     ports:
       - "8080:8080"
@@ -181,11 +181,11 @@ version: '3.8'
 services:
   postgres_postgis:
     image: postgis/postgis:16-3.4-alpine
-    container_name: larbar_postgres
+    container_name: labar_postgres
     restart: always
     environment:
-      POSTGRES_DB: larbar_prod
-      POSTGRES_USER: larbar_admin
+      POSTGRES_DB: labar_prod
+      POSTGRES_USER: labar_admin
       POSTGRES_PASSWORD: SecretPostgresPass123
     ports:
       - "5432:5432"
@@ -196,7 +196,7 @@ services:
 
   minio_s3:
     image: minio/minio:latest
-    container_name: larbar_minio_vault
+    container_name: labar_minio_vault
     restart: always
     command: server /data --console-address ":9001"
     environment:

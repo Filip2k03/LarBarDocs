@@ -1,7 +1,7 @@
 {
-  "name": "@larbar/passenger-app",
+  "name": "@labar/passenger-app",
   "version": "1.0.0",
-  "description": "LarBar Passenger React Native Application (iOS & Android)",
+  "description": "LaBar Passenger React Native Application (iOS & Android)",
   "main": "index.js",
   "scripts": {
     "start": "react-native start",
@@ -9,8 +9,8 @@
     "ios": "react-native run-ios"
   },
   "dependencies": {
-    "@larbar/api-client": "*",
-    "@larbar/ui-tokens": "*",
+    "@labar/api-client": "*",
+    "@labar/ui-tokens": "*",
     "react": "18.2.0",
     "react-native": "0.74.0",
     "react-native-maps": "^1.14.0",

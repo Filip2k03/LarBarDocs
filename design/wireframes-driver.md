@@ -1,6 +1,6 @@
 # 🚗 Driver Application Wireframes & UX Flow
 
-The **LarBar Driver Application** empowers professional taxi drivers across Myanmar with shift mode management, real-time 15-second cascading offer acceptance, in-trip protecting CCTV recording, **1.0 km ➔ 3.0 km fellow driver emergency assistance radar**, and instant KBZPay/WavePay sales payout.
+The **LaBar Driver Application** empowers professional taxi drivers across Myanmar with shift mode management, real-time 15-second cascading offer acceptance, in-trip protecting CCTV recording, **1.0 km ➔ 3.0 km fellow driver emergency assistance radar**, and instant KBZPay/WavePay sales payout.
 
 ---
 

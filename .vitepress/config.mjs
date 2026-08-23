@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'LarBar Taxi Platform',
+  title: 'LaBar Taxi Platform',
   description: 'Enterprise Taxi Dispatch, Dual-Shield Safety, Guardian Plugins & Financial Settlement System',
   lang: 'en-US',
   head: [
@@ -10,7 +10,7 @@ export default defineConfig({
   ],
   themeConfig: {
     logo: '/logo.svg',
-    siteTitle: 'LarBar Taxi Engine',
+    siteTitle: 'LaBar Taxi Engine',
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/getting-started' },
@@ -85,8 +85,8 @@ export default defineConfig({
       }
     ],
     footer: {
-      message: 'LarBar - Next-Generation Taxi Booking & Safety Platform',
-      copyright: 'Copyright © 2026 LarBar Engineering Team'
+      message: 'LaBar - Next-Generation Taxi Booking & Safety Platform',
+      copyright: 'Copyright © 2026 LaBar Engineering Team'
     },
     search: {
       provider: 'local'

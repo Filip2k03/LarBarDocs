@@ -1,6 +1,6 @@
 # 🛡️ Guardian Safety Shield Wireframes & UX Flow
 
-The **LarBar Guardian Safety Plugin Ecosystem** provides an on-demand, lightweight safety layer (~3.8MB) for passengers, driver families (spouses/parents), and rapid emergency response teams.
+The **LaBar Guardian Safety Plugin Ecosystem** provides an on-demand, lightweight safety layer (~3.8MB) for passengers, driver families (spouses/parents), and rapid emergency response teams.
 
 ---
 
@@ -50,7 +50,7 @@ The **LarBar Guardian Safety Plugin Ecosystem** provides an on-demand, lightweig
   - **High-Contrast QR Code Card**: Center-shielded QR code for camera scanning.
   - **6-Digit OTP Token Display**: Large formatted security PIN (`8 4 9 2 0 1`) valid for 10 minutes.
   - **3-Step Setup Instructions**:
-    1. Install lightweight LarBar Guardian dynamic plugin package (~3.8MB).
+    1. Install lightweight LaBar Guardian dynamic plugin package (~3.8MB).
     2. Scan QR code or enter code `849201`.
     3. Enjoy 24/7 live GPS telemetry and high-priority safety notifications.
   - **Share Action**: 1-Tap **"မိသားစုထံ ဖိတ်ခေါ်လင့်ခ် ပေးပို့မည် (SHARE LINK)"** to dispatch an instant SMS/Viber/Telegram invitation link.

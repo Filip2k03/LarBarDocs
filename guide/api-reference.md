@@ -1,6 +1,6 @@
 # 🌐 REST & WebSocket API Reference
 
-The LarBar Taxi Platform exposes high-throughput, low-latency REST endpoints (JSON over HTTP/2) and real-time WebSockets over TLS 1.3.
+The LaBar Taxi Platform exposes high-throughput, low-latency REST endpoints (JSON over HTTP/2) and real-time WebSockets over TLS 1.3.
 
 ---
 
@@ -135,16 +135,16 @@ Delivers available on-demand plugins for dynamic download (~3.8MB).
 {
   "plugins": [
     {
-      "id": "com.larbar.plugin.guardian.passenger",
+      "id": "com.labar.plugin.guardian.passenger",
       "version": "1.4.0",
-      "download_url": "https://cdn.larbartaxi.com/plugins/guardian_passenger_v140.apk.split",
+      "download_url": "https://cdn.labartaxi.com/plugins/guardian_passenger_v140.apk.split",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "size_bytes": 3984512
     },
     {
-      "id": "com.larbar.plugin.guardian.driver",
+      "id": "com.labar.plugin.guardian.driver",
       "version": "1.2.0",
-      "download_url": "https://cdn.larbartaxi.com/plugins/guardian_driver_v120.apk.split",
+      "download_url": "https://cdn.labartaxi.com/plugins/guardian_driver_v120.apk.split",
       "sha256": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
       "size_bytes": 3355443
     }

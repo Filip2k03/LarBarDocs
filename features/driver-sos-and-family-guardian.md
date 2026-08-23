@@ -1,6 +1,6 @@
 # 🚨 Driver Emergency SOS & Family Guardian Shield
 
-The **LarBar Driver Emergency Ecosystem** combines an **instant 1km ➔ 3km tiered driver-mesh assistance network** with a **Driver Family Guardian Plugin Module**, providing complete physical protection for drivers in hazardous situations (e.g. passenger assault, robbery, hijack attempt, or medical distress).
+The **LaBar Driver Emergency Ecosystem** combines an **instant 1km ➔ 3km tiered driver-mesh assistance network** with a **Driver Family Guardian Plugin Module**, providing complete physical protection for drivers in hazardous situations (e.g. passenger assault, robbery, hijack attempt, or medical distress).
 
 ---
 
@@ -25,7 +25,7 @@ When a driver activates the emergency panic trigger, the backend initiates an au
 │         ▼                                                                                        │
 │  [ TIER 2: 3.0 km RADIUS (30s+) ]                                                                │
 │  - Extended Push to 50 Nearby Drivers                                                            │
-│  - Automated Police Dispatch Webhook & LarBar Rapid Emergency Response Team (ERT)                │
+│  - Automated Police Dispatch Webhook & LaBar Rapid Emergency Response Team (ERT)                │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 

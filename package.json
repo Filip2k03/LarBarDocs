@@ -1,7 +1,7 @@
 {
-  "name": "larbar-docs",
+  "name": "labar-docs",
   "version": "1.0.0",
-  "description": "LarBar Taxi Platform - Architecture, Design System & Documentation Portal",
+  "description": "LaBar Taxi Platform - Architecture, Design System & Documentation Portal",
   "main": "index.js",
   "scripts": {
     "dev": "vitepress dev",
@@ -9,7 +9,7 @@
     "preview": "vitepress preview"
   },
   "keywords": [
-    "larbar",
+    "labar",
     "taxi",
     "vitepress",
     "documentation",
@@ -17,7 +17,7 @@
     "figma",
     "design-system"
   ],
-  "author": "LarBar Team",
+  "author": "LaBar Team",
   "license": "MIT",
   "dependencies": {
     "vitepress": "^1.5.0",

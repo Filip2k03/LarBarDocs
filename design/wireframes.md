@@ -1,6 +1,6 @@
 # 📱 Master Mobile Wireframes & Figma UI/UX Prototypes
 
-The **LarBar Taxi & Safety Ecosystem** UI/UX is designed with an **Imperial Crimson Red** (`#E5252A`) and **Royal Gold** (`#F59E0B`) color system tailored for high readability, 1-tap rapid actions, and high-stress emergency response.
+The **LaBar Taxi & Safety Ecosystem** UI/UX is designed with an **Imperial Crimson Red** (`#E5252A`) and **Royal Gold** (`#F59E0B`) color system tailored for high readability, 1-tap rapid actions, and high-stress emergency response.
 
 ---
 
@@ -8,7 +8,7 @@ The **LarBar Taxi & Safety Ecosystem** UI/UX is designed with an **Imperial Crim
 
 You can import all 12 complete production screens directly into **Figma**, **Sketch**, or **Penpot** using the master vector canvas:
 
-- 🌟 **Download Master 12-Screen Figma Canvas**: [`larbar_master_figma_canvas.svg`](/wireframes/larbar_master_figma_canvas.svg)
+- 🌟 **Download Master 12-Screen Figma Canvas**: [`labar_master_figma_canvas.svg`](/wireframes/labar_master_figma_canvas.svg)
 - 📂 **Figma Tokens Studio JSON**: [`design-system/figma_tokens.json`](file:///Users/stephanfilip/Yamato_project/Labar/design-system/figma_tokens.json)
 - 📐 **Device Frame Standard**: Native **iPhone 15 Pro / Android Viewport (`390 x 844 px`)**
 
