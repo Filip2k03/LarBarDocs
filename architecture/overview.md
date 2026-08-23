@@ -13,6 +13,8 @@ The **Yamato Taxi Engine** follows a modern **5-Tier Microservices Architecture*
 │  │ Passenger Native App  │   │ Driver Native App      │   │ Guardian Plugin Module (~3.8MB)   │  │
 │  │ (SwiftUI / Compose)   │   │ (CCTV & Digital Meter) │   │ (On-Demand Dynamic Package)       │  │
 │  └───────────┬───────────┘   └───────────┬────────────┘   └─────────────────┬─────────────────┘  │
+│  │ DriverReg KYC App     │   │ Admin Control Center   │   │ Staff RBAC + Audit                │  │
+│  │ (OCR/Face/Vehicle)    │   │ (Review & Provision)   │   │ (Least Privilege)                 │  │
 └──────────────┼───────────────────────────┼──────────────────────────────────┼────────────────────┘
                │                           │                                  │
                │ HTTPS / WSS               │ HTTPS / WSS / gRPC               │ Dynamic Sync
@@ -61,3 +63,8 @@ The **Yamato Taxi Engine** follows a modern **5-Tier Microservices Architecture*
 3. **Dual-Shield Safety Synchronization**:
    - Driver CCTV is recorded in local rolling 60-second chunks, hashed via SHA-256, and synced to S3.
    - Guardian Live Stream relays vehicle coordinates to family devices via WebSockets, alerting family members if $d_{xt} > 300\text{m}$.
+4. **Driver Identity & Activation Pipeline**:
+   - DriverReg creates consented KYC cases with NRC/licence media, confidence-aware OCR, liveness/face evidence, and commercial vehicle records.
+   - An independent reviewer decides the case before the Driver App account can activate.
+5. **Staff Identity & Authorization**:
+   - `GOD_ADMIN` is break-glass only; `CEO`, `CTO`, and `PSO` share `EXEC_SUPERADMIN`; operational roles use explicit least-privilege scopes and immutable audit logs.

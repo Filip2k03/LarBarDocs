@@ -1,0 +1,12 @@
+{
+  "name": "@labar/driverreg-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LaBar Staff-Assisted Driver KYC Onboarding & Licence Camera Scan Application",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@labar/api-client": "*",
+    "@labar/ui-tokens": "*",
+    "react": "^18.2.0"
+  }
+}

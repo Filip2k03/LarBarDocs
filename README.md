@@ -19,6 +19,10 @@ All specifications and system design diagrams have been generated conforming str
 3. 🎨 **Red & Gold Design System & Figma Tokens**:
    - 📂 **Figma Tokens Studio JSON**: [`design-system/figma_tokens.json`](file:///Users/stephanfilip/Yamato_project/Labar/design-system/figma_tokens.json)
    - Imperial Crimson Red (`#E5252A`) and Royal Gold (`#F59E0B`) 100-900 color scales, typography hierarchy, button states, and CSS transitions.
+   - **Figma prototype plan**: [`design/figma-prototype-plan.md`](design/figma-prototype-plan.md)
+   - **Figma-importable v2 canvas**: [`public/wireframes/labar_master_figma_canvas_v2.svg`](public/wireframes/labar_master_figma_canvas_v2.svg)
+   - **DriverReg prototype**: [`public/prototypes/driverreg-app.html`](/prototypes/driverreg-app.html)
+   - **Admin Control Center prototype**: [`public/prototypes/admin-control-center.html`](/prototypes/admin-control-center.html)
 
 4. 🎨 **Interactive Draw.io (`.drawio`) Architecture Files**:
    - 🌟 **[`taxi_master_architecture.drawio`](file:///Users/stephanfilip/Yamato_project/Labar/taxi_master_architecture.drawio)**: **Master multi-page Draw.io file with 13 interactive tabs (including Hetzner 3-Server & Driver SOS)**!
@@ -50,5 +54,6 @@ All specifications and system design diagrams have been generated conforming str
 - ⚡ **Intelligent Dispatch Engine**: Geo-radius searching in Redis with automatic 15-second driver cascading upon rejection/timeout.
 - 📹 **Driver Protecting Mode**: Hardware-integrated in-car CCTV video recording, GPS telemetry logging, and SHA-256 cloud archiving.
 - 💳 **Driver Financial Settlement**: Daily sales summary, real-time wallet ledger, and on-demand fund transfer/payout via KBZPay/WavePay.
-
-
+- 🪪 **DriverReg KYC**: Staff-authenticated NRC/licence scanning, confidence-aware OCR autofill, selfie liveness/face comparison, vehicle compliance, independent review, and activation handoff.
+- 🔐 **Admin Control Center**: Driver verification, least-privilege staff provisioning, CEO/CTO/PSO executive-superadmin parity, break-glass `GOD_ADMIN`, and immutable audit records.
+- 🛡️ **Discreet Safety Drawer**: Passenger and driver SOS controls stay visually collapsed during normal use but remain accessible in one deliberate action, with covert triggering and persistent active-incident state.

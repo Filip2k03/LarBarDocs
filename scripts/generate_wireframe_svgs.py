@@ -61,6 +61,7 @@ def rich_map_canvas(w=358, h=236, route_polyline="", pins=""):
     """
 
 def screen_frame(content, title, status_bar="9:41", battery="100%", badge_color="#F59E0B", badge_text="LABAR NATIVE"):
+    title = title.replace("&", "&amp;")
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" width="390" height="844" style="background:#F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Pyidaungsu', 'Myanmar3', sans-serif;">
   <defs>
     <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -274,10 +275,11 @@ def gen_passenger_03_intrip():
       <text x="195" y="656" fill="#065F46" font-size="10" font-weight="800" text-anchor="middle">📹 Driver Protecting CCTV: RECORDING ACTIVE</text>
     </g>
 
-    <!-- In-Trip Safety SOS Button -->
+    <!-- Collapsed Discreet Safety Drawer -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="682" width="358" height="54" rx="14" fill="url(#red-grad)"/>
-      <text x="195" y="716" fill="#FFFFFF" font-size="15" font-weight="900" text-anchor="middle">🚨 EMERGENCY SOS &amp; GUARDIAN SIREN</text>
+      <rect x="16" y="682" width="358" height="54" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="36" y="716" fill="#0F172A" font-size="14" font-weight="900">🛡️ SAFETY &amp; EMERGENCY OPTIONS</text>
+      <text x="350" y="716" fill="#64748B" font-size="14" font-weight="900" text-anchor="end">⌃</text>
     </g>
     """
     return screen_frame(content, "ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)")
@@ -373,12 +375,13 @@ def gen_driver_01_dashboard():
     <text x="222" y="442" fill="#0F172A" font-size="13" font-weight="800">CCTV Protecting</text>
     <text x="222" y="460" fill="#059669" font-size="10" font-weight="700">Active • 1080p Stream</text>
 
-    <!-- Driver Emergency SOS Panic Button -->
+    <!-- Collapsed Discreet Safety Drawer -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="488" width="358" height="92" rx="18" fill="url(#red-grad)"/>
-      <text x="40" y="532" fill="#FFFFFF" font-size="28">🚨</text>
-      <text x="80" y="530" fill="#FFFFFF" font-size="16" font-weight="900">အရေးပေါ် အကူအညီတောင်းရန်</text>
-      <text x="80" y="554" fill="#FEE2E2" font-size="12">1km - 3km Fellow Driver SOS Broadcast</text>
+      <rect x="16" y="488" width="358" height="92" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="40" y="532" fill="#2563EB" font-size="28">🛡️</text>
+      <text x="80" y="530" fill="#0F172A" font-size="16" font-weight="900">Safety &amp; emergency options</text>
+      <text x="80" y="554" fill="#64748B" font-size="12">Collapsed • tap once • hold 2s for silent SOS</text>
+      <text x="350" y="538" fill="#64748B" font-size="18" font-weight="900" text-anchor="end">⌃</text>
     </g>
 
     <!-- Recent Rides History List -->
@@ -834,6 +837,7 @@ def gen_master_figma_canvas(screens_dict):
     ]
 
     for idx, (fname, title, func) in enumerate(screens_dict):
+        safe_title = title.replace("&", "&amp;")
         col, row = positions[idx]
         pos_x = 60 + col * 430
         pos_y = 130 + row * 890
@@ -842,9 +846,9 @@ def gen_master_figma_canvas(screens_dict):
         inner_body = inner_svg[inner_svg.find("<rect x=\"1\" y=\"1\""):inner_svg.rfind("</svg>")]
 
         svg_canvas.append(f"""
-  <!-- Screen {idx+1}: {title} -->
+  <!-- Screen {idx+1}: {safe_title} -->
   <g transform="translate({pos_x}, {pos_y})">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#{idx+1:02d} • {title}</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#{idx+1:02d} • {safe_title}</text>
     {inner_body}
   </g>
 """)

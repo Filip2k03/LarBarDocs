@@ -4,7 +4,7 @@ The persistence tier utilizes **PostgreSQL 16 with the PostGIS 3.4 spatial exten
 
 ---
 
-## 📊 Relational Tables Matrix (18 Connected Tables)
+## 📊 Relational Tables Matrix (Ride Core + DriverReg and Staff Security)
 
 ```text
 ┌──────────────┐       ┌──────────────────────┐       ┌───────────────────────────┐
@@ -25,6 +25,107 @@ The persistence tier utilizes **PostgreSQL 16 with the PostGIS 3.4 spatial exten
        │                            ├───► SAFETY_ALERTS (Off-Route Alarms)
        │                            └───► PAYMENTS (Cashless / Cash Receipts)
 ```
+
+## DriverReg, staff RBAC, and audit extensions
+
+The KYC extension keeps identity records separate from live dispatch data. Raw NRC, licence, profile, and selfie media are stored as encrypted object references; list screens use masked normalized values. Age is calculated from `date_of_birth` and is not persisted independently.
+
+```sql
+CREATE TABLE staff_accounts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    full_name VARCHAR(120) NOT NULL,
+    work_phone VARCHAR(20) UNIQUE,
+    work_email VARCHAR(160) UNIQUE,
+    branch_code VARCHAR(30),
+    status VARCHAR(20) NOT NULL DEFAULT 'INVITED',
+    mfa_level VARCHAR(30) NOT NULL DEFAULT 'REQUIRED',
+    created_by UUID REFERENCES staff_accounts(id),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE staff_role_grants (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    staff_id UUID NOT NULL REFERENCES staff_accounts(id) ON DELETE CASCADE,
+    role_code VARCHAR(40) NOT NULL, -- GOD_ADMIN, EXEC_SUPERADMIN, KYC_MANAGER, KYC_REVIEWER, DRIVER_REGISTRAR, STAFF_REGISTRAR, MARKETER, SUPPORT, AUDITOR
+    executive_title VARCHAR(10), -- CEO, CTO, PSO; valid only with EXEC_SUPERADMIN
+    granted_by UUID NOT NULL REFERENCES staff_accounts(id),
+    granted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    revoked_at TIMESTAMPTZ,
+    UNIQUE (staff_id, role_code, revoked_at)
+);
+
+CREATE TABLE driver_registration_cases (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    case_number VARCHAR(40) UNIQUE NOT NULL,
+    driver_id UUID REFERENCES drivers(id),
+    registering_staff_id UUID NOT NULL REFERENCES staff_accounts(id),
+    reviewer_staff_id UUID REFERENCES staff_accounts(id),
+    status VARCHAR(30) NOT NULL DEFAULT 'DRAFT', -- DRAFT, SUBMITTED, IN_REVIEW, NEEDS_CORRECTION, APPROVED, REJECTED
+    full_name_en VARCHAR(120) NOT NULL,
+    full_name_my VARCHAR(160),
+    date_of_birth DATE NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    residential_address TEXT,
+    nrc_normalized_encrypted BYTEA NOT NULL,
+    nrc_masked VARCHAR(40) NOT NULL,
+    consent_version VARCHAR(30) NOT NULL,
+    consented_at TIMESTAMPTZ NOT NULL,
+    submitted_at TIMESTAMPTZ,
+    decided_at TIMESTAMPTZ,
+    decision_reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE driver_kyc_documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    case_id UUID NOT NULL REFERENCES driver_registration_cases(id) ON DELETE CASCADE,
+    document_type VARCHAR(40) NOT NULL, -- NRC_FRONT, NRC_BACK, DRIVING_LICENCE_FRONT, DRIVING_LICENCE_BACK, VEHICLE_REGISTRATION, INSURANCE, WHEEL_TAX
+    encrypted_object_key TEXT NOT NULL,
+    sha256_fingerprint VARCHAR(64) NOT NULL,
+    capture_quality JSONB NOT NULL DEFAULT '{}'::jsonb,
+    ocr_raw_encrypted BYTEA,
+    ocr_normalized JSONB NOT NULL DEFAULT '{}'::jsonb,
+    ocr_confidence JSONB NOT NULL DEFAULT '{}'::jsonb,
+    captured_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE driver_biometric_checks (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    case_id UUID NOT NULL REFERENCES driver_registration_cases(id) ON DELETE CASCADE,
+    profile_object_key TEXT NOT NULL,
+    liveness_passed BOOLEAN NOT NULL,
+    face_match_score DECIMAL(5,4),
+    provider_name VARCHAR(60),
+    provider_version VARCHAR(30),
+    manual_review_required BOOLEAN NOT NULL DEFAULT TRUE,
+    checked_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE staff_audit_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    actor_staff_id UUID REFERENCES staff_accounts(id),
+    action_code VARCHAR(80) NOT NULL,
+    target_type VARCHAR(50) NOT NULL,
+    target_id UUID,
+    reason TEXT,
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    occurred_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE vehicles
+    ADD COLUMN vehicle_type VARCHAR(40),
+    ADD COLUMN service_tier VARCHAR(30),
+    ADD COLUMN model_year SMALLINT,
+    ADD COLUMN chassis_vin VARCHAR(80),
+    ADD COLUMN engine_number VARCHAR(80),
+    ADD COLUMN fuel_type VARCHAR(30),
+    ADD COLUMN insurance_expires_on DATE,
+    ADD COLUMN rtad_inspection_expires_on DATE,
+    ADD COLUMN wheel_tax_expires_on DATE,
+    ADD COLUMN cctv_hardware_id VARCHAR(80);
+```
+
+Permission enforcement belongs in the authorization service and database policies: `DRIVER_REGISTRAR` cannot approve its own case, `STAFF_REGISTRAR` cannot grant privileged roles, and only a break-glass `GOD_ADMIN` can create or revoke an executive superadmin.
 
 ---
 

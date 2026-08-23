@@ -6,9 +6,10 @@ The **LaBar Taxi & Safety Ecosystem** UI/UX is designed with an **Imperial Crims
 
 ## 🎨 Master Figma & Sketch Canvas Asset
 
-You can import all 12 complete production screens directly into **Figma**, **Sketch**, or **Penpot** using the master vector canvas:
+You can import the legacy ride screens plus the DriverReg and Admin v2 frames directly into **Figma**, **Sketch**, or **Penpot**:
 
-- 🌟 **Download Master 12-Screen Figma Canvas**: [`labar_master_figma_canvas.svg`](/wireframes/labar_master_figma_canvas.svg)
+- 🌟 **Download Legacy 13-Screen Figma Canvas**: [`labar_master_figma_canvas.svg`](/wireframes/labar_master_figma_canvas.svg)
+- 🌟 **Download v2 DriverReg + Admin Canvas**: [`labar_master_figma_canvas_v2.svg`](/wireframes/labar_master_figma_canvas_v2.svg)
 - 📂 **Figma Tokens Studio JSON**: [`design-system/figma_tokens.json`](file:///Users/stephanfilip/Yamato_project/Labar/design-system/figma_tokens.json)
 - 📐 **Device Frame Standard**: Native **iPhone 15 Pro / Android Viewport (`390 x 844 px`)**
 
@@ -24,6 +25,18 @@ Explore the deep-dive UX flows and vector screens for each application:
     <h3 style="color: #F59E0B; margin-top: 0;">🚖 Passenger App</h3>
     <p style="color: #9CA3AF; font-size: 13px;">4 Production Screens: Multi-stop booking, 15s cascading radar, in-trip dynamic meter, and KBZPay MMQR payment with tipping.</p>
     <a href="/design/wireframes-passenger" class="btn-gold-action" style="display: inline-block; padding: 8px 16px; font-size: 12px;">View Passenger Wireframes ❯</a>
+  </div>
+
+  <div style="background: #181922; border: 1px solid #282836; border-radius: 16px; padding: 20px;">
+    <h3 style="color: #60A5FA; margin-top: 0;">🪪 DriverReg App</h3>
+    <p style="color: #9CA3AF; font-size: 13px;">10 staff-assisted KYC screens covering consent, NRC/licence camera OCR, face/liveness, vehicle compliance, review, and activation.</p>
+    <a href="/design/wireframes-driverreg" class="btn-gold-action" style="display: inline-block; padding: 8px 16px; font-size: 12px;">View DriverReg Wireframes ❯</a>
+  </div>
+
+  <div style="background: #181922; border: 1px solid #282836; border-radius: 16px; padding: 20px;">
+    <h3 style="color: #A78BFA; margin-top: 0;">🖥️ Admin Control Center</h3>
+    <p style="color: #9CA3AF; font-size: 13px;">5 desktop frames for the KYC queue, case comparison, staff accounts, role controls, and audit log.</p>
+    <a href="/design/wireframes-admin" class="btn-gold-action" style="display: inline-block; padding: 8px 16px; font-size: 12px;">View Admin Wireframes ❯</a>
   </div>
 
   <div style="background: #181922; border: 1px solid #282836; border-radius: 16px; padding: 20px;">
@@ -55,7 +68,7 @@ Explore the deep-dive UX flows and vector screens for each application:
 ### 2. Driver App Suite
 | # | Screen Name | High-Resolution Vector Mockup | Key Features |
 |---|---|---|---|
-| **05** | **Shift Mode & Today's Earnings** | [Open SVG](/wireframes/driver_01_shift_dashboard.svg) | Green `ON DUTY` shift switch, today's gross earnings (48,500 MMK / 12 trips), CCTV indicator, **Imperial Crimson SOS Panic Button**. |
+| **05** | **Shift Mode & Today's Earnings** | [Open SVG](/wireframes/driver_01_shift_dashboard.svg) | Green `ON DUTY` shift switch, today's gross earnings (48,500 MMK / 12 trips), CCTV indicator, and collapsed **Safety Drawer**. |
 | **06** | **15s Incoming Offer Modal** | [Open SVG](/wireframes/driver_02_15s_offer_card.svg) | 15s countdown header (11s left), fare highlight (3,800 MMK), mini route map, passenger Ma Thiri (4.95⭐), Accept/Decline. |
 | **07** | **In-Trip Meter & CCTV HUD** | [Open SVG](/wireframes/driver_03_intrip_cctv_meter.svg) | Turn-by-turn navigation banner, `● REC 1080p CCTV` indicator, dynamic fare HUD (3,850 MMK), passenger call/chat pills. |
 | **08** | **1km Emergency SOS Intercept Radar** | [Open SVG](/wireframes/driver_04_sos_1km_mesh.svg) | 🚨 Code Red banner, proximity intercept line (*240m away*), victim details (Plate `4B-9102`), **"ကူညီရန် သွားမည် (I AM RESPONDING)"** button. |

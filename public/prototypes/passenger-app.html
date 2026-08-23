@@ -422,7 +422,12 @@
             <div style="margin-top: 8px; font-size: 10px; color: var(--clr-emerald-600); font-weight: 800;">📹 CCTV Protecting Mode: RECORDING ACTIVE</div>
           </div>
 
-          <button class="action-btn-crimson" onclick="alert('🚨 SOS Panic Alarm Broadcasted to Police & Family Guardian!')">🚨 EMERGENCY SOS PANIC</button>
+          <button style="background:#FFFFFF;border:1px solid var(--clr-border-main);color:var(--clr-text-primary);padding:12px;border-radius:14px;font-weight:850;width:100%;cursor:pointer" onclick="toggleSafety('passenger-safety')">🛡️ Safety &amp; emergency options <span style="float:right">⌃</span></button>
+          <div id="passenger-safety" style="display:none;border:1px solid #FCA5A5;background:#FFF7F7;border-radius:16px;padding:12px">
+            <div style="font-weight:900;margin-bottom:8px">Safety Drawer</div>
+            <div style="font-size:11px;color:var(--clr-text-secondary);margin-bottom:9px">Share live location, record evidence, call emergency services, or hold for silent SOS.</div>
+            <button class="action-btn-crimson" onclick="alert('Silent SOS sent to LaBar Safety and Family Guardian!')">HOLD • SILENT SOS</button>
+          </div>
           <button class="action-btn-gold" onclick="renderStep(5)">Simulate Arrived at Destination ➔</button>
         `;
       } else if (step === 4) {
@@ -475,6 +480,11 @@
     function selectVehicle(tier) {
       selectedTier = tier;
       renderStep(1);
+    }
+
+    function toggleSafety(id) {
+      const drawer = document.getElementById(id);
+      if (drawer) drawer.style.display = drawer.style.display === 'block' ? 'none' : 'block';
     }
 
     renderStep(1);

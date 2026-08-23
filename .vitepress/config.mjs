@@ -52,6 +52,7 @@ export default defineConfig({
         items: [
           { text: '🧩 On-Demand Add-Ons & Plugin Store', link: '/features/dynamic-plugin-store' },
           { text: 'Myanmar 🇲🇲 Localization & Compliance', link: '/features/myanmar-localization-and-payments' },
+          { text: 'DriverReg KYC & Staff Access', link: '/features/driver-registration-and-staff-access' },
           { text: 'Guardian Dynamic Plugin Module', link: '/features/guardian-plugin' },
           { text: 'Driver SOS & Family Guardian', link: '/features/driver-sos-and-family-guardian' },
           { text: 'Driver Protecting Mode & CCTV', link: '/features/driver-protecting-cctv' },
@@ -68,6 +69,9 @@ export default defineConfig({
           { text: '🚖 Passenger App (4 Screens)', link: '/design/wireframes-passenger' },
           { text: '🚗 Driver App (5 Screens)', link: '/design/wireframes-driver' },
           { text: '🛡️ Guardian Safety (3 Screens)', link: '/design/wireframes-guardian' },
+          { text: '🪪 DriverReg KYC (10 Screens)', link: '/design/wireframes-driverreg' },
+          { text: '🖥️ Admin Control Center', link: '/design/wireframes-admin' },
+          { text: '🧭 Figma Prototype Plan', link: '/design/figma-prototype-plan' },
           { text: '🎨 Red & Gold Palette (100-900)', link: '/design/design-system' },
           { text: '🎛️ UI Components & Motion States', link: '/design/ui-components' }
         ]

@@ -1820,6 +1820,26 @@ All architecture models are available as native **Draw.io XML (`.drawio`)** file
 2. **Desktop App**: Open directly in [Draw.io Desktop](https://www.draw.io/).
 3. **VS Code / Cursor**: Install the **Draw.io Integration** extension (`hediet.vscode-drawio`) to edit and view diagrams directly within the editor.
 
+---
 
+## 7. DriverReg KYC, Staff Administration, and Revised Safety UX
+
+The v2 product architecture adds two first-class clients alongside Passenger, Driver, and Guardian:
+
+1. **DriverReg App** — a staff-authenticated KYC capture client for consent, personal data, NRC, driving licence camera OCR, selfie/liveness and face comparison, vehicle/commercial compliance, review, and submission.
+2. **Admin Control Center** — a desktop review and access-governance client for independent KYC decisions, staff invitations, roles, session revocation, and immutable audit history.
+
+Driver onboarding is isolated from ride operations. A submitted case follows `DRAFT → SUBMITTED → IN_REVIEW → NEEDS_CORRECTION | APPROVED | REJECTED`. Only an approved case can issue a one-time activation invitation to the Driver App. The registering staff member cannot approve the same case.
+
+`GOD_ADMIN` is a hardware-MFA, break-glass role. `CEO`, `CTO`, and `PSO` are executive labels with the same `EXEC_SUPERADMIN` permission set. `DRIVER_REGISTRAR`, `KYC_REVIEWER`, `STAFF_REGISTRAR`, `MARKETER`, `SUPPORT`, and `AUDITOR` remain separated by least-privilege scopes. A staff registrar cannot grant privileged roles.
+
+Normal Passenger and Driver screens now expose a collapsed **Safety Drawer** instead of a dominant panic button. The drawer is reachable in one deliberate action, supports a two-second hold and cancel countdown, offers covert/silent triggering, and becomes persistently visible when an incident is active. Incoming emergency responder alerts remain interruptive.
+
+Detailed sources:
+
+- [`features/driver-registration-and-staff-access.md`](features/driver-registration-and-staff-access.md)
+- [`design/figma-prototype-plan.md`](design/figma-prototype-plan.md)
+- [`architecture/database-design.md`](architecture/database-design.md)
+- [`public/wireframes/labar_master_figma_canvas_v2.svg`](public/wireframes/labar_master_figma_canvas_v2.svg)
 
 

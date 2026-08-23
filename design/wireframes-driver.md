@@ -4,8 +4,8 @@ The **LaBar Driver Application** empowers professional taxi drivers across Myanm
 
 ---
 
-## Screen 1: Driver Shift Mode, Earnings & SOS Dashboard
-<span class="badge-red">Driver Screen 01</span> • Online shift status toggle (`ON DUTY`), gross daily earnings in MMK, trip counters, and primary emergency SOS button.
+## Screen 1: Driver Shift Mode, Earnings & Safety Dashboard
+<span class="badge-red">Driver Screen 01</span> • Online shift status toggle (`ON DUTY`), gross daily earnings in MMK, trip counters, and collapsed Safety Drawer.
 
 <div style="display: flex; justify-content: center; margin: 28px 0;">
   <img src="/wireframes/driver_01_shift_dashboard.svg" alt="Driver Shift Dashboard Screen" style="max-width: 380px; border-radius: 28px; box-shadow: 0 16px 40px rgba(0,0,0,0.7); border: 2px solid #282836;" />
@@ -18,7 +18,7 @@ The **LaBar Driver Application** empowers professional taxi drivers across Myanm
   - **Quick Action Grid**:
     - 💳 **ငွေထုတ်ယူမည် (Sales Payout)**: Direct transfer to driver's personal KBZPay / WavePay account.
     - 📹 **CCTV Protecting**: Real-time status showing active 1080p camera recording.
-  - **Emergency SOS Panic Button**: Full-width Imperial Crimson button for instant fellow driver mesh broadcast.
+  - **Discreet Safety Drawer**: Collapsed in normal operation; one deliberate tap reveals call, location sharing, evidence recording, and two-second-hold silent SOS actions.
   - **Recent Trips Feed**: Shows individual fare receipts and payment channels (Cashless vs Cash).
 
 ---

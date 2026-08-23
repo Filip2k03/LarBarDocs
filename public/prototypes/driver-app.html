@@ -174,6 +174,9 @@
       transition: transform 0.15s ease;
     }
     .action-btn-crimson:hover { transform: translateY(-2px); }
+    .safety-launcher { width: 100%; border: 1px solid var(--clr-border-main); background: #FFFFFF; color: var(--clr-text-primary); border-radius: 14px; padding: 12px; font-weight: 850; cursor: pointer; }
+    .safety-drawer { display: none; border: 1px solid #FCA5A5; background: #FFF7F7; border-radius: 16px; padding: 12px; }
+    .safety-drawer.is-open { display: block; }
   </style>
 </head>
 <body>
@@ -294,7 +297,12 @@
             </div>
           </div>
 
-          <button class="action-btn-crimson" onclick="renderStep(4)">🚨 အရေးပေါ် အကူအညီတောင်းရန် (SOS)</button>
+          <button class="safety-launcher" onclick="toggleSafety('driver-safety-dashboard')">🛡️ Safety &amp; emergency options <span style="float:right">⌃</span></button>
+          <div class="safety-drawer" id="driver-safety-dashboard">
+            <div style="font-weight:900;margin-bottom:8px">Discreet Safety Drawer</div>
+            <div style="font-size:11px;color:var(--clr-text-secondary);margin-bottom:9px">Hold for 2 seconds to send a silent alert. Active incidents stay visible.</div>
+            <button class="action-btn-crimson" onclick="alert('Silent SOS sent to LaBar Safety, guardians, and nearby responders.')">HOLD • SILENT SOS</button>
+          </div>
           <button class="action-btn-gold" onclick="renderStep(2)">Simulate Incoming 15s Ride Offer ➔</button>
         `;
       } else if (step === 2) {
@@ -395,6 +403,11 @@
           <button style="background: transparent; border: 1px solid var(--clr-border-main); color: var(--clr-text-primary); padding: 10px; border-radius: 10px; font-weight: 800; width: 100%; cursor: pointer; font-size: 12px;" onclick="renderStep(1)">Back to Dashboard</button>
         `;
       }
+    }
+
+    function toggleSafety(id) {
+      const drawer = document.getElementById(id);
+      if (drawer) drawer.classList.toggle('is-open');
     }
 
     renderStep(1);

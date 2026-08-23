@@ -79,12 +79,13 @@
     <text x="222" y="442" fill="#0F172A" font-size="13" font-weight="800">CCTV Protecting</text>
     <text x="222" y="460" fill="#059669" font-size="10" font-weight="700">Active • 1080p Stream</text>
 
-    <!-- Driver Emergency SOS Panic Button -->
+    <!-- Collapsed Discreet Safety Drawer -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="488" width="358" height="92" rx="18" fill="url(#red-grad)"/>
-      <text x="40" y="532" fill="#FFFFFF" font-size="28">🚨</text>
-      <text x="80" y="530" fill="#FFFFFF" font-size="16" font-weight="900">အရေးပေါ် အကူအညီတောင်းရန်</text>
-      <text x="80" y="554" fill="#FEE2E2" font-size="12">1km - 3km Fellow Driver SOS Broadcast</text>
+      <rect x="16" y="488" width="358" height="92" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="40" y="532" fill="#2563EB" font-size="28">🛡️</text>
+      <text x="80" y="530" fill="#0F172A" font-size="16" font-weight="900">Safety &amp; emergency options</text>
+      <text x="80" y="554" fill="#64748B" font-size="12">Collapsed • tap once • hold 2s for silent SOS</text>
+      <text x="350" y="538" fill="#64748B" font-size="18" font-weight="900" text-anchor="end">⌃</text>
     </g>
 
     <!-- Recent Rides History List -->

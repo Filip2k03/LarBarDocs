@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LaBar Control Center — Operations, KYC &amp; Staff Administration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+      :root {
+        --ink-primary: #0F172A;
+        --ink-secondary: #475569;
+        --ink-muted: #94A3B8;
+        --surface-base: #F8FAFC;
+        --surface-card: #FFFFFF;
+        --surface-elevated: #F1F5F9;
+        --border-main: #E2E8F0;
+        --border-subtle: #CBD5E1;
+        --gold-500: #F59E0B;
+        --gold-600: #D97706;
+        --gold-light: #FEF3C7;
+        --crimson-500: #EF4444;
+        --crimson-600: #DC2626;
+        --crimson-light: #FEE2E2;
+        --emerald-500: #10B981;
+        --emerald-600: #059669;
+        --emerald-light: #D1FAE5;
+        --cyan-500: #0EA5E9;
+        --cyan-600: #0284C7;
+        --cyan-light: #E0F2FE;
+        --sidebar-bg: #0F172A;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Pyidaungsu', sans-serif;
+        background: var(--surface-base);
+        color: var(--ink-primary);
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

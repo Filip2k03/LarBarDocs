@@ -281,9 +281,9 @@
 
   </g>
 
-  <!-- Screen 3: Passenger In-Trip Navigation & Fare Meter -->
+  <!-- Screen 3: Passenger In-Trip Navigation &amp; Fare Meter -->
   <g transform="translate(920, 130)">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#03 • Passenger In-Trip Navigation & Fare Meter</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#03 • Passenger In-Trip Navigation &amp; Fare Meter</text>
     <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
   <circle cx="236" cy="26" r="5" fill="#1E293B"/>
@@ -395,10 +395,11 @@
       <text x="195" y="656" fill="#065F46" font-size="10" font-weight="800" text-anchor="middle">📹 Driver Protecting CCTV: RECORDING ACTIVE</text>
     </g>
 
-    <!-- In-Trip Safety SOS Button -->
+    <!-- Collapsed Discreet Safety Drawer -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="682" width="358" height="54" rx="14" fill="url(#red-grad)"/>
-      <text x="195" y="716" fill="#FFFFFF" font-size="15" font-weight="900" text-anchor="middle">🚨 EMERGENCY SOS &amp; GUARDIAN SIREN</text>
+      <rect x="16" y="682" width="358" height="54" rx="14" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="36" y="716" fill="#0F172A" font-size="14" font-weight="900">🛡️ SAFETY &amp; EMERGENCY OPTIONS</text>
+      <text x="350" y="716" fill="#64748B" font-size="14" font-weight="900" text-anchor="end">⌃</text>
     </g>
     
 
@@ -407,9 +408,9 @@
 
   </g>
 
-  <!-- Screen 4: Passenger Receipt & Driver 5-Star Rating -->
+  <!-- Screen 4: Passenger Receipt &amp; Driver 5-Star Rating -->
   <g transform="translate(1350, 130)">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#04 • Passenger Receipt & Driver 5-Star Rating</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#04 • Passenger Receipt &amp; Driver 5-Star Rating</text>
     <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
   <circle cx="236" cy="26" r="5" fill="#1E293B"/>
@@ -424,7 +425,7 @@
   <rect x="92" y="66" width="82" height="18" rx="9" fill="#F59E0B" fill-opacity="0.12" stroke="#F59E0B" stroke-width="1"/>
   <text x="133" y="79" fill="#F59E0B" font-size="9" font-weight="800" text-anchor="middle">LABAR NATIVE</text>
   
-  <text x="280" y="80" fill="#0F172A" font-size="12" font-weight="800" text-anchor="middle">ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt & Rating)</text>
+  <text x="280" y="80" fill="#0F172A" font-size="12" font-weight="800" text-anchor="middle">ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt &amp; Rating)</text>
   <circle cx="360" cy="74" r="14" fill="#F1F5F9"/>
   <text x="360" y="79" fill="#0F172A" font-size="11" text-anchor="middle">🔔</text>
 
@@ -480,9 +481,9 @@
 
   </g>
 
-  <!-- Screen 5: Driver Shift Dashboard & Today's Earnings -->
+  <!-- Screen 5: Driver Shift Dashboard &amp; Today's Earnings -->
   <g transform="translate(60, 1020)">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#05 • Driver Shift Dashboard & Today's Earnings</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#05 • Driver Shift Dashboard &amp; Today's Earnings</text>
     <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
   <circle cx="236" cy="26" r="5" fill="#1E293B"/>
@@ -540,12 +541,13 @@
     <text x="222" y="442" fill="#0F172A" font-size="13" font-weight="800">CCTV Protecting</text>
     <text x="222" y="460" fill="#059669" font-size="10" font-weight="700">Active • 1080p Stream</text>
 
-    <!-- Driver Emergency SOS Panic Button -->
+    <!-- Collapsed Discreet Safety Drawer -->
     <g filter="url(#card-shadow)">
-      <rect x="16" y="488" width="358" height="92" rx="18" fill="url(#red-grad)"/>
-      <text x="40" y="532" fill="#FFFFFF" font-size="28">🚨</text>
-      <text x="80" y="530" fill="#FFFFFF" font-size="16" font-weight="900">အရေးပေါ် အကူအညီတောင်းရန်</text>
-      <text x="80" y="554" fill="#FEE2E2" font-size="12">1km - 3km Fellow Driver SOS Broadcast</text>
+      <rect x="16" y="488" width="358" height="92" rx="18" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="40" y="532" fill="#2563EB" font-size="28">🛡️</text>
+      <text x="80" y="530" fill="#0F172A" font-size="16" font-weight="900">Safety &amp; emergency options</text>
+      <text x="80" y="554" fill="#64748B" font-size="12">Collapsed • tap once • hold 2s for silent SOS</text>
+      <text x="350" y="538" fill="#64748B" font-size="18" font-weight="900" text-anchor="end">⌃</text>
     </g>
 
     <!-- Recent Rides History List -->
@@ -642,9 +644,9 @@
 
   </g>
 
-  <!-- Screen 7: Driver In-Trip Meter & CCTV HUD -->
+  <!-- Screen 7: Driver In-Trip Meter &amp; CCTV HUD -->
   <g transform="translate(920, 1020)">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#07 • Driver In-Trip Meter & CCTV HUD</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#07 • Driver In-Trip Meter &amp; CCTV HUD</text>
     <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
   <circle cx="236" cy="26" r="5" fill="#1E293B"/>
@@ -883,9 +885,9 @@
 
   </g>
 
-  <!-- Screen 9: Driver Daily Settlement & Instant Payout -->
+  <!-- Screen 9: Driver Daily Settlement &amp; Instant Payout -->
   <g transform="translate(60, 1910)">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#09 • Driver Daily Settlement & Instant Payout</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#09 • Driver Daily Settlement &amp; Instant Payout</text>
     <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
   <circle cx="236" cy="26" r="5" fill="#1E293B"/>
@@ -1080,9 +1082,9 @@
 
   </g>
 
-  <!-- Screen 11: Driver Family Guardian Shift & SOS Shield -->
+  <!-- Screen 11: Driver Family Guardian Shift &amp; SOS Shield -->
   <g transform="translate(920, 1910)">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#11 • Driver Family Guardian Shift & SOS Shield</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#11 • Driver Family Guardian Shift &amp; SOS Shield</text>
     <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
   <circle cx="236" cy="26" r="5" fill="#1E293B"/>
@@ -1197,9 +1199,9 @@
 
   </g>
 
-  <!-- Screen 12: Family Mesh Pairing & QR Code Scanner -->
+  <!-- Screen 12: Family Mesh Pairing &amp; QR Code Scanner -->
   <g transform="translate(1350, 1910)">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#12 • Family Mesh Pairing & QR Code Scanner</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#12 • Family Mesh Pairing &amp; QR Code Scanner</text>
     <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
   <circle cx="236" cy="26" r="5" fill="#1E293B"/>
@@ -1272,9 +1274,9 @@
 
   </g>
 
-  <!-- Screen 13: In-App Add-Ons & Dynamic Plugin Store -->
+  <!-- Screen 13: In-App Add-Ons &amp; Dynamic Plugin Store -->
   <g transform="translate(60, 2800)">
-    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#13 • In-App Add-Ons & Dynamic Plugin Store</text>
+    <text x="0" y="-12" fill="#0F172A" font-size="14" font-weight="800">#13 • In-App Add-Ons &amp; Dynamic Plugin Store</text>
     <rect x="1" y="1" width="388" height="842" rx="46" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
   <rect x="130" y="12" width="130" height="28" rx="14" fill="#0F172A"/>
   <circle cx="236" cy="26" r="5" fill="#1E293B"/>
