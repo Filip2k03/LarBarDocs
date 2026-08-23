@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LarBar Passenger App — High-Fidelity Interactive Prototype</title>
+  <title>LarBar Passenger App — Live Map Interactive Prototype</title>
+  
+  <!-- Leaflet.js for Real Live Yangon Map Tiles -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <style>
     :root {
       --clr-noir-base: #0A0B0E;
@@ -30,22 +35,22 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-display); }
     body { background: var(--clr-noir-base); color: var(--clr-text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px; }
 
-    /* Top Control Hub */
-    .prototype-control-hub { text-align: center; margin-bottom: 24px; max-width: 640px; }
+    /* Top Navigation */
+    .prototype-control-hub { text-align: center; margin-bottom: 20px; max-width: 680px; }
     .prototype-heading { font-size: 26px; font-weight: 900; color: var(--clr-gold-500); letter-spacing: -0.5px; margin-bottom: 6px; }
-    .prototype-subtitle { font-size: 13px; color: var(--clr-text-dim); line-height: 1.5; margin-bottom: 18px; }
+    .prototype-subtitle { font-size: 13px; color: var(--clr-text-dim); line-height: 1.5; margin-bottom: 16px; }
     
     .lifecycle-nav-pill-group { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
     .lifecycle-tab-trigger {
       background: var(--clr-noir-surface);
       border: 1px solid var(--clr-noir-border);
       color: var(--clr-text-dim);
-      padding: 8px 18px;
+      padding: 8px 16px;
       border-radius: 9999px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
     }
     .lifecycle-tab-trigger:hover { border-color: var(--clr-gold-500); color: var(--clr-text-main); }
     .lifecycle-tab-trigger.is-active {
@@ -55,7 +60,7 @@
       box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
     }
 
-    /* Device Viewport Frame */
+    /* Device Chassis */
     .device-chassis {
       width: 390px;
       height: 844px;
@@ -75,7 +80,7 @@
       background: #000000;
       border-radius: 14px;
       margin: 10px auto 0;
-      z-index: 50;
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: flex-end;
@@ -90,59 +95,60 @@
       padding: 6px 30px 4px;
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: -0.2px;
+      z-index: 1000;
+      background: rgba(18, 19, 26, 0.9);
     }
 
     .top-app-bar {
       background: rgba(18, 19, 26, 0.95);
       backdrop-filter: blur(12px);
-      padding: 12px 20px;
+      padding: 10px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--clr-noir-border);
+      z-index: 1000;
     }
-    .brand-emblem { font-size: 20px; font-weight: 900; color: var(--clr-gold-500); letter-spacing: 0.5px; }
-    .screen-title-tag { font-size: 13px; font-weight: 700; color: var(--clr-text-main); }
-    .notification-bell-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--clr-noir-elevated); border: 1px solid var(--clr-noir-border); display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; }
+    .brand-emblem { font-size: 18px; font-weight: 900; color: var(--clr-gold-500); letter-spacing: 0.5px; }
+    .screen-title-tag { font-size: 12px; font-weight: 700; color: var(--clr-text-main); }
 
-    .interactive-scroll-pane { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+    /* Leaflet Live Map Box */
+    .live-map-viewport {
+      width: 100%;
+      height: 230px;
+      border-bottom: 1px solid var(--clr-noir-border);
+      position: relative;
+      z-index: 10;
+    }
+    .leaflet-container { background: #12131A !important; }
+
+    .interactive-scroll-pane { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; z-index: 20; background: var(--clr-noir-surface); }
     .interactive-scroll-pane::-webkit-scrollbar { width: 4px; }
     .interactive-scroll-pane::-webkit-scrollbar-thumb { background: var(--clr-noir-border); border-radius: 2px; }
 
-    .bottom-home-indicator { width: 134px; height: 4px; background: var(--clr-text-sub); border-radius: 2px; margin: 8px auto 10px; }
+    .bottom-home-indicator { width: 134px; height: 4px; background: var(--clr-text-sub); border-radius: 2px; margin: 6px auto 8px; z-index: 1000; }
 
     /* Component System */
-    .map-canvas-container {
-      height: 200px;
-      background: #10121A;
-      border: 1px solid var(--clr-noir-border);
-      border-radius: 18px;
-      position: relative;
-      overflow: hidden;
-    }
-    .map-grid-svg { width: 100%; height: 100%; }
-
     .route-timeline-container {
       background: var(--clr-noir-elevated);
       border: 1px solid var(--clr-noir-border);
       border-radius: 16px;
-      padding: 16px;
+      padding: 14px;
     }
-    .timeline-stop-row { display: flex; align-items: center; gap: 12px; }
+    .timeline-stop-row { display: flex; align-items: center; gap: 10px; }
     .timeline-node-pin { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .timeline-node-pickup { background: var(--clr-emerald-500); box-shadow: 0 0 8px rgba(16,185,129,0.6); }
     .timeline-node-stop { background: var(--clr-gold-500); box-shadow: 0 0 8px rgba(245,158,11,0.6); }
     .timeline-node-dest { background: var(--clr-crimson-500); box-shadow: 0 0 8px rgba(229,37,42,0.6); }
-    .timeline-connector-line { width: 2px; height: 16px; background: var(--clr-noir-border); margin-left: 4px; }
-    .timeline-address-text { font-size: 13px; font-weight: 600; color: var(--clr-text-main); flex: 1; }
+    .timeline-connector-line { width: 2px; height: 14px; background: var(--clr-noir-border); margin-left: 4px; }
+    .timeline-address-text { font-size: 13px; font-weight: 700; color: var(--clr-text-main); }
     .timeline-address-sub { font-size: 11px; color: var(--clr-text-dim); }
 
     .vehicle-tier-card {
       background: var(--clr-noir-elevated);
       border: 1px solid var(--clr-noir-border);
-      border-radius: 16px;
-      padding: 14px 16px;
+      border-radius: 14px;
+      padding: 12px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -154,34 +160,33 @@
       border: 2px solid var(--clr-gold-500);
       background: rgba(245, 158, 11, 0.08);
     }
-    .tier-title { font-size: 14px; font-weight: 800; color: var(--clr-text-main); margin-bottom: 2px; }
+    .tier-title { font-size: 13px; font-weight: 800; color: var(--clr-text-main); }
     .tier-details { font-size: 11px; color: var(--clr-text-dim); }
-    .tier-fare-badge { font-size: 17px; font-weight: 900; color: var(--clr-gold-500); text-align: right; }
+    .tier-fare-badge { font-size: 16px; font-weight: 900; color: var(--clr-gold-500); text-align: right; }
 
     .action-btn-gold {
       background: linear-gradient(135deg, var(--clr-gold-300), var(--clr-gold-500));
       color: #12131A;
       border: none;
       border-radius: 14px;
-      padding: 16px;
-      font-size: 15px;
+      padding: 14px;
+      font-size: 14px;
       font-weight: 900;
       width: 100%;
       cursor: pointer;
       text-align: center;
       box-shadow: 0 6px 20px rgba(245,158,11,0.3);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform 0.15s ease;
     }
-    .action-btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.45); }
-    .action-btn-gold:active { transform: translateY(0); }
+    .action-btn-gold:hover { transform: translateY(-2px); }
 
     .action-btn-crimson {
       background: linear-gradient(135deg, #F85A5A, var(--clr-crimson-500));
       color: #FFFFFF;
       border: none;
       border-radius: 14px;
-      padding: 16px;
-      font-size: 15px;
+      padding: 14px;
+      font-size: 14px;
       font-weight: 900;
       width: 100%;
       cursor: pointer;
@@ -189,46 +194,24 @@
       box-shadow: 0 6px 20px rgba(229,37,42,0.35);
       transition: transform 0.15s ease;
     }
-    .action-btn-crimson:hover { transform: translateY(-2px); }
 
-    /* Radar Animations */
-    .cascading-radar-sphere {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      border: 1px solid var(--clr-noir-border);
-      position: relative;
-      margin: 16px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .radar-sweep-ring {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 2px solid var(--clr-gold-500);
-      opacity: 0;
-      animation: radarPulse 2s infinite cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    @keyframes radarPulse {
-      0% { transform: scale(0.2); opacity: 0.8; }
-      100% { transform: scale(1.3); opacity: 0; }
-    }
+    /* Chat Messages Box */
+    .chat-bubble-received { background: var(--clr-noir-card); border-radius: 12px 12px 12px 2px; padding: 8px 12px; font-size: 12px; max-width: 80%; margin-bottom: 6px; align-self: flex-start; }
+    .chat-bubble-sent { background: var(--clr-gold-500); color: #12131A; font-weight: 600; border-radius: 12px 12px 2px 12px; padding: 8px 12px; font-size: 12px; max-width: 80%; margin-bottom: 6px; align-self: flex-end; }
   </style>
 </head>
 <body>
 
   <div class="prototype-control-hub">
-    <h1 class="prototype-heading">🚖 LarBar Passenger App Interactive Prototype</h1>
-    <p class="prototype-subtitle">Click through the live lifecycle steps below to simulate multi-stop ride estimation, 15s cascading dispatch, dynamic in-trip metering, and KBZPay MMQR settlement.</p>
+    <h1 class="prototype-heading">🚖 LarBar Passenger Live Map Prototype</h1>
+    <p class="prototype-subtitle">Experience real OpenStreetMap cartography across Yangon (Sule Square ➔ Bogyoke Market ➔ Junction City) with multi-stop estimation, 15s cascading search, live turn navigation, and in-app driver chat.</p>
     
     <div class="lifecycle-nav-pill-group">
       <button class="lifecycle-tab-trigger is-active" onclick="renderStep(1)">1. Multi-Stop Booking</button>
       <button class="lifecycle-tab-trigger" onclick="renderStep(2)">2. 15s Cascading Search</button>
-      <button class="lifecycle-tab-trigger" onclick="renderStep(3)">3. In-Trip Live Meter</button>
-      <button class="lifecycle-tab-trigger" onclick="renderStep(4)">4. Receipt &amp; 5★ Rating</button>
+      <button class="lifecycle-tab-trigger" onclick="renderStep(3)">3. In-Trip Live Navigation</button>
+      <button class="lifecycle-tab-trigger" onclick="renderStep(4)">4. In-App Driver Chat</button>
+      <button class="lifecycle-tab-trigger" onclick="renderStep(5)">5. Receipt &amp; 5★ Rating</button>
     </div>
   </div>
 
@@ -242,8 +225,11 @@
     <div class="top-app-bar">
       <span class="brand-emblem">LarBar</span>
       <span class="screen-title-tag" id="active-screen-title">ခရီးစဥ်မှာယူခြင်း</span>
-      <div class="notification-bell-btn">🔔</div>
+      <div style="font-size: 12px;">🔔</div>
     </div>
+
+    <!-- Live Interactive Map Canvas (Centered on Yangon, Myanmar) -->
+    <div id="leaflet-map" class="live-map-viewport"></div>
 
     <div class="interactive-scroll-pane" id="interactive-viewport"></div>
 
@@ -251,9 +237,62 @@
   </div>
 
   <script>
+    let map = null;
+    let routePolyline = null;
+    let carMarker = null;
     let selectedTier = 'standard';
     let countdownSec = 15;
     let timerInterval = null;
+
+    // Real Yangon Coordinates
+    const coords = {
+      sulePickup: [16.7794, 96.1554],      // Sule Pagoda / Sule Square
+      bogyokeStop: [16.7801, 96.1528],     // Bogyoke Aung San Market
+      junctionDest: [16.7820, 96.1495],    // Junction City Mall
+      shwedagon: [16.7983, 96.1497],       // Shwedagon Pagoda
+      inTripCar: [16.7808, 96.1512]        // In-trip position
+    };
+
+    function initMap() {
+      if (map) return;
+      map = L.map('leaflet-map', {
+        center: coords.sulePickup,
+        zoom: 15,
+        zoomControl: false,
+        attributionControl: false
+      });
+
+      // CartoDB Dark Matter Real Map Tiles
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      // Add Map Markers
+      L.marker(coords.sulePickup, {
+        icon: L.divIcon({
+          className: 'custom-pin',
+          html: '<div style="background:#10B981; color:#FFF; font-weight:900; font-size:10px; padding:3px 6px; border-radius:6px; border:2px solid #FFF; white-space:nowrap;">🟢 Sule Square</div>',
+          iconSize: [80, 24]
+        })
+      }).addTo(map);
+
+      L.marker(coords.junctionDest, {
+        icon: L.divIcon({
+          className: 'custom-pin',
+          html: '<div style="background:#E5252A; color:#FFF; font-weight:900; font-size:10px; padding:3px 6px; border-radius:6px; border:2px solid #FFF; white-space:nowrap;">🔴 Junction City</div>',
+          iconSize: [80, 24]
+        })
+      }).addTo(map);
+
+      // Route Polyline
+      const latlngs = [
+        coords.sulePickup,
+        coords.bogyokeStop,
+        coords.junctionDest
+      ];
+      routePolyline = L.polyline(latlngs, { color: '#F59E0B', weight: 5, opacity: 0.9 }).addTo(map);
+      map.fitBounds(routePolyline.getBounds(), { padding: [30, 30] });
+    }
 
     function renderStep(step) {
       clearInterval(timerInterval);
@@ -264,25 +303,13 @@
       const viewport = document.getElementById('interactive-viewport');
       const titleEl = document.getElementById('active-screen-title');
 
+      if (!map) {
+        setTimeout(initMap, 200);
+      }
+
       if (step === 1) {
         titleEl.innerText = 'ခရီးစဥ်မှာယူခြင်း (Ride Booking)';
         viewport.innerHTML = `
-          <div class="map-canvas-container">
-            <svg class="map-grid-svg" viewBox="0 0 358 200">
-              <path d="M 20 180 Q 140 120 340 160" stroke="#2D3042" stroke-width="6" fill="none"/>
-              <path d="M 100 20 L 100 190" stroke="#2D3042" stroke-width="4" fill="none"/>
-              <path d="M 240 20 L 240 190" stroke="#2D3042" stroke-width="4" fill="none"/>
-              <!-- Route Polyline -->
-              <path d="M 60 160 L 160 100 L 290 60" stroke="#F59E0B" stroke-width="4" stroke-linecap="round" fill="none"/>
-              <circle cx="60" cy="160" r="7" fill="#10B981"/>
-              <circle cx="160" cy="100" r="5" fill="#F59E0B"/>
-              <circle cx="290" cy="60" r="7" fill="#E5252A"/>
-              <!-- Moving Taxi -->
-              <rect x="110" y="115" width="28" height="15" rx="3" fill="#F59E0B"/>
-              <text x="124" y="126" fill="#12131A" font-size="8" font-weight="900" text-anchor="middle">🚖 3m</text>
-            </svg>
-          </div>
-
           <div class="route-timeline-container">
             <div class="timeline-stop-row">
               <div class="timeline-node-pin timeline-node-pickup"></div>
@@ -326,37 +353,37 @@
             <div class="tier-fare-badge" style="color: var(--clr-gold-300);">4,500 MMK</div>
           </div>
 
-          <button class="action-btn-gold" onclick="renderStep(2)">ခရီးစဥ် ခေါ်ယူမည် (CALL TAXI NOW)</button>
+          <div style="background: var(--clr-noir-elevated); padding: 10px 14px; border-radius: 12px; display: flex; justify-content: space-between; font-size: 12px;">
+            <span>💳 Payment: <b style="color: var(--clr-cyan-500);">KBZPay Direct</b></span>
+            <span style="color: var(--clr-gold-500); font-weight: 700; cursor: pointer;">Change ❯</span>
+          </div>
+
+          <button class="action-btn-gold" onclick="renderStep(2)">ခရီးစဥ် ခေါ်ယူမည် (CONFIRM BOOKING)</button>
         `;
       } else if (step === 2) {
         countdownSec = 15;
-        titleEl.innerText = 'ယာဥ်မောင်း ရှာဖွေနေသည် (15s Cascading)';
+        titleEl.innerText = 'ယာဥ်မောင်း ရှာဖွေနေသည် (Cascading Search)';
         viewport.innerHTML = `
-          <div class="route-timeline-container" style="text-align: center; padding: 24px 16px;">
-            <div class="cascading-radar-sphere">
-              <div class="radar-sweep-ring"></div>
-              <div class="radar-sweep-ring" style="animation-delay: 0.7s;"></div>
-              <div style="font-size: 36px;">🚖</div>
+          <div class="route-timeline-container" style="text-align: center; padding: 20px 14px;">
+            <div style="font-size: 32px; margin-bottom: 6px;">📡</div>
+            <div style="font-size: 15px; font-weight: 900; color: var(--clr-gold-500); margin-bottom: 2px;">
+              15s Cascading Search Active
             </div>
-            <div style="font-size: 16px; font-weight: 900; color: var(--clr-gold-500); margin-bottom: 4px;">
-              15s Cascading Dispatch Active
-            </div>
-            <div style="font-size: 12px; color: var(--clr-text-dim); margin-bottom: 14px;">
+            <div style="font-size: 11px; color: var(--clr-text-dim); margin-bottom: 12px;">
               Offering to nearest driver: <b style="color: #FFF;">U Aung Kyaw (240m away)</b>
             </div>
-            <div style="background: var(--clr-noir-card); border-radius: 12px; padding: 10px; font-size: 13px;">
+            <div style="background: var(--clr-noir-card); border-radius: 10px; padding: 8px; font-size: 12px;">
               ⏱️ Time remaining: <span id="timer-sec" style="color: var(--clr-gold-500); font-weight: 900;">15s</span>
             </div>
           </div>
 
           <div class="route-timeline-container">
-            <div style="font-size: 12px; color: var(--clr-text-dim); margin-bottom: 6px;">Trip Summary:</div>
-            <div style="font-weight: 800; font-size: 13px;">Sule Square ➔ Junction City (5.4 km)</div>
-            <div style="font-size: 12px; color: var(--clr-gold-500); margin-top: 4px;">Fare: 2,800 MMK (KBZPay Direct)</div>
+            <div style="font-size: 11px; color: var(--clr-text-dim);">Trip: Sule Square ➔ Junction City (5.4 km)</div>
+            <div style="font-size: 12px; color: var(--clr-gold-500); font-weight: 700; margin-top: 2px;">Estimated Fare: 2,800 MMK</div>
           </div>
 
           <button class="action-btn-gold" onclick="renderStep(3)">Simulate Driver Accepted ➔</button>
-          <button style="background: transparent; border: 1px solid var(--clr-crimson-500); color: var(--clr-crimson-500); padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer;" onclick="renderStep(1)">မခေါ်ယူတော့ပါ (Cancel Search)</button>
+          <button style="background: transparent; border: 1px solid var(--clr-crimson-500); color: var(--clr-crimson-500); padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer;" onclick="renderStep(1)">မခေါ်ယူတော့ပါ (Cancel Search)</button>
         `;
 
         timerInterval = setInterval(() => {
@@ -371,52 +398,66 @@
       } else if (step === 3) {
         titleEl.innerText = 'ခရီးစဥ် လိုက်ပါနေသည် (In-Trip)';
         viewport.innerHTML = `
-          <div class="map-canvas-container" style="display: flex; align-items: center; justify-content: center;">
-            <div style="color: var(--clr-emerald-500); font-weight: 900; font-size: 14px;">📍 42 km/h on Pyay Road • 8 mins to Junction City</div>
-          </div>
-
           <div class="route-timeline-container" style="border: 2px solid var(--clr-gold-500);">
             <div style="font-size: 11px; color: var(--clr-text-dim);">လက်ရှိ မီတာခ (Live Taximeter)</div>
-            <div style="color: var(--clr-gold-500); font-size: 32px; font-weight: 900; margin: 4px 0;">2,350 MMK</div>
-            <div style="font-size: 11px; color: var(--clr-cyan-500);">Distance: 4.2 km • Duration: 11m 40s</div>
+            <div style="color: var(--clr-gold-500); font-size: 28px; font-weight: 900; margin: 2px 0;">2,350 MMK</div>
+            <div style="font-size: 11px; color: var(--clr-cyan-500);">Distance: 4.2 km • Speed: 38 km/h • 8 mins remaining</div>
           </div>
 
           <div class="route-timeline-container">
-            <div style="display: flex; gap: 12px; align-items: center;">
-              <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--clr-noir-card); display: flex; align-items: center; justify-content: center; font-size: 20px;">👨🏻‍✈️</div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <div style="font-size: 26px;">👨🏻‍✈️</div>
               <div style="flex: 1;">
-                <div style="font-weight: 800; font-size: 14px;">U Aung Kyaw</div>
-                <div style="font-size: 11px; color: var(--clr-gold-500);">⭐ 4.96 • Toyota Fielder (3A-8492)</div>
+                <div style="font-weight: 800; font-size: 13px;">U Aung Kyaw (Toyota Fielder)</div>
+                <div style="font-size: 11px; color: var(--clr-gold-500);">⭐ 4.96 • Plate: 3A-8492</div>
               </div>
-              <div style="display: flex; gap: 6px;">
-                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--clr-noir-card); display: flex; align-items: center; justify-content: center;">💬</div>
-                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--clr-noir-card); display: flex; align-items: center; justify-content: center;">📞</div>
-              </div>
+              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;" onclick="renderStep(4)">💬 Chat</button>
             </div>
-            <div style="margin-top: 10px; font-size: 10px; color: var(--clr-emerald-500); font-weight: 800;">📹 CCTV Protecting Mode: ACTIVE</div>
+            <div style="margin-top: 8px; font-size: 10px; color: var(--clr-emerald-500); font-weight: 800;">📹 CCTV Protecting Mode: RECORDING ACTIVE</div>
           </div>
 
-          <button class="action-btn-crimson" onclick="alert('🚨 SOS Panic Broadcasted to Police & Family Guardian!')">🚨 EMERGENCY SOS PANIC</button>
-          <button class="action-btn-gold" onclick="renderStep(4)">Simulate Arrived at Destination ➔</button>
+          <button class="action-btn-crimson" onclick="alert('🚨 SOS Panic Alarm Broadcasted to Police & Family Guardian!')">🚨 EMERGENCY SOS PANIC</button>
+          <button class="action-btn-gold" onclick="renderStep(5)">Simulate Arrived at Destination ➔</button>
         `;
       } else if (step === 4) {
+        titleEl.innerText = 'ယာဥ်မောင်းနှင့် စကားပြောခြင်း (In-App Chat)';
+        viewport.innerHTML = `
+          <div style="background: var(--clr-noir-elevated); border: 1px solid var(--clr-noir-border); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; height: 260px; overflow-y: auto;">
+            <div class="chat-bubble-received">မင်္ဂလာပါ ခင်ဗျာ။ Sule Square အပေါက်ဝရှေ့မှာ စောင့်နေပါသည်ခင်ဗျာ။</div>
+            <div class="chat-bubble-sent">ဟုတ်ကဲ့ပါ အခုပဲ ထွက်လာပါပြီရှင်။</div>
+            <div class="chat-bubble-received">အိုကေပါခင်ဗျာ ကားအဖြူရောင် နံပါတ် 3A-8492 ပါ။</div>
+          </div>
+
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 4px 8px; border-radius: 6px; font-size: 10px;" onclick="alert('Quick reply sent: Sule Square အပေါက်ဝရှေ့ရောက်ပါပြီ')">ရောက်ပါပြီ</button>
+            <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 4px 8px; border-radius: 6px; font-size: 10px;" onclick="alert('Quick reply sent: ၂ မိနစ်စောင့်ပေးပါရှင်')">၂ မိနစ်စောင့်ပါ</button>
+          </div>
+
+          <div style="display: flex; gap: 6px;">
+            <input type="text" placeholder="Type message..." style="flex: 1; background: var(--clr-noir-elevated); border: 1px solid var(--clr-noir-border); border-radius: 10px; padding: 8px 12px; color: #FFF; font-size: 12px;" />
+            <button style="background: var(--clr-gold-500); border: none; border-radius: 10px; padding: 8px 14px; font-weight: 800; cursor: pointer; color: #12131A;">Send</button>
+          </div>
+
+          <button class="action-btn-gold" onclick="renderStep(3)">Back to In-Trip Navigation ❯</button>
+        `;
+      } else if (step === 5) {
         titleEl.innerText = 'ခရီးစဥ်ပြီးဆုံးခြင်း (Receipt & Rating)';
         viewport.innerHTML = `
-          <div class="route-timeline-container" style="text-align: center; padding: 24px 16px; border: 2px solid var(--clr-emerald-500);">
-            <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--clr-emerald-500); color: #12131A; font-size: 24px; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">✓</div>
-            <div style="font-weight: 800; font-size: 16px;">ခရီးစဥ် ပြီးဆုံးပါပြီ</div>
-            <div style="color: var(--clr-gold-500); font-size: 34px; font-weight: 900; margin: 6px 0;">2,800 MMK</div>
-            <div style="font-size: 12px; color: var(--clr-cyan-500);">Paid via KBZPay Direct (Auto Settled)</div>
+          <div class="route-timeline-container" style="text-align: center; padding: 20px 14px; border: 2px solid var(--clr-emerald-500);">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--clr-emerald-500); color: #12131A; font-size: 20px; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px;">✓</div>
+            <div style="font-weight: 800; font-size: 15px;">ခရီးစဥ် ပြီးဆုံးပါပြီ</div>
+            <div style="color: var(--clr-gold-500); font-size: 30px; font-weight: 900; margin: 4px 0;">2,800 MMK</div>
+            <div style="font-size: 11px; color: var(--clr-cyan-500);">Paid via KBZPay Direct (Auto Settled)</div>
           </div>
 
           <div class="route-timeline-container" style="text-align: center;">
-            <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Rate U Aung Kyaw:</div>
-            <div style="color: var(--clr-gold-500); font-size: 26px; letter-spacing: 6px; margin-bottom: 12px;">★★★★★</div>
-            <div style="font-size: 11px; color: var(--clr-text-dim); margin-bottom: 8px;">Add Tip (မုန့်ဖိုးပေးမည်):</div>
-            <div style="display: flex; gap: 8px; justify-content: center;">
-              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 8px 14px; border-radius: 8px; font-size: 11px;">+500 MMK</button>
-              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-gold-500); color: var(--clr-gold-500); padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 800;">+1,000 MMK</button>
-              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 8px 14px; border-radius: 8px; font-size: 11px;">+2,000 MMK</button>
+            <div style="font-size: 12px; font-weight: 700; margin-bottom: 6px;">Rate U Aung Kyaw:</div>
+            <div style="color: var(--clr-gold-500); font-size: 24px; letter-spacing: 4px; margin-bottom: 10px;">★★★★★</div>
+            <div style="font-size: 11px; color: var(--clr-text-dim); margin-bottom: 6px;">Add Driver Tip (မုန့်ဖိုးပေးမည်):</div>
+            <div style="display: flex; gap: 6px; justify-content: center;">
+              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 6px 12px; border-radius: 8px; font-size: 11px;">+500 MMK</button>
+              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-gold-500); color: var(--clr-gold-500); padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800;">+1,000 MMK</button>
+              <button style="background: var(--clr-noir-card); border: 1px solid var(--clr-noir-border); color: #FFF; padding: 6px 12px; border-radius: 8px; font-size: 11px;">+2,000 MMK</button>
             </div>
           </div>
 

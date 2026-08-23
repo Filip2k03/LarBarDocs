@@ -40,6 +40,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'High-Level Overview', link: '/architecture/overview' },
+          { text: 'Cartography, Maps & OSRM Engine', link: '/architecture/cartography-and-live-maps' },
           { text: 'UML 2.5 & Draw.io Models', link: '/architecture/uml-diagrams' },
           { text: 'Database & PostGIS ERD', link: '/architecture/database-design' },
           { text: 'Clean Architecture (Go)', link: '/architecture/clean-architecture-go' }
