@@ -112,12 +112,13 @@ func (s *Service) Submit(ctx context.Context, userID uuid.UUID) (Application, er
 	if completed != len(required) {
 		return Application{}, ErrDocumentsRequired
 	}
+	requiredDocuments := []string{"profile_photo", "nrc", "driver_license", "vehicle_registration", "vehicle_front", "vehicle_rear"}
 	var documents int
-	err = s.db.QueryRow(ctx, `SELECT count(DISTINCT type) FROM driver_documents WHERE application_id=$1 AND status IN ('pending','verified')`, a.ID).Scan(&documents)
+	err = s.db.QueryRow(ctx, `SELECT count(DISTINCT type) FROM driver_documents WHERE application_id=$1 AND status IN ('pending','verified') AND type=ANY($2)`, a.ID, requiredDocuments).Scan(&documents)
 	if err != nil {
 		return Application{}, err
 	}
-	if documents < 4 {
+	if documents != len(requiredDocuments) {
 		return Application{}, ErrDocumentsRequired
 	}
 	tx, err := s.db.Begin(ctx)
@@ -167,6 +168,32 @@ func (s *Service) Reject(ctx context.Context, adminID, applicationID uuid.UUID, 
 	}
 	return s.decision(ctx, adminID, applicationID, "rejected", reason, requestID, nil)
 }
+
+func (s *Service) VerifyDocument(ctx context.Context, adminID, applicationID, documentID uuid.UUID, verified bool, reason, requestID string) error {
+	status := "verified"
+	if !verified {
+		status = "rejected"
+		if reason == "" {
+			return errors.New("document rejection reason required")
+		}
+	}
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+	tag, err := tx.Exec(ctx, `UPDATE driver_documents SET status=$1,rejection_reason=CASE WHEN $1='rejected' THEN $2 ELSE NULL END,verified_by=$3,verified_at=now() WHERE id=$4 AND application_id=$5 AND status='pending'`, status, reason, adminID, documentID, applicationID)
+	if err != nil {
+		return err
+	}
+	if tag.RowsAffected() != 1 {
+		return ErrApplicationState
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO audit_logs(actor_id,actor_type,action,resource_type,resource_id,after_data,request_id) VALUES($1,'admin',$2,'driver_document',$3::text,jsonb_build_object('status',$4,'reason',$5,'application_id',$6::text),$7)`, adminID, "driver.document."+status, documentID, status, reason, applicationID, requestID); err != nil {
+		return err
+	}
+	return tx.Commit(ctx)
+}
 func (s *Service) Approve(ctx context.Context, adminID, applicationID uuid.UUID, reason, requestID string) error {
 	tx, err := s.db.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.Serializable})
 	if err != nil {
@@ -190,12 +217,13 @@ func (s *Service) Approve(ctx context.Context, adminID, applicationID uuid.UUID,
 	if status != "submitted" && status != "under_review" && status != "verification" {
 		return ErrApplicationState
 	}
-	var rejected, expired int
-	err = tx.QueryRow(ctx, `SELECT count(*) FILTER(WHERE status='rejected'),count(*) FILTER(WHERE expires_on<CURRENT_DATE) FROM driver_documents WHERE application_id=$1`, applicationID).Scan(&rejected, &expired)
+	requiredDocuments := []string{"profile_photo", "nrc", "driver_license", "vehicle_registration", "vehicle_front", "vehicle_rear"}
+	var verified, rejected, expired int
+	err = tx.QueryRow(ctx, `SELECT count(DISTINCT type) FILTER(WHERE status='verified' AND type=ANY($2)),count(*) FILTER(WHERE status IN ('pending','rejected','expired')),count(*) FILTER(WHERE expires_on<CURRENT_DATE) FROM driver_documents WHERE application_id=$1`, applicationID, requiredDocuments).Scan(&verified, &rejected, &expired)
 	if err != nil {
 		return err
 	}
-	if rejected > 0 || expired > 0 {
+	if verified != len(requiredDocuments) || rejected > 0 || expired > 0 {
 		return ErrDocumentsRequired
 	}
 	driverID := uuid.New()

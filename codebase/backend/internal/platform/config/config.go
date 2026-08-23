@@ -24,6 +24,7 @@ type Config struct {
 	DevelopmentOTP   bool
 	MapProvider      string
 	MapBaseURL       string
+	GeocodeBaseURL   string
 	StorageProvider  string
 	StorageEndpoint  string
 	StorageBucket    string
@@ -46,7 +47,7 @@ func Load() (Config, error) {
 		JWTSecret:        os.Getenv("JWT_SECRET"), OTPSecret: os.Getenv("OTP_SECRET"), EncryptionKey: os.Getenv("ENCRYPTION_KEY"),
 		AccessTokenTTL: duration("ACCESS_TOKEN_TTL", 15*time.Minute), RefreshTokenTTL: duration("REFRESH_TOKEN_TTL", 30*24*time.Hour),
 		SMSProvider: env("SMS_PROVIDER", "development"), DevelopmentOTP: boolean("DEVELOPMENT_OTP_ENABLED", false),
-		MapProvider: env("MAP_PROVIDER", "osrm"), MapBaseURL: env("MAP_BASE_URL", "http://localhost:5000"),
+		MapProvider: env("MAP_PROVIDER", "osrm"), MapBaseURL: env("MAP_BASE_URL", "http://localhost:5000"), GeocodeBaseURL: env("GEOCODE_BASE_URL", "https://nominatim.openstreetmap.org"),
 		StorageProvider: env("STORAGE_PROVIDER", "minio"), StorageEndpoint: env("STORAGE_ENDPOINT", "localhost:9000"),
 		StorageBucket: env("STORAGE_BUCKET", "labar"), StorageAccessKey: os.Getenv("STORAGE_ACCESS_KEY"), StorageSecretKey: os.Getenv("STORAGE_SECRET_KEY"), StorageUseTLS: boolean("STORAGE_USE_TLS", false),
 		FCMProjectID: os.Getenv("FCM_PROJECT_ID"), FCMCredentials: os.Getenv("FCM_CREDENTIALS_FILE"),

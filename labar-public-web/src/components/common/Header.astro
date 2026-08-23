@@ -10,22 +10,22 @@ const { locale = defaultLocale } = Astro.props;
 const t = getTranslation(locale);
 ---
 
-<header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-brand-border/80 transition-all">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-border/80 transition-all">
+  <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
     <!-- Brand Logo -->
-    <a href="/" class="flex items-center gap-3 shrink-0 group">
+    <a href="/" class="flex items-center gap-2.5 shrink-0 group">
       <img
         src="/logo.png"
         alt="LaBar Logo"
-        class="h-10 w-auto object-contain transition-transform group-hover:scale-105"
+        class="h-8 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105"
       />
-      <span class="text-2xl font-black tracking-tight text-neutral-900 flex items-center">
+      <span class="text-xl sm:text-2xl font-black tracking-tight text-neutral-900 flex items-center">
         La<span class="text-brand-red">Bar</span>
       </span>
     </a>
 
-    <!-- Desktop Navigation Links -->
-    <nav class="hidden lg:flex items-center gap-6 text-xs font-bold text-neutral-700">
+    <!-- Desktop Navigation Links (>= 1024px) -->
+    <nav class="hidden lg:flex items-center gap-5 xl:gap-6 text-xs font-bold text-neutral-700">
       <div class="relative group">
         <a href="/ride" class="flex items-center gap-1 hover:text-brand-red transition-colors py-2">
           <span>{t.nav.ride}</span>
@@ -60,26 +60,150 @@ const t = getTranslation(locale);
       <a href="/about" class="hover:text-brand-red transition-colors py-2">{t.nav.about}</a>
     </nav>
 
-    <!-- Right Controls: Language Switcher, Staff/Login, Book CTA -->
-    <div class="flex items-center gap-3 shrink-0">
+    <!-- Right Controls: Language Switcher, Staff/Login, Book CTA, Mobile Menu Button -->
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
       <LanguageSwitcher client:load currentLocale={locale} />
       
       <a
         href="/prototypes/admin-control-center.html"
-        class="hidden sm:inline-flex text-xs font-bold text-neutral-700 hover:text-neutral-900 px-3 py-1.5 rounded-full hover:bg-neutral-100 transition-colors"
+        class="hidden md:inline-flex text-xs font-bold text-neutral-700 hover:text-neutral-900 px-3 py-1.5 rounded-full hover:bg-neutral-100 transition-colors"
       >
         Staff Portal
       </a>
 
       <a
         href="/ride"
-        class="btn-primary text-xs py-2.5 px-5 shadow-sm"
+        class="btn-primary text-xs py-2 sm:py-2.5 px-3.5 sm:px-5 shadow-sm shrink-0"
       >
-        <span>{t.nav.bookRide}</span>
+        <span class="hidden sm:inline">{t.nav.bookRide}</span>
+        <span class="sm:hidden">Ride</span>
         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
         </svg>
       </a>
+
+      <!-- Mobile Hamburger Button (< 1024px / 425px) -->
+      <button
+        id="mobileMenuBtn"
+        type="button"
+        class="lg:hidden p-2 rounded-xl text-neutral-700 hover:bg-neutral-100 transition-colors cursor-pointer"
+        aria-label="Toggle mobile menu"
+      >
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Slide-out Drawer for 425px & Small Screen Devices -->
+  <div
+    id="mobileMenuDrawer"
+    class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm lg:hidden transition-opacity"
+  >
+    <div class="fixed inset-y-0 right-0 max-w-[320px] w-full bg-white shadow-soft-lg p-6 flex flex-col justify-between overflow-y-auto">
+      <div class="space-y-6">
+        <!-- Top Drawer Header -->
+        <div class="flex items-center justify-between border-b border-neutral-100 pb-4">
+          <div class="flex items-center gap-2">
+            <img src="/logo.png" alt="LaBar" class="h-7 w-auto" />
+            <span class="text-lg font-black">La<span class="text-brand-red">Bar</span></span>
+          </div>
+          <button
+            id="closeMobileMenuBtn"
+            type="button"
+            class="p-1.5 rounded-full text-neutral-400 hover:text-neutral-800 hover:bg-neutral-100"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Navigation Links List -->
+        <nav class="flex flex-col space-y-1 text-sm font-bold text-neutral-800">
+          <a href="/ride" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.ride}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/drive" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.drive}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/delivery" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.delivery}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/airport" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.airport}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/schedule" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.schedule}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/business" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.business}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/safety" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.safety}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/promotions" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.promotions}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/fares" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.fares}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/help" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.help}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+          <a href="/about" class="px-3 py-2.5 rounded-xl hover:bg-brand-bg hover:text-brand-red transition-colors flex items-center justify-between">
+            <span>{t.nav.about}</span>
+            <span class="text-neutral-400">❯</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="pt-6 border-t border-neutral-100 space-y-3">
+        <a
+          href="/ride"
+          class="btn-primary w-full text-xs py-3 shadow-md"
+        >
+          <span>{t.nav.bookRide}</span>
+        </a>
+        <a
+          href="/prototypes/admin-control-center.html"
+          class="btn-secondary w-full text-xs py-2.5"
+        >
+          <span>Staff Control Center</span>
+        </a>
+      </div>
     </div>
   </div>
 </header>
+
+<script is:inline>
+  const mobileBtn = document.getElementById('mobileMenuBtn');
+  const closeBtn = document.getElementById('closeMobileMenuBtn');
+  const drawer = document.getElementById('mobileMenuDrawer');
+
+  if (mobileBtn && drawer && closeBtn) {
+    mobileBtn.addEventListener('click', () => {
+      drawer.classList.remove('hidden');
+    });
+    closeBtn.addEventListener('click', () => {
+      drawer.classList.add('hidden');
+    });
+    drawer.addEventListener('click', (e) => {
+      if (e.target === drawer) {
+        drawer.classList.add('hidden');
+      }
+    });
+  }
+</script>

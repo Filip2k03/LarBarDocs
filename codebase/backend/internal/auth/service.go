@@ -158,7 +158,26 @@ func (s *Service) VerifyOTP(ctx context.Context, challengeID uuid.UUID, phone, c
 	if err != nil {
 		return Tokens{}, err
 	}
-	user.Roles = []string{"passenger"}
+	if _, err = tx.Exec(ctx, `INSERT INTO passenger_profiles(user_id) VALUES($1) ON CONFLICT DO NOTHING`, user.ID); err != nil {
+		return Tokens{}, err
+	}
+	rows, err := tx.Query(ctx, `SELECT r.name FROM user_roles ur JOIN roles r ON r.id=ur.role_id WHERE ur.user_id=$1 ORDER BY r.name`, user.ID)
+	if err != nil {
+		return Tokens{}, err
+	}
+	for rows.Next() {
+		var role string
+		if err = rows.Scan(&role); err != nil {
+			rows.Close()
+			return Tokens{}, err
+		}
+		user.Roles = append(user.Roles, role)
+	}
+	if err = rows.Err(); err != nil {
+		rows.Close()
+		return Tokens{}, err
+	}
+	rows.Close()
 	refresh, refreshHash, err := randomToken()
 	if err != nil {
 		return Tokens{}, err

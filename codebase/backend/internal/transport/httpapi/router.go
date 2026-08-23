@@ -21,6 +21,7 @@ import (
 	"github.com/Filip2k03/labar-backend/internal/driverreg"
 	"github.com/Filip2k03/labar-backend/internal/drivers"
 	"github.com/Filip2k03/labar-backend/internal/passengers"
+	platformmaps "github.com/Filip2k03/labar-backend/internal/platform/maps"
 	"github.com/Filip2k03/labar-backend/internal/platform/storage"
 	"github.com/Filip2k03/labar-backend/internal/pricing"
 	"github.com/Filip2k03/labar-backend/internal/realtime"
@@ -57,6 +58,8 @@ type Dependencies struct {
 	Content    *content.Service
 	Admin      *admin.Service
 	Realtime   *realtime.Gateway
+	Maps       platformmaps.Provider
+	Geocoder   platformmaps.Geocoder
 }
 type API struct{ deps Dependencies }
 
@@ -86,14 +89,22 @@ func (api API) publicRoutes(r chi.Router) {
 		r.Get("/cities/{slug}", api.city)
 		r.Get("/ride-types", api.rideTypes)
 		r.Get("/fares", api.fares)
-		r.Post("/fares/estimate", api.publicQuote)
-		r.Post("/bookings/quote", api.publicQuote)
+		r.With(api.rateLimit("public_quote", 30, time.Minute)).Post("/fares/estimate", api.publicQuote)
+		r.With(api.rateLimit("public_quote", 30, time.Minute)).Post("/bookings/quote", api.publicQuote)
+		r.With(apimiddleware.Authenticate(api.deps.Auth), apimiddleware.RequireRoles("passenger", "admin", "super_admin")).Post("/bookings", api.createRide)
 		r.Get("/promotions", api.promotions)
 		r.Get("/faqs", api.faqs)
+		r.Get("/help/categories", api.helpCategories)
+		r.Get("/help/articles", api.helpArticles)
+		r.Get("/help/articles/{slug}", api.helpArticle)
+		r.Get("/help/search", api.helpSearch)
 		r.Get("/status", api.publicStatus)
 		r.Get("/app-version", api.mobileConfig)
 		r.Get("/trip-share/{token}", api.publicTripShare)
-		r.Post("/support/tickets", api.publicSupport)
+		r.With(api.rateLimit("public_support", 5, time.Hour)).Post("/support/tickets", api.publicSupport)
+		r.With(api.rateLimit("public_contact", 5, time.Hour)).Post("/contact", api.publicSupport)
+		r.With(api.rateLimit("public_driver_application", 5, time.Hour)).Post("/driver-applications", api.publicSupport)
+		r.With(api.rateLimit("public_business", 5, time.Hour)).Post("/business/inquiries", api.publicSupport)
 	})
 	r.Get("/mobile/config", api.mobileConfig)
 }
@@ -110,6 +121,12 @@ func (api API) authRoutes(r chi.Router) {
 	})
 }
 func (api API) authenticatedRoutes(r chi.Router) {
+	r.Group(func(r chi.Router) {
+		r.Use(api.rateLimit("locations", 120, time.Minute))
+		r.Get("/locations/search", api.locationSearch)
+		r.Get("/locations/reverse-geocode", api.reverseGeocode)
+		r.Post("/routes/estimate", api.routeEstimate)
+	})
 	r.Post("/devices/register", api.registerDevice)
 	r.Delete("/devices/{id}", api.deleteDevice)
 	r.Get("/realtime", api.realtime)
@@ -143,6 +160,7 @@ func (api API) authenticatedRoutes(r chi.Router) {
 		r.Get("/offers/current", api.currentOffer)
 		r.Post("/offers/{id}/accept", api.acceptOffer)
 		r.Post("/offers/{id}/reject", api.rejectOffer)
+		r.Post("/rides/{id}/enroute", api.driverEnroute)
 		r.Post("/rides/{id}/arrived", api.driverArrived)
 		r.Post("/rides/{id}/pickup-pin", api.pickupConfirmed)
 		r.Post("/rides/{id}/start", api.startTrip)
@@ -166,6 +184,7 @@ func (api API) authenticatedRoutes(r chi.Router) {
 		r.Get("/dashboard", api.adminDashboard)
 		r.Get("/driver-applications", api.adminApplications)
 		r.Post("/driver-applications/{id}/request-documents", api.adminRequestDocuments)
+		r.Post("/driver-applications/{id}/documents/{document_id}/decision", api.adminDocumentDecision)
 		r.Post("/driver-applications/{id}/approve", api.adminApprove)
 		r.Post("/driver-applications/{id}/reject", api.adminReject)
 		r.Get("/audit-logs", api.auditLogs)
@@ -174,6 +193,72 @@ func (api API) authenticatedRoutes(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("super_admin", "admin", "operations_manager", "dispatcher"))
 		r.Get("/dashboard", api.adminDashboard)
 	})
+}
+
+func (api API) rateLimit(scope string, limit int64, window time.Duration) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			identity := r.RemoteAddr
+			if p, ok := apimiddleware.PrincipalFrom(r.Context()); ok {
+				identity = p.UserID.String()
+			}
+			key := "rate:" + scope + ":" + identity
+			count, err := api.deps.Redis.Incr(r.Context(), key).Result()
+			if err != nil {
+				response.Error(w, r, http.StatusServiceUnavailable, "SERVICE_UNAVAILABLE", "Rate-limit service is unavailable.")
+				return
+			}
+			if count == 1 {
+				_ = api.deps.Redis.Expire(r.Context(), key, window).Err()
+			}
+			if count > limit {
+				response.Error(w, r, http.StatusTooManyRequests, "RATE_LIMITED", "Try again later.")
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func (api API) locationSearch(w http.ResponseWriter, r *http.Request) {
+	places, err := api.deps.Geocoder.Search(r.Context(), r.URL.Query().Get("q"), 5)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, places)
+}
+
+func (api API) reverseGeocode(w http.ResponseWriter, r *http.Request) {
+	lat, latErr := strconv.ParseFloat(r.URL.Query().Get("lat"), 64)
+	lng, lngErr := strconv.ParseFloat(r.URL.Query().Get("lng"), 64)
+	if latErr != nil || lngErr != nil {
+		response.Error(w, r, http.StatusUnprocessableEntity, "VALIDATION_ERROR", "Valid lat and lng values are required.")
+		return
+	}
+	place, err := api.deps.Geocoder.Reverse(r.Context(), platformmaps.Point{Latitude: lat, Longitude: lng})
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, place)
+}
+
+func (api API) routeEstimate(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Pickup      platformmaps.Point `json:"pickup"`
+		Destination platformmaps.Point `json:"destination"`
+	}
+	if err := validation.Decode(w, r, &body); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	route, err := api.deps.Maps.Route(r.Context(), body.Pickup, body.Destination)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, route)
 }
 func requestLogger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -343,6 +428,38 @@ func (api API) faqs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	response.JSON(w, r, 200, data)
+}
+func (api API) helpCategories(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Content.HelpCategories(r.Context())
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+func (api API) helpArticles(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Content.HelpArticles(r.Context(), r.URL.Query().Get("category"), "")
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+func (api API) helpSearch(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Content.HelpArticles(r.Context(), "", r.URL.Query().Get("q"))
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+func (api API) helpArticle(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Content.HelpArticle(r.Context(), chi.URLParam(r, "slug"))
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
 }
 func (api API) publicStatus(w http.ResponseWriter, r *http.Request) {
 	response.JSON(w, r, 200, map[string]any{"operational": true, "checked_at": time.Now().UTC()})
@@ -667,6 +784,9 @@ func (api API) rejectOffer(w http.ResponseWriter, r *http.Request) {
 func (api API) driverArrived(w http.ResponseWriter, r *http.Request) {
 	api.driverTransition(w, r, rides.DriverArrived)
 }
+func (api API) driverEnroute(w http.ResponseWriter, r *http.Request) {
+	api.driverTransition(w, r, rides.DriverEnroute)
+}
 func (api API) pickupConfirmed(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r)
 	if !ok {
@@ -820,6 +940,30 @@ func (api API) adminApprove(w http.ResponseWriter, r *http.Request) {
 	api.adminDecision(w, r, "approve")
 }
 func (api API) adminReject(w http.ResponseWriter, r *http.Request) { api.adminDecision(w, r, "reject") }
+func (api API) adminDocumentDecision(w http.ResponseWriter, r *http.Request) {
+	applicationID, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	documentID, err := uuid.Parse(chi.URLParam(r, "document_id"))
+	if err != nil {
+		response.Error(w, r, http.StatusBadRequest, "VALIDATION_ERROR", "The document ID is invalid.")
+		return
+	}
+	var body struct {
+		Verified bool   `json:"verified"`
+		Reason   string `json:"reason"`
+	}
+	if err = validation.Decode(w, r, &body); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	if err = api.deps.DriverReg.VerifyDocument(r.Context(), principal(r).UserID, applicationID, documentID, body.Verified, body.Reason, chimiddleware.GetReqID(r.Context())); err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, map[string]any{"document_id": documentID, "verified": body.Verified})
+}
 func (api API) adminDecision(w http.ResponseWriter, r *http.Request, decision string) {
 	id, ok := pathID(w, r)
 	if !ok {

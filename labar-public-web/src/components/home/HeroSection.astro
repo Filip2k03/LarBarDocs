@@ -1,6 +1,7 @@
 ---
 import Icon from '@/components/common/Icon.astro';
 import { HeroBookingWidget } from './HeroBookingWidget';
+import { Hero3DCanvas } from './Hero3DCanvas';
 import { getTranslation, defaultLocale } from '@/i18n';
 
 interface Props {
@@ -11,64 +12,36 @@ const { locale = defaultLocale } = Astro.props;
 const t = getTranslation(locale);
 ---
 
-<section class="relative overflow-hidden pt-8 pb-16 lg:py-20 bg-gradient-to-b from-white via-brand-bg/40 to-brand-bg border-b border-brand-border/60">
-  <!-- Subtle Vector Map Background Graphic for Yangon -->
-  <div class="absolute inset-0 pointer-events-none opacity-35 overflow-hidden flex items-center justify-center">
-    <svg class="w-full h-full object-cover min-w-[1000px]" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Waterways (Yangon River & Pazundaung Creek & Lakes) -->
-      <path d="M0 450 C 300 480, 500 560, 800 480 C 1000 420, 1100 520, 1200 550 L 1200 600 L 0 600 Z" fill="#BAE6FD" opacity="0.6"/>
-      <ellipse cx="620" cy="180" rx="45" ry="25" fill="#BBF7D0" opacity="0.7"/> <!-- Kandawgyi Lake -->
-      <ellipse cx="620" cy="100" rx="35" ry="20" fill="#BBF7D0" opacity="0.7"/> <!-- Inya Lake -->
-
-      <!-- Main Road Grid Polylines -->
-      <path d="M 620 40 L 620 450" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"/>
-      <path d="M 400 300 L 950 300" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"/>
-      <path d="M 500 420 L 780 420" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"/>
-
-      <!-- Route Polyline (Red GPS Active Route Line) -->
-      <path d="M 640 180 C 640 260, 660 340, 760 440" stroke="#E53935" stroke-width="4" stroke-dasharray="6 6" stroke-linecap="round"/>
+<section class="relative overflow-hidden pt-6 pb-14 lg:py-20 bg-gradient-to-b from-white via-brand-bg/60 to-brand-bg border-b border-brand-border/60">
+  <div class="relative max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
       
-      <!-- Landmarks Markers -->
-      <g transform="translate(620, 160)">
-        <circle cx="0" cy="0" r="14" fill="#FFD23F" stroke="#FFFFFF" stroke-width="3"/>
-        <text x="18" y="4" font-family="Poppins" font-size="11" font-weight="700" fill="#475569">Shwedagon Pagoda</text>
-      </g>
-
-      <g transform="translate(760, 440)">
-        <circle cx="0" cy="0" r="12" fill="#E53935" stroke="#FFFFFF" stroke-width="3"/>
-        <text x="-120" y="4" font-family="Poppins" font-size="11" font-weight="700" fill="#475569">Botataung Pagoda</text>
-      </g>
-    </svg>
-  </div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-      <!-- Left Hero Typography -->
+      <!-- Left Hero Column: Typography & 3D Interactive WebGL Scene -->
       <div class="lg:col-span-7 space-y-6">
         <!-- Myanmar Heritage Badge with Vector Emblem -->
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 shadow-soft-sm text-amber-900">
           <Icon name="myanmar-badge" size={15} color="#D97706" />
-          <span class="text-xs font-bold tracking-wide">
+          <span class="text-[11px] sm:text-xs font-bold tracking-wide">
             {t.hero.badge}
           </span>
         </div>
 
-        <!-- Main Display Headline -->
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-neutral-900 tracking-tight leading-[1.1]">
+        <!-- Main Display Headline (Fluid responsive font sizing for 425px & mobile) -->
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-neutral-900 tracking-tight leading-[1.12]">
           {t.hero.titleLine1} <br />
           <span class="text-amber-500 font-extrabold">{t.hero.titleLine2}</span>
         </h1>
 
         <!-- Subheading Paragraph -->
-        <p class="text-base sm:text-lg text-neutral-600 font-medium leading-relaxed max-w-xl">
+        <p class="text-xs sm:text-base text-neutral-600 font-medium leading-relaxed max-w-xl">
           {t.hero.subtitle}
         </p>
 
         <!-- CTA Buttons -->
-        <div class="flex flex-wrap items-center gap-4 pt-2">
+        <div class="flex flex-wrap items-center gap-3 pt-1">
           <a
             href="/ride"
-            class="btn-primary shadow-soft-md"
+            class="btn-primary text-xs sm:text-sm py-3 px-5 sm:px-6 shadow-soft-md"
           >
             <span>{t.hero.bookNow}</span>
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,15 +51,20 @@ const t = getTranslation(locale);
 
           <a
             href="/drive"
-            class="btn-secondary"
+            class="btn-secondary text-xs sm:text-sm py-3 px-5 sm:px-6"
           >
             <span>{t.hero.driveWithUs}</span>
           </a>
         </div>
+
+        <!-- Interactive 3D WebGL Three.js Taxi Canvas Island -->
+        <div class="pt-4">
+          <Hero3DCanvas client:load />
+        </div>
       </div>
 
-      <!-- Right Floating Interactive Booking Widget Island -->
-      <div class="lg:col-span-5 flex justify-center lg:justify-end">
+      <!-- Right Floating Real-Time Booking UI Island Overlay -->
+      <div class="lg:col-span-5 flex justify-center lg:justify-end w-full">
         <HeroBookingWidget client:load />
       </div>
     </div>

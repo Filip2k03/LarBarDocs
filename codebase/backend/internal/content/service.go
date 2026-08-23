@@ -3,8 +3,10 @@ package content
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -113,14 +115,60 @@ func (s *Service) FAQs(ctx context.Context) ([]map[string]any, error) {
 	}
 	return out, rows.Err()
 }
+
+func (s *Service) HelpCategories(ctx context.Context) ([]map[string]any, error) {
+	rows, err := s.db.Query(ctx, `SELECT id,slug,name FROM help_categories WHERE status='published' ORDER BY display_order,name`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var result []map[string]any
+	for rows.Next() {
+		var id uuid.UUID
+		var slug, name string
+		if err = rows.Scan(&id, &slug, &name); err != nil {
+			return nil, err
+		}
+		result = append(result, map[string]any{"id": id, "slug": slug, "name": name})
+	}
+	return result, rows.Err()
+}
+
+func (s *Service) HelpArticles(ctx context.Context, category, query string) ([]map[string]any, error) {
+	rows, err := s.db.Query(ctx, `SELECT ha.id,ha.slug,ha.title,hc.slug FROM help_articles ha JOIN help_categories hc ON hc.id=ha.category_id WHERE ha.status='published' AND ($1='' OR hc.slug=$1) AND ($2='' OR ha.title ILIKE '%'||$2||'%') ORDER BY ha.published_at DESC LIMIT 50`, category, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var result []map[string]any
+	for rows.Next() {
+		var id uuid.UUID
+		var slug, title, categorySlug string
+		if err = rows.Scan(&id, &slug, &title, &categorySlug); err != nil {
+			return nil, err
+		}
+		result = append(result, map[string]any{"id": id, "slug": slug, "title": title, "category": categorySlug})
+	}
+	return result, rows.Err()
+}
+
+func (s *Service) HelpArticle(ctx context.Context, slug string) (map[string]any, error) {
+	var id uuid.UUID
+	var title, category string
+	var body json.RawMessage
+	err := s.db.QueryRow(ctx, `SELECT ha.id,ha.title,ha.body,hc.slug FROM help_articles ha JOIN help_categories hc ON hc.id=ha.category_id WHERE ha.slug=$1 AND ha.status='published'`, slug).Scan(&id, &title, &body, &category)
+	if err != nil {
+		return nil, err
+	}
+	return map[string]any{"id": id, "slug": slug, "title": title, "body": body, "category": category}, nil
+}
 func (s *Service) RemoteConfig(ctx context.Context, app, platform, version string) (map[string]any, error) {
 	var minimum, latest string
 	var force bool
 	err := s.db.QueryRow(ctx, `SELECT minimum_version,latest_version,force_update FROM app_versions WHERE app=$1 AND platform=$2`, app, platform).Scan(&minimum, &latest, &force)
-	if err != nil {
-		minimum = "0.0.0"
-		latest = "0.0.0"
-		force = false
+	configured := err == nil
+	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+		return nil, err
 	}
 	rows, queryErr := s.db.Query(ctx, `SELECT key,enabled,config FROM feature_flags WHERE scope='global' OR(scope='platform' AND scope_value=$1) ORDER BY key`, platform)
 	if queryErr != nil {
@@ -137,5 +185,5 @@ func (s *Service) RemoteConfig(ctx context.Context, app, platform, version strin
 		}
 		flags[key] = map[string]any{"enabled": enabled, "config": raw}
 	}
-	return map[string]any{"app": app, "platform": platform, "current_version": version, "minimum_version": minimum, "latest_version": latest, "force_update": force, "feature_flags": flags, "support_contacts": map[string]string{}, "location_upload_interval_seconds": 5, "ride_refresh_interval_seconds": 10}, rows.Err()
+	return map[string]any{"app": app, "platform": platform, "current_version": version, "version_policy_configured": configured, "minimum_version": minimum, "latest_version": latest, "force_update": force, "feature_flags": flags, "support_contacts": map[string]string{}, "location_upload_interval_seconds": 5, "ride_refresh_interval_seconds": 10}, rows.Err()
 }

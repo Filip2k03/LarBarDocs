@@ -245,6 +245,22 @@ func (s *Service) Transition(ctx context.Context, rideID uuid.UUID, to Status, a
 	if err != nil {
 		return Ride{}, err
 	}
+	if actorType == "driver" && actorID != nil {
+		availability := ""
+		switch to {
+		case DriverEnroute:
+			availability = "enroute_pickup"
+		case DriverArrived, PickupConfirmed:
+			availability = "waiting_passenger"
+		case InProgress:
+			availability = "on_trip"
+		}
+		if availability != "" {
+			if _, err = tx.Exec(ctx, `UPDATE drivers SET availability=$1 WHERE id=$2`, availability, *actorID); err != nil {
+				return Ride{}, err
+			}
+		}
+	}
 	if err = tx.Commit(ctx); err != nil {
 		return Ride{}, err
 	}
@@ -304,10 +320,44 @@ func actor(id *uuid.UUID) uuid.UUID {
 }
 func (s *Service) Cancel(ctx context.Context, rideID, userID uuid.UUID, actorType, reason string) (Ride, error) {
 	target := PassengerCancelled
+	ownership := `passenger_id=$2`
 	if actorType == "driver" {
 		target = DriverCancelled
+		ownership = `driver_id IN(SELECT id FROM drivers WHERE user_id=$2)`
 	}
-	return s.Transition(ctx, rideID, target, actorType, &userID, map[string]any{"reason": reason})
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return Ride{}, err
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+	var from Status
+	var driverID *uuid.UUID
+	var sequence int64
+	err = tx.QueryRow(ctx, `SELECT status,driver_id,coalesce((SELECT max(sequence) FROM ride_events WHERE ride_id=$1),0) FROM rides WHERE id=$1 AND `+ownership+` FOR UPDATE`, rideID, userID).Scan(&from, &driverID, &sequence)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return Ride{}, ErrRideNotFound
+	}
+	if err != nil {
+		return Ride{}, err
+	}
+	if err = ValidateTransition(from, target); err != nil {
+		return Ride{}, err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE rides SET status=$1,updated_at=now(),version=version+1 WHERE id=$2`, target, rideID); err != nil {
+		return Ride{}, err
+	}
+	if driverID != nil {
+		if _, err = tx.Exec(ctx, `UPDATE drivers SET availability='available' WHERE id=$1`, *driverID); err != nil {
+			return Ride{}, err
+		}
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id,metadata) VALUES($1,$2,$3,$4,$5,jsonb_build_object('reason',$6))`, rideID, sequence+1, "ride."+string(target), actorType, userID, reason); err != nil {
+		return Ride{}, err
+	}
+	if err = tx.Commit(ctx); err != nil {
+		return Ride{}, err
+	}
+	return s.Get(ctx, rideID, userID, nil)
 }
 func (s *Service) Receipt(ctx context.Context, rideID, passengerID uuid.UUID) (map[string]any, error) {
 	var result map[string]any

@@ -1,0 +1,271 @@
+openapi: 3.1.0
+info:
+  title: LaBar Platform API
+  version: 1.0.0
+  description: Authoritative API for LaBar passenger, driver, registration, public web and administration clients.
+servers:
+  - url: http://localhost:8080/api/v1
+security:
+  - bearerAuth: []
+tags:
+  - {name: Public}
+  - {name: Auth}
+  - {name: Passenger}
+  - {name: Driver}
+  - {name: Driver Registration}
+  - {name: Admin}
+paths:
+  /public/config:
+    get: {tags: [Public], security: [], operationId: publicConfig, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /public/cities:
+    get: {tags: [Public], security: [], operationId: listCities, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /public/cities/{slug}:
+    get:
+      tags: [Public]
+      security: []
+      operationId: getCity
+      parameters: [{$ref: '#/components/parameters/Slug'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}, '404': {$ref: '#/components/responses/Error'}}
+  /public/ride-types:
+    get: {tags: [Public], security: [], operationId: publicRideTypes, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /public/fares:
+    get: {tags: [Public], security: [], operationId: publicFares, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /public/fares/estimate:
+    post:
+      tags: [Public]
+      security: []
+      operationId: publicFareEstimate
+      requestBody: {$ref: '#/components/requestBodies/Quote'}
+      responses: {'200': {$ref: '#/components/responses/Success'}, '422': {$ref: '#/components/responses/Error'}}
+  /public/bookings/quote:
+    post:
+      tags: [Public]
+      security: []
+      operationId: publicBookingQuote
+      requestBody: {$ref: '#/components/requestBodies/Quote'}
+      responses: {'200': {$ref: '#/components/responses/Success'}}
+  /public/promotions:
+    get: {tags: [Public], security: [], operationId: publicPromotions, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /public/faqs:
+    get: {tags: [Public], security: [], operationId: publicFaqs, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /public/status:
+    get: {tags: [Public], security: [], operationId: publicStatus, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /auth/otp/request:
+    post:
+      tags: [Auth]
+      security: []
+      operationId: requestOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OTPRequest'}
+      responses: {'202': {$ref: '#/components/responses/Success'}, '429': {$ref: '#/components/responses/Error'}}
+  /auth/otp/verify:
+    post:
+      tags: [Auth]
+      security: []
+      operationId: verifyOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OTPVerify'}
+      responses: {'200': {$ref: '#/components/responses/Success'}, '401': {$ref: '#/components/responses/Error'}}
+  /auth/refresh:
+    post: {tags: [Auth], security: [], operationId: refreshSession, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /auth/logout:
+    post: {tags: [Auth], operationId: logout, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /auth/me:
+    get: {tags: [Auth], operationId: authMe, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /devices/register:
+    post: {operationId: registerDevice, responses: {'201': {$ref: '#/components/responses/Success'}}}
+  /realtime:
+    get:
+      operationId: realtimeWebSocket
+      description: Authenticated WebSocket upgrade for user and active ride events.
+      responses: {'101': {description: Switching Protocols}, '401': {$ref: '#/components/responses/Error'}}
+  /passenger/profile:
+    get: {tags: [Passenger], operationId: passengerProfile, responses: {'200': {$ref: '#/components/responses/Success'}}}
+    patch: {tags: [Passenger], operationId: patchPassengerProfile, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /passenger/places:
+    get: {tags: [Passenger], operationId: passengerPlaces, responses: {'200': {$ref: '#/components/responses/Success'}}}
+    post: {tags: [Passenger], operationId: createPassengerPlace, responses: {'201': {$ref: '#/components/responses/Success'}}}
+  /passenger/rides/quote:
+    post:
+      tags: [Passenger]
+      operationId: passengerRideQuote
+      requestBody: {$ref: '#/components/requestBodies/Quote'}
+      responses: {'200': {$ref: '#/components/responses/Success'}, '422': {$ref: '#/components/responses/Error'}}
+  /passenger/rides:
+    post:
+      tags: [Passenger]
+      operationId: createRide
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CreateRide'}
+      responses: {'201': {$ref: '#/components/responses/Success'}, '409': {$ref: '#/components/responses/Error'}}
+  /passenger/rides/{id}:
+    get:
+      tags: [Passenger]
+      operationId: passengerRide
+      parameters: [{$ref: '#/components/parameters/ID'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}, '404': {$ref: '#/components/responses/Error'}}
+  /passenger/rides/{id}/cancel:
+    post:
+      tags: [Passenger]
+      operationId: cancelPassengerRide
+      parameters: [{$ref: '#/components/parameters/ID'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}, '409': {$ref: '#/components/responses/Error'}}
+  /passenger/rides/{id}/rating:
+    post:
+      tags: [Passenger]
+      operationId: rateDriver
+      parameters: [{$ref: '#/components/parameters/ID'}]
+      responses: {'201': {$ref: '#/components/responses/Success'}}
+  /driver/dashboard:
+    get: {tags: [Driver], operationId: driverDashboard, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /driver/availability:
+    post: {tags: [Driver], operationId: setDriverAvailability, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /driver/location:
+    post: {tags: [Driver], operationId: sendDriverLocation, responses: {'202': {$ref: '#/components/responses/Success'}}}
+  /driver/offers/current:
+    get: {tags: [Driver], operationId: currentDriverOffer, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /driver/offers/{id}/accept:
+    post:
+      tags: [Driver]
+      operationId: acceptOffer
+      parameters: [{$ref: '#/components/parameters/ID'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}, '409': {$ref: '#/components/responses/Error'}}
+  /driver/rides/{id}/pickup-pin:
+    post:
+      tags: [Driver]
+      operationId: confirmPickupPin
+      parameters: [{$ref: '#/components/parameters/ID'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}}
+  /driver/rides/{id}/enroute:
+    post:
+      tags: [Driver]
+      operationId: driverEnroute
+      parameters: [{$ref: '#/components/parameters/ID'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}}
+  /driver/rides/{id}/complete:
+    post:
+      tags: [Driver]
+      operationId: completeRide
+      parameters: [{$ref: '#/components/parameters/ID'}, {$ref: '#/components/parameters/IdempotencyKey'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}, '409': {$ref: '#/components/responses/Error'}}
+  /driver-registration/application:
+    get: {tags: [Driver Registration], operationId: driverApplication, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /driver-registration/steps/{step}:
+    put:
+      tags: [Driver Registration]
+      operationId: saveApplicationStep
+      parameters:
+        - {name: step, in: path, required: true, schema: {type: string}}
+      responses: {'200': {$ref: '#/components/responses/Success'}}
+  /driver-registration/submit:
+    post: {tags: [Driver Registration], operationId: submitDriverApplication, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /driver-registration/uploads/presign:
+    post: {tags: [Driver Registration], operationId: presignDriverUpload, responses: {'201': {$ref: '#/components/responses/Success'}}}
+  /admin/dashboard:
+    get: {tags: [Admin], operationId: adminDashboard, responses: {'200': {$ref: '#/components/responses/Success'}, '403': {$ref: '#/components/responses/Error'}}}
+  /admin/driver-applications:
+    get: {tags: [Admin], operationId: adminDriverApplications, responses: {'200': {$ref: '#/components/responses/Success'}}}
+  /admin/driver-applications/{id}/approve:
+    post:
+      tags: [Admin]
+      operationId: approveDriverApplication
+      parameters: [{$ref: '#/components/parameters/ID'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}, '409': {$ref: '#/components/responses/Error'}}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer, bearerFormat: JWT}
+  parameters:
+    ID: {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+    Slug: {name: slug, in: path, required: true, schema: {type: string}}
+    IdempotencyKey: {name: Idempotency-Key, in: header, required: true, schema: {type: string, minLength: 8, maxLength: 255}}
+  requestBodies:
+    Quote:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/QuoteRequest'}
+  responses:
+    Success:
+      description: Successful response
+      headers:
+        X-Request-ID: {schema: {type: string}}
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Success'}
+    Error:
+      description: Stable API error
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Error'}
+  schemas:
+    Success:
+      type: object
+      required: [success, data, meta]
+      properties:
+        success: {const: true}
+        data: {}
+        meta: {$ref: '#/components/schemas/Meta'}
+    Error:
+      type: object
+      required: [success, error, meta]
+      properties:
+        success: {const: false}
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: {type: string, examples: [VALIDATION_ERROR]}
+            message: {type: string}
+            fields: {type: object, additionalProperties: {type: string}}
+        meta: {$ref: '#/components/schemas/Meta'}
+    Meta:
+      type: object
+      required: [request_id]
+      properties: {request_id: {type: string}}
+    Point:
+      type: object
+      required: [lat, lng]
+      properties:
+        lat: {type: number, minimum: -90, maximum: 90}
+        lng: {type: number, minimum: -180, maximum: 180}
+    QuoteRequest:
+      type: object
+      required: [pickup, destination]
+      properties:
+        pickup: {$ref: '#/components/schemas/Point'}
+        destination: {$ref: '#/components/schemas/Point'}
+        scheduled_at: {type: string, format: date-time}
+        passengers: {type: integer, minimum: 1}
+        promo_code: {type: string}
+    CreateRide:
+      type: object
+      required: [quote_id, ride_type_id, payment_method]
+      properties:
+        quote_id: {type: string, format: uuid}
+        ride_type_id: {type: string, format: uuid}
+        payment_method: {type: string, enum: [cash, wallet, kbzpay, wavepay, ayapay]}
+        notes: {type: string, maxLength: 1000}
+    OTPRequest:
+      type: object
+      required: [phone, purpose]
+      properties:
+        phone: {type: string, examples: ['+959123456789']}
+        purpose: {type: string, enum: [login, driver_registration]}
+    OTPVerify:
+      type: object
+      required: [challenge_id, phone, code]
+      properties:
+        challenge_id: {type: string, format: uuid}
+        phone: {type: string}
+        code: {type: string, pattern: '^[0-9]{6}$'}
+        device_name: {type: string}
