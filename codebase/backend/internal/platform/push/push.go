@@ -237,7 +237,11 @@ func (a *APNS) SendLiveActivity(ctx context.Context, update LiveActivityUpdate) 
 		return "", err
 	}
 	req.Header.Set("authorization", "bearer "+providerToken)
-	req.Header.Set("apns-topic", update.ActivityTopic+".push-type.liveactivity")
+	activityTopic := update.ActivityTopic
+	if activityTopic == "" {
+		activityTopic = a.bundleID
+	}
+	req.Header.Set("apns-topic", activityTopic+".push-type.liveactivity")
 	req.Header.Set("apns-push-type", "liveactivity")
 	req.Header.Set("apns-priority", "10")
 	req.Header.Set("content-type", "application/json")

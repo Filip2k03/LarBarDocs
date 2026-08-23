@@ -22,6 +22,9 @@ type Config struct {
 	RefreshTokenTTL  time.Duration
 	SMSProvider      string
 	DevelopmentOTP   bool
+	SMSEndpoint      string
+	SMSAPIKey        string
+	SMSSender        string
 	MapProvider      string
 	MapBaseURL       string
 	GeocodeBaseURL   string
@@ -37,6 +40,9 @@ type Config struct {
 	APNSKeyID        string
 	APNSBundleID     string
 	APNSKeyFile      string
+	PaymentProvider  string
+	PaymentEndpoint  string
+	PaymentAPIKey    string
 }
 
 func Load() (Config, error) {
@@ -47,11 +53,13 @@ func Load() (Config, error) {
 		JWTSecret:        os.Getenv("JWT_SECRET"), OTPSecret: os.Getenv("OTP_SECRET"), EncryptionKey: os.Getenv("ENCRYPTION_KEY"),
 		AccessTokenTTL: duration("ACCESS_TOKEN_TTL", 15*time.Minute), RefreshTokenTTL: duration("REFRESH_TOKEN_TTL", 30*24*time.Hour),
 		SMSProvider: env("SMS_PROVIDER", "development"), DevelopmentOTP: boolean("DEVELOPMENT_OTP_ENABLED", false),
+		SMSEndpoint: os.Getenv("SMS_ENDPOINT"), SMSAPIKey: os.Getenv("SMS_API_KEY"), SMSSender: os.Getenv("SMS_SENDER"),
 		MapProvider: env("MAP_PROVIDER", "osrm"), MapBaseURL: env("MAP_BASE_URL", "http://localhost:5000"), GeocodeBaseURL: env("GEOCODE_BASE_URL", "https://nominatim.openstreetmap.org"),
 		StorageProvider: env("STORAGE_PROVIDER", "minio"), StorageEndpoint: env("STORAGE_ENDPOINT", "localhost:9000"),
 		StorageBucket: env("STORAGE_BUCKET", "labar"), StorageAccessKey: os.Getenv("STORAGE_ACCESS_KEY"), StorageSecretKey: os.Getenv("STORAGE_SECRET_KEY"), StorageUseTLS: boolean("STORAGE_USE_TLS", false),
 		FCMProjectID: os.Getenv("FCM_PROJECT_ID"), FCMCredentials: os.Getenv("FCM_CREDENTIALS_FILE"),
 		APNSTeamID: os.Getenv("APNS_TEAM_ID"), APNSKeyID: os.Getenv("APNS_KEY_ID"), APNSBundleID: os.Getenv("APNS_BUNDLE_ID"), APNSKeyFile: os.Getenv("APNS_KEY_FILE"),
+		PaymentProvider: os.Getenv("PAYMENT_PROVIDER"), PaymentEndpoint: os.Getenv("PAYMENT_ENDPOINT"), PaymentAPIKey: os.Getenv("PAYMENT_API_KEY"),
 	}
 	if err := cfg.Validate(); err != nil {
 		return Config{}, err
@@ -71,6 +79,24 @@ func (c Config) Validate() error {
 	}
 	if c.SMSProvider == "development" && !c.DevelopmentOTP {
 		return errors.New("development SMS provider requires DEVELOPMENT_OTP_ENABLED=true")
+	}
+	if c.SMSProvider != "development" && (c.SMSEndpoint == "" || c.SMSAPIKey == "" || c.SMSSender == "") {
+		return errors.New("production SMS provider requires SMS_ENDPOINT, SMS_API_KEY and SMS_SENDER")
+	}
+	if c.Environment != "local" && c.SMSProvider != "development" && !strings.HasPrefix(c.SMSEndpoint, "https://") {
+		return errors.New("production SMS endpoint must use HTTPS")
+	}
+	if c.MapProvider != "osrm" {
+		return errors.New("MAP_PROVIDER must be osrm for this build")
+	}
+	if c.StorageEndpoint == "" || c.StorageBucket == "" || c.StorageAccessKey == "" || c.StorageSecretKey == "" {
+		return errors.New("object storage endpoint, bucket and credentials are required")
+	}
+	if c.PaymentProvider != "" && (c.PaymentEndpoint == "" || c.PaymentAPIKey == "") {
+		return errors.New("configured payment provider requires PAYMENT_ENDPOINT and PAYMENT_API_KEY")
+	}
+	if c.Environment != "local" && c.PaymentProvider != "" && !strings.HasPrefix(c.PaymentEndpoint, "https://") {
+		return errors.New("production payment endpoint must use HTTPS")
 	}
 	if len(c.PublicWebOrigins) == 0 {
 		return errors.New("PUBLIC_WEB_ORIGINS must contain at least one explicit origin")

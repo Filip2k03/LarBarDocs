@@ -161,6 +161,9 @@ func (s *Service) VerifyOTP(ctx context.Context, challengeID uuid.UUID, phone, c
 	if _, err = tx.Exec(ctx, `INSERT INTO passenger_profiles(user_id) VALUES($1) ON CONFLICT DO NOTHING`, user.ID); err != nil {
 		return Tokens{}, err
 	}
+	if _, err = tx.Exec(ctx, `INSERT INTO wallets(user_id) VALUES($1) ON CONFLICT DO NOTHING`, user.ID); err != nil {
+		return Tokens{}, err
+	}
 	rows, err := tx.Query(ctx, `SELECT r.name FROM user_roles ur JOIN roles r ON r.id=ur.role_id WHERE ur.user_id=$1 ORDER BY r.name`, user.ID)
 	if err != nil {
 		return Tokens{}, err

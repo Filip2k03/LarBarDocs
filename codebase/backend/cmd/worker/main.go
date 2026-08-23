@@ -11,8 +11,10 @@ import (
 
 	"github.com/Filip2k03/labar-backend/internal/dispatch"
 	"github.com/Filip2k03/labar-backend/internal/notifications"
+	paymentservice "github.com/Filip2k03/labar-backend/internal/payments"
 	"github.com/Filip2k03/labar-backend/internal/platform/config"
 	"github.com/Filip2k03/labar-backend/internal/platform/database"
+	platformpayments "github.com/Filip2k03/labar-backend/internal/platform/payments"
 	"github.com/Filip2k03/labar-backend/internal/platform/push"
 	platformredis "github.com/Filip2k03/labar-backend/internal/platform/redis"
 	"github.com/google/uuid"
@@ -60,6 +62,14 @@ func main() {
 		}
 	}
 	notificationWorker := notifications.NewWorker(db, fcmProvider, apnsProvider)
+	var paymentProvider platformpayments.Provider
+	if cfg.PaymentProvider != "" {
+		paymentProvider, err = platformpayments.NewHTTP(cfg.PaymentEndpoint, cfg.PaymentAPIKey)
+		if err != nil {
+			log.Fatal().Err(err).Msg("payment provider configuration invalid")
+		}
+	}
+	paymentService := paymentservice.NewService(db, paymentProvider)
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 	go func() { <-signals; cancel() }()
@@ -85,7 +95,7 @@ func main() {
 			time.Sleep(time.Second)
 			continue
 		}
-		processErr := process(ctx, db, dispatcher, j)
+		processErr := process(ctx, db, dispatcher, paymentService, j)
 		if finishErr := finish(ctx, db, j, processErr); finishErr != nil {
 			log.Error().Err(finishErr).Str("job_id", j.ID.String()).Msg("finish job failed")
 		}
@@ -108,10 +118,11 @@ func claim(ctx context.Context, db *pgxpool.Pool, workerID string) (job, error) 
 	}
 	return j, tx.Commit(ctx)
 }
-func process(ctx context.Context, db *pgxpool.Pool, dispatcher *dispatch.Service, j job) error {
+func process(ctx context.Context, db *pgxpool.Pool, dispatcher *dispatch.Service, paymentService *paymentservice.Service, j job) error {
 	var payload struct {
-		RideID  uuid.UUID `json:"ride_id"`
-		OfferID uuid.UUID `json:"offer_id"`
+		RideID    uuid.UUID `json:"ride_id"`
+		OfferID   uuid.UUID `json:"offer_id"`
+		PaymentID uuid.UUID `json:"payment_id"`
 	}
 	if err := json.Unmarshal(j.Payload, &payload); err != nil {
 		return err
@@ -121,6 +132,8 @@ func process(ctx context.Context, db *pgxpool.Pool, dispatcher *dispatch.Service
 		return dispatcher.Dispatch(ctx, payload.RideID)
 	case "dispatch.offer_timeout":
 		return dispatcher.ExpireOffer(ctx, payload.OfferID)
+	case "payment.capture":
+		return paymentService.Capture(ctx, payload.PaymentID)
 	case "notification.ride_assigned":
 		_, err := db.Exec(ctx, `INSERT INTO notifications(user_id,category,title,body,data) SELECT passenger_id,'driver_arriving','Driver assigned','Your driver is on the way',jsonb_build_object('ride_id',id::text) FROM rides WHERE id=$1`, payload.RideID)
 		return err

@@ -31,10 +31,11 @@ type Service struct {
 func NewService(db *pgxpool.Pool) *Service { return &Service{db: db, now: time.Now} }
 
 type CreateRequest struct {
-	QuoteID       uuid.UUID `json:"quote_id"`
-	RideTypeID    uuid.UUID `json:"ride_type_id"`
-	PaymentMethod string    `json:"payment_method"`
-	Notes         string    `json:"notes"`
+	QuoteID         uuid.UUID  `json:"quote_id"`
+	RideTypeID      uuid.UUID  `json:"ride_type_id"`
+	PaymentMethod   string     `json:"payment_method"`
+	PaymentMethodID *uuid.UUID `json:"payment_method_id,omitempty"`
+	Notes           string     `json:"notes"`
 }
 type Ride struct {
 	ID                uuid.UUID        `json:"id"`
@@ -73,6 +74,18 @@ func (s *Service) Create(ctx context.Context, passengerID uuid.UUID, idempotency
 	}
 	if !validPayment(request.PaymentMethod) {
 		return Ride{}, false, errors.New("unsupported payment method")
+	}
+	if request.PaymentMethod != "cash" && request.PaymentMethod != "wallet" {
+		if request.PaymentMethodID == nil {
+			return Ride{}, false, errors.New("payment_method_id required for digital payments")
+		}
+		var valid bool
+		if err := s.db.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM payment_methods WHERE id=$1 AND user_id=$2 AND type=$3 AND status='active')`, *request.PaymentMethodID, passengerID, request.PaymentMethod).Scan(&valid); err != nil {
+			return Ride{}, false, err
+		}
+		if !valid {
+			return Ride{}, false, errors.New("invalid payment method")
+		}
 	}
 	payload, _ := json.Marshal(request)
 	requestHash := sha256.Sum256(payload)
@@ -127,11 +140,15 @@ func (s *Service) Create(ctx context.Context, passengerID uuid.UUID, idempotency
 	}
 	pinHash := sha256.Sum256([]byte(pin))
 	ride := Ride{ID: uuid.New(), PassengerID: passengerID, QuoteID: request.QuoteID, RideTypeID: request.RideTypeID, Status: Searching, PickupLat: pickupLat, PickupLng: pickupLng, DestinationLat: destLat, DestinationLng: destLng, PaymentMethod: request.PaymentMethod, EstimatedTotalMMK: domain.MoneyMMK(total), RequestedAt: s.now().UTC(), Version: 2, PickupPIN: pin}
-	_, err = tx.Exec(ctx, `INSERT INTO rides(id,passenger_id,quote_id,ride_type_id,city_id,pricing_version_id,status,pickup,destination,notes,payment_method,estimated_total_mmk,requested_at,version,pickup_pin_hash,pickup_pin_ciphertext) VALUES($1,$2,$3,$4,$5,$6,$7,ST_SetSRID(ST_MakePoint($8,$9),4326)::geography,ST_SetSRID(ST_MakePoint($10,$11),4326)::geography,$12,$13,$14,$15,2,$16,pgp_sym_encrypt($17,current_setting('app.encryption_key')))`, ride.ID, passengerID, request.QuoteID, request.RideTypeID, cityID, versionID, Searching, pickupLng, pickupLat, destLng, destLat, request.Notes, request.PaymentMethod, total, ride.RequestedAt, pinHash[:], pin)
+	_, err = tx.Exec(ctx, `INSERT INTO rides(id,passenger_id,quote_id,ride_type_id,city_id,pricing_version_id,status,pickup,destination,notes,payment_method,payment_method_id,estimated_total_mmk,requested_at,version,pickup_pin_hash,pickup_pin_ciphertext) VALUES($1,$2,$3,$4,$5,$6,$7,ST_SetSRID(ST_MakePoint($8,$9),4326)::geography,ST_SetSRID(ST_MakePoint($10,$11),4326)::geography,$12,$13,$14,$15,$16,2,$17,pgp_sym_encrypt($18,current_setting('app.encryption_key')))`, ride.ID, passengerID, request.QuoteID, request.RideTypeID, cityID, versionID, Searching, pickupLng, pickupLat, destLng, destLat, request.Notes, request.PaymentMethod, request.PaymentMethodID, total, ride.RequestedAt, pinHash[:], pin)
 	if err != nil {
 		return Ride{}, false, err
 	}
 	_, err = tx.Exec(ctx, `INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id) VALUES($1,1,'ride.requested','passenger',$2),($1,2,'ride.searching','system',NULL)`, ride.ID, passengerID)
+	if err != nil {
+		return Ride{}, false, err
+	}
+	_, err = tx.Exec(ctx, `INSERT INTO promo_redemptions(promotion_id,promo_code_id,user_id,quote_id,ride_id,discount_mmk) SELECT pc.promotion_id,q.promo_code_id,$2,q.id,$1,o.discount_mmk FROM fare_quotes q JOIN promo_codes pc ON pc.id=q.promo_code_id JOIN fare_quote_options o ON o.quote_id=q.id AND o.ride_type_id=$3 WHERE q.id=$4 AND q.promo_code_id IS NOT NULL AND o.discount_mmk>0`, ride.ID, passengerID, request.RideTypeID, request.QuoteID)
 	if err != nil {
 		return Ride{}, false, err
 	}
@@ -260,6 +277,20 @@ func (s *Service) Transition(ctx context.Context, rideID uuid.UUID, to Status, a
 				return Ride{}, err
 			}
 		}
+		category, title, body := "", "", ""
+		switch to {
+		case DriverEnroute:
+			category, title, body = "driver_arriving", "Driver on the way", "Your driver is travelling to the pickup."
+		case DriverArrived:
+			category, title, body = "driver_arrived", "Driver arrived", "Your driver is waiting at the pickup."
+		case InProgress:
+			category, title, body = "trip_started", "Trip started", "Your LaBar trip is in progress."
+		}
+		if category != "" {
+			if _, err = tx.Exec(ctx, `INSERT INTO notifications(user_id,category,title,body,data) SELECT passenger_id,$2,$3,$4,jsonb_build_object('ride_id',id::text,'status',$5) FROM rides WHERE id=$1`, rideID, category, title, body, to); err != nil {
+				return Ride{}, err
+			}
+		}
 	}
 	if err = tx.Commit(ctx); err != nil {
 		return Ride{}, err
@@ -354,6 +385,9 @@ func (s *Service) Cancel(ctx context.Context, rideID, userID uuid.UUID, actorTyp
 	if _, err = tx.Exec(ctx, `INSERT INTO ride_events(ride_id,sequence,event_type,actor_type,actor_id,metadata) VALUES($1,$2,$3,$4,$5,jsonb_build_object('reason',$6))`, rideID, sequence+1, "ride."+string(target), actorType, userID, reason); err != nil {
 		return Ride{}, err
 	}
+	if _, err = tx.Exec(ctx, `INSERT INTO notifications(user_id,category,title,body,data) SELECT passenger_id,'ride_cancelled','Ride cancelled','The ride was cancelled.',jsonb_build_object('ride_id',id::text,'status',$2,'reason',$3) FROM rides WHERE id=$1`, rideID, target, reason); err != nil {
+		return Ride{}, err
+	}
 	if err = tx.Commit(ctx); err != nil {
 		return Ride{}, err
 	}
@@ -391,12 +425,31 @@ func (s *Service) DriverTransition(ctx context.Context, userID, rideID uuid.UUID
 	}
 	return s.Transition(ctx, rideID, to, "driver", ride.DriverID, nil)
 }
-func (s *Service) Complete(ctx context.Context, userID, rideID uuid.UUID) (Ride, error) {
+func (s *Service) Complete(ctx context.Context, userID, rideID uuid.UUID, idempotencyKey string) (Ride, error) {
+	if idempotencyKey == "" {
+		return Ride{}, errors.New("Idempotency-Key required")
+	}
 	tx, err := s.db.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.Serializable})
 	if err != nil {
 		return Ride{}, err
 	}
 	defer func() { _ = tx.Rollback(ctx) }()
+	requestHash := sha256.Sum256([]byte(rideID.String()))
+	tag, err := tx.Exec(ctx, `INSERT INTO idempotency_keys(scope,actor_id,key,request_hash,expires_at) VALUES('ride.complete',$1,$2,$3,now()+interval '7 days') ON CONFLICT DO NOTHING`, userID, idempotencyKey, requestHash[:])
+	if err != nil {
+		return Ride{}, err
+	}
+	if tag.RowsAffected() == 0 {
+		var storedHash []byte
+		var completed bool
+		if err = tx.QueryRow(ctx, `SELECT ik.request_hash,EXISTS(SELECT 1 FROM rides r JOIN drivers d ON d.id=r.driver_id WHERE r.id=$3 AND d.user_id=$1 AND r.status='completed') FROM idempotency_keys ik WHERE ik.scope='ride.complete' AND ik.actor_id=$1 AND ik.key=$2`, userID, idempotencyKey, rideID).Scan(&storedHash, &completed); err != nil {
+			return Ride{}, err
+		}
+		if !equal(storedHash, requestHash[:]) || !completed {
+			return Ride{}, ErrIdempotencyConflict
+		}
+		return s.Get(ctx, rideID, userID, nil)
+	}
 	var driverID, passengerID, rideTypeID, versionID uuid.UUID
 	var status Status
 	var distance, duration, lowSpeed int64
@@ -433,6 +486,9 @@ func (s *Service) Complete(ctx context.Context, userID, rideID uuid.UUID) (Ride,
 	if method == "cash" {
 		paymentStatus = "cash_due"
 		provider = "cash"
+	} else if method == "wallet" {
+		paymentStatus = "paid"
+		provider = "wallet"
 	}
 	paymentID := uuid.New()
 	gross := total
@@ -442,7 +498,7 @@ func (s *Service) Complete(ctx context.Context, userID, rideID uuid.UUID) (Ride,
 	if err = tx.QueryRow(ctx, `SELECT coalesce(max(sequence),0) FROM ride_events WHERE ride_id=$1`, rideID).Scan(&sequence); err != nil {
 		return Ride{}, err
 	}
-	tag, err := tx.Exec(ctx, `UPDATE rides SET status='completed',final_total_mmk=$1,completed_at=now(),updated_at=now(),version=version+1 WHERE id=$2 AND status='in_progress'`, total, rideID)
+	tag, err = tx.Exec(ctx, `UPDATE rides SET status='completed',final_total_mmk=$1,completed_at=now(),updated_at=now(),version=version+1 WHERE id=$2 AND status='in_progress'`, total, rideID)
 	if err != nil {
 		return Ride{}, err
 	}
@@ -458,6 +514,23 @@ func (s *Service) Complete(ctx context.Context, userID, rideID uuid.UUID) (Ride,
 	if _, err = tx.Exec(ctx, `INSERT INTO payments(id,ride_id,user_id,method,provider,amount_mmk,status,idempotency_key) VALUES($1,$2,$3,$4,$5,$6,$7,'ride-complete-'||$2::text)`, paymentID, rideID, passengerID, method, provider, total, paymentStatus); err != nil {
 		return Ride{}, err
 	}
+	if method == "wallet" {
+		var walletID uuid.UUID
+		var balance int64
+		if err = tx.QueryRow(ctx, `SELECT id,cached_balance_mmk FROM wallets WHERE user_id=$1 FOR UPDATE`, passengerID).Scan(&walletID, &balance); err != nil {
+			return Ride{}, err
+		}
+		if balance < total {
+			return Ride{}, errors.New("wallet balance is insufficient")
+		}
+		newBalance := balance - total
+		if _, err = tx.Exec(ctx, `UPDATE wallets SET cached_balance_mmk=$1,version=version+1 WHERE id=$2`, newBalance, walletID); err != nil {
+			return Ride{}, err
+		}
+		if _, err = tx.Exec(ctx, `INSERT INTO wallet_transactions(wallet_id,type,amount_mmk,direction,reference_type,reference_id,idempotency_key,balance_after_mmk) VALUES($1,'ride_payment',$2,-1,'ride',$3,'ride-payment-'||$3::text,$4)`, walletID, total, rideID, newBalance); err != nil {
+			return Ride{}, err
+		}
+	}
 	if _, err = tx.Exec(ctx, `INSERT INTO driver_earnings(driver_id,ride_id,gross_mmk,commission_mmk,net_mmk,pricing_version_id) VALUES($1,$2,$3,$4,$5,$6)`, driverID, rideID, gross, commission, net, versionID); err != nil {
 		return Ride{}, err
 	}
@@ -467,8 +540,27 @@ func (s *Service) Complete(ctx context.Context, userID, rideID uuid.UUID) (Ride,
 	if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload) VALUES('notification.trip_completed',jsonb_build_object('ride_id',$1::text,'payment_id',$2::text)),('receipt.create',jsonb_build_object('ride_id',$1::text))`, rideID, paymentID); err != nil {
 		return Ride{}, err
 	}
+	if method != "cash" && method != "wallet" {
+		if _, err = tx.Exec(ctx, `INSERT INTO jobs(type,payload) VALUES('payment.capture',jsonb_build_object('payment_id',$1::text))`, paymentID); err != nil {
+			return Ride{}, err
+		}
+	}
 	if err = tx.Commit(ctx); err != nil {
 		return Ride{}, err
 	}
 	return s.Get(ctx, rideID, userID, []string{"admin"})
+}
+
+func (s *Service) ConfirmCashCollected(ctx context.Context, userID, rideID uuid.UUID) error {
+	tag, err := s.db.Exec(ctx, `UPDATE payments p SET status='paid',updated_at=now() FROM rides r JOIN drivers d ON d.id=r.driver_id WHERE p.ride_id=r.id AND r.id=$1 AND d.user_id=$2 AND r.status='completed' AND p.method='cash' AND p.status='cash_due'`, rideID, userID)
+	if err != nil {
+		return err
+	}
+	if tag.RowsAffected() == 0 {
+		var paid bool
+		if queryErr := s.db.QueryRow(ctx, `SELECT EXISTS(SELECT 1 FROM payments p JOIN rides r ON r.id=p.ride_id JOIN drivers d ON d.id=r.driver_id WHERE r.id=$1 AND d.user_id=$2 AND p.method='cash' AND p.status='paid')`, rideID, userID).Scan(&paid); queryErr != nil || !paid {
+			return ErrRideNotFound
+		}
+	}
+	return nil
 }

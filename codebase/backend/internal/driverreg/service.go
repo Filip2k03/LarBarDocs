@@ -156,6 +156,57 @@ func (s *Service) List(ctx context.Context, status string, limit int) ([]Applica
 	}
 	return out, rows.Err()
 }
+
+func (s *Service) Detail(ctx context.Context, applicationID uuid.UUID) (map[string]any, error) {
+	var application Application
+	err := s.db.QueryRow(ctx, `SELECT id,user_id,status,legal_name,date_of_birth,submitted_at,reviewed_at,decision_reason,created_at,updated_at FROM driver_applications WHERE id=$1`, applicationID).Scan(&application.ID, &application.UserID, &application.Status, &application.LegalName, &application.DateOfBirth, &application.SubmittedAt, &application.ReviewedAt, &application.DecisionReason, &application.CreatedAt, &application.UpdatedAt)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, ErrApplicationNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	rows, err := s.db.Query(ctx, `SELECT step,data,completed_at,updated_at FROM driver_application_steps WHERE application_id=$1 ORDER BY step`, applicationID)
+	if err != nil {
+		return nil, err
+	}
+	steps := []map[string]any{}
+	for rows.Next() {
+		var step string
+		var data json.RawMessage
+		var completedAt *time.Time
+		var updatedAt time.Time
+		if err = rows.Scan(&step, &data, &completedAt, &updatedAt); err != nil {
+			rows.Close()
+			return nil, err
+		}
+		steps = append(steps, map[string]any{"step": step, "data": data, "completed_at": completedAt, "updated_at": updatedAt})
+	}
+	rows.Close()
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	rows, err = s.db.Query(ctx, `SELECT dd.id,dd.type,dd.status,dd.expires_on,dd.rejection_reason,dd.verified_at,u.id,u.mime_type,u.size_bytes,u.object_key FROM driver_documents dd JOIN uploads u ON u.id=dd.upload_id WHERE dd.application_id=$1 ORDER BY dd.created_at`, applicationID)
+	if err != nil {
+		return nil, err
+	}
+	documents := []map[string]any{}
+	for rows.Next() {
+		var id, uploadID uuid.UUID
+		var docType, status, mime, objectKey string
+		var expiresOn *time.Time
+		var rejectionReason *string
+		var verifiedAt *time.Time
+		var size int64
+		if err = rows.Scan(&id, &docType, &status, &expiresOn, &rejectionReason, &verifiedAt, &uploadID, &mime, &size, &objectKey); err != nil {
+			rows.Close()
+			return nil, err
+		}
+		documents = append(documents, map[string]any{"id": id, "upload_id": uploadID, "type": docType, "status": status, "expires_on": expiresOn, "rejection_reason": rejectionReason, "verified_at": verifiedAt, "mime_type": mime, "size_bytes": size, "object_key": objectKey})
+	}
+	rows.Close()
+	return map[string]any{"application": application, "steps": steps, "documents": documents}, rows.Err()
+}
 func (s *Service) RequestDocuments(ctx context.Context, adminID, applicationID uuid.UUID, reason string, types []string, requestID string) error {
 	if reason == "" || len(types) == 0 {
 		return errors.New("reason and document types required")

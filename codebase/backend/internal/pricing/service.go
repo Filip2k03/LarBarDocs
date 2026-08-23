@@ -99,13 +99,16 @@ func (s *Service) Quote(ctx context.Context, passengerID *uuid.UUID, request Quo
 		return Quote{}, err
 	}
 	var promoID *uuid.UUID
+	var promoRideTypeID *uuid.UUID
+	var promoService *string
+	var promoMinimum domain.MoneyMMK
 	var promoPercent *float64
 	var promoFixed, promoMax domain.MoneyMMK
 	if request.PromoCode != "" {
 		var id uuid.UUID
 		var percent *float64
 		var fixed, max *int64
-		err = tx.QueryRow(ctx, `SELECT pc.id,p.discount_percent,p.discount_fixed_mmk,p.maximum_discount_mmk FROM promo_codes pc JOIN promotions p ON p.id=pc.promotion_id WHERE upper(pc.code)=upper($1) AND pc.active AND p.status='active' AND now() BETWEEN p.starts_at AND p.ends_at AND (p.city_id IS NULL OR p.city_id=$2)`, request.PromoCode, cityID).Scan(&id, &percent, &fixed, &max)
+		err = tx.QueryRow(ctx, `SELECT pc.id,p.discount_percent,p.discount_fixed_mmk,p.maximum_discount_mmk,p.ride_type_id,p.service,p.minimum_fare_mmk FROM promo_codes pc JOIN promotions p ON p.id=pc.promotion_id WHERE upper(pc.code)=upper($1) AND pc.active AND p.status='active' AND now() BETWEEN p.starts_at AND p.ends_at AND (p.city_id IS NULL OR p.city_id=$2) AND (p.max_redemptions IS NULL OR (SELECT count(*) FROM promo_redemptions pr WHERE pr.promotion_id=p.id)<p.max_redemptions) AND (NOT p.new_user_only OR ($3::uuid IS NOT NULL AND NOT EXISTS(SELECT 1 FROM rides WHERE passenger_id=$3 AND status='completed'))) AND ($3::uuid IS NULL OR (SELECT count(*) FROM promo_redemptions pr WHERE pr.promotion_id=p.id AND pr.user_id=$3)<p.per_user_limit)`, request.PromoCode, cityID, passengerID).Scan(&id, &percent, &fixed, &max, &promoRideTypeID, &promoService, &promoMinimum)
 		if errors.Is(err, pgx.ErrNoRows) {
 			return Quote{}, errors.New("promo invalid or expired")
 		}
@@ -150,9 +153,12 @@ func (s *Service) Quote(ctx context.Context, passengerID *uuid.UUID, request Quo
 		subtotal := transport + domain.MoneyMMK(booking+service)
 		discount := domain.MoneyMMK(0)
 		if promoPercent != nil {
-			discount = domain.MoneyMMK(math.Floor(float64(transport) * (*promoPercent) / 100))
+			if (promoRideTypeID == nil || *promoRideTypeID == option.RideTypeID) && (promoService == nil || *promoService == "ride") && subtotal >= promoMinimum {
+				discount = domain.MoneyMMK(math.Floor(float64(transport) * (*promoPercent) / 100))
+			}
 		}
-		if promoFixed > discount {
+		promoApplies := (promoRideTypeID == nil || *promoRideTypeID == option.RideTypeID) && (promoService == nil || *promoService == "ride") && subtotal >= promoMinimum
+		if promoApplies && promoFixed > discount {
 			discount = promoFixed
 		}
 		if promoMax > 0 && discount > promoMax {

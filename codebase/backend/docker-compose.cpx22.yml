@@ -28,20 +28,45 @@ services:
     image: labar/backend-api:latest
     container_name: labar_go_core
     restart: unless-stopped
-    environment:
-      - PORT=8080
-      - APP_ENV=production
-      - DB_DSN=postgres://labar_user:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres_db:5432/labar_prod?sslmode=disable
-      - REDIS_ADDR=redis_spatial:6379
-      - REDIS_PASSWORD=${REDIS_PASSWORD:?set REDIS_PASSWORD}
-      - JWT_SECRET=${JWT_SECRET:?set JWT_SECRET}
+    environment: &backend_environment
+      APP_ENV: production
+      HTTP_ADDR: :8080
+      DATABASE_URL: postgres://labar_user:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres_db:5432/labar_prod?sslmode=disable
+      REDIS_URL: redis://:${REDIS_PASSWORD:?set REDIS_PASSWORD}@redis_spatial:6379/0
+      PUBLIC_WEB_ORIGINS: ${PUBLIC_WEB_ORIGINS:?set PUBLIC_WEB_ORIGINS}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+      OTP_SECRET: ${OTP_SECRET:?set OTP_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?set ENCRYPTION_KEY}
+      SMS_PROVIDER: http
+      SMS_ENDPOINT: ${SMS_ENDPOINT:?set SMS_ENDPOINT}
+      SMS_API_KEY: ${SMS_API_KEY:?set SMS_API_KEY}
+      SMS_SENDER: ${SMS_SENDER:-LaBar}
+      DEVELOPMENT_OTP_ENABLED: "false"
+      MAP_PROVIDER: osrm
+      MAP_BASE_URL: http://osrm_myanmar:5000
+      GEOCODE_BASE_URL: ${GEOCODE_BASE_URL:-https://nominatim.openstreetmap.org}
+      STORAGE_PROVIDER: ${STORAGE_PROVIDER:-s3}
+      STORAGE_ENDPOINT: ${STORAGE_ENDPOINT:?set STORAGE_ENDPOINT}
+      STORAGE_BUCKET: ${STORAGE_BUCKET:-labar}
+      STORAGE_ACCESS_KEY: ${STORAGE_ACCESS_KEY:?set STORAGE_ACCESS_KEY}
+      STORAGE_SECRET_KEY: ${STORAGE_SECRET_KEY:?set STORAGE_SECRET_KEY}
+      STORAGE_USE_TLS: ${STORAGE_USE_TLS:-true}
+      FCM_PROJECT_ID: ${FCM_PROJECT_ID:-}
+      FCM_CREDENTIALS_FILE: ${FCM_CREDENTIALS_FILE:-}
+      APNS_TEAM_ID: ${APNS_TEAM_ID:-}
+      APNS_KEY_ID: ${APNS_KEY_ID:-}
+      APNS_BUNDLE_ID: ${APNS_BUNDLE_ID:-}
+      APNS_KEY_FILE: ${APNS_KEY_FILE:-}
+      PAYMENT_PROVIDER: ${PAYMENT_PROVIDER:-}
+      PAYMENT_ENDPOINT: ${PAYMENT_ENDPOINT:-}
+      PAYMENT_API_KEY: ${PAYMENT_API_KEY:-}
     depends_on:
       postgres_db:
         condition: service_healthy
       redis_spatial:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "/app/labar-api", "--healthcheck"]
+      test: ["CMD", "/app/api", "--healthcheck"]
       interval: 15s
       timeout: 3s
       retries: 5
@@ -52,6 +77,28 @@ services:
         limits:
           cpus: '0.80'
           memory: 400M
+
+  go_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: labar/backend-api:latest
+    container_name: labar_go_worker
+    restart: unless-stopped
+    entrypoint: ["/app/worker"]
+    environment: *backend_environment
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+      redis_spatial:
+        condition: service_healthy
+    networks:
+      - labar_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 250M
 
   postgres_db:
     image: postgis/postgis:16-3.4-alpine

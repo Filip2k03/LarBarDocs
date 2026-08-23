@@ -6,26 +6,22 @@ The LaBar Taxi Platform exposes high-throughput, low-latency REST endpoints (JSO
 
 ## 1. Authentication & Session Endpoints
 
-### `POST /api/v1/auth/passenger/otp`
-Initiates mobile number OTP verification for passengers.
+### `POST /api/v1/auth/otp/request`
+Creates a shared phone OTP challenge for Passenger, Driver, or Driver Registration clients.
 
 - **Request Body**:
 ```json
 {
-  "phone_number": "+959123456789",
-  "device_id": "uuid-v4-device-token",
-  "app_version": "1.0.0"
+  "phone": "+959123456789",
+  "purpose": "login"
 }
 ```
-- **Response `200 OK`**:
+- **Response `202 Accepted`**:
 ```json
 {
-  "status": "success",
-  "data": {
-    "session_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expires_in_sec": 300,
-    "otp_length": 6
-  }
+  "success": true,
+  "data": {"challenge_id": "uuid", "expires_at": "2026-08-24T08:05:00Z"},
+  "meta": {"request_id": "uuid"}
 }
 ```
 
@@ -33,34 +29,33 @@ Initiates mobile number OTP verification for passengers.
 
 ## 2. Fare Quote and Ride Booking
 
-### `GET /api/v1/fares/policy`
+### `GET /api/v1/public/fares`
 
 Returns the active versioned public fare constants.
 
 ```json
 {
-  "version": "MM-2026-08-v1",
-  "minimum_transport_fare_mmk": 5000,
-  "included_distance_km": 2,
-  "distance_step_km": 0.1,
-  "distance_step_fare_mmk": 150,
-  "service_fee_mmk": 1500,
-  "cash_rounding_unit_mmk": 500,
-  "promo_credit_value_mmk": 10
+  "version": 1,
+  "base_fare_mmk": 5000,
+  "included_distance_meters": 3000,
+  "per_km_mmk": 1500,
+  "low_speed_threshold_kph": 10,
+  "low_speed_per_minute_mmk": 150
 }
 ```
 
-### `POST /api/v1/fares/quote`
+### `POST /api/v1/passenger/rides/quote`
 
-Calculates the authoritative payable amount. `/api/v1/rides/quote` remains a compatibility alias.
+Calculates an authoritative, expiring route quote using the configured routing provider and active PostgreSQL pricing version.
 
 Request:
 
 ```json
 {
-  "distance_km": 2.1,
-  "payment_method": "CASH",
-  "promo_credits": 0
+  "pickup": {"lat": 16.8661, "lng": 96.1561},
+  "destination": {"lat": 16.8053, "lng": 96.1561},
+  "city": "yangon",
+  "passengers": 1
 }
 ```
 
@@ -68,40 +63,32 @@ Response `200 OK`:
 
 ```json
 {
-  "quote_id": "ddf64f1d-0a77-45e2-a9da-fcf32f774ed3",
-  "policy_version": "MM-2026-08-v1",
-  "requested_distance_km": 2.1,
-  "billable_distance_km": 2.1,
-  "payment_method": "CASH",
-  "currency": "MMK",
-  "breakdown": {
-    "transport_fare_mmk": 5150,
-    "extra_distance_steps": 1,
-    "extra_distance_fare_mmk": 150,
-    "service_fee_mmk": 1500,
-    "promo_credits_applied": 0,
-    "promo_discount_mmk": 0,
-    "subtotal_mmk": 6650,
-    "cash_rounding_mmk": 350,
-    "payable_mmk": 7000
+  "success": true,
+  "data": {
+    "quote_id": "ddf64f1d-0a77-45e2-a9da-fcf32f774ed3",
+    "pricing_version_id": "uuid",
+    "distance_meters": 7200,
+    "duration_seconds": 1440,
+    "ride_options": []
   },
   "expires_at": "2026-08-24T08:05:00Z"
 }
 ```
 
-The 5,000 MMK transport minimum includes up to 2 km. Every started 0.1 km after that costs 150 MMK. The 1,500 MMK service fee is added once to every route. Cash rounds upward to the next 500 MMK; digital payments remain exact. One promo credit equals 10 MMK and cannot remove the service fee.
+The current production reference is 5,000 MMK including 3 km, then 1,500 MMK/km, plus 150 MMK per started low-speed minute at 10 km/h or below. Values are active versioned database records, not handler constants.
 
 ---
 
-### `POST /api/v1/rides/book`
+### `POST /api/v1/passenger/rides`
 Submits ride request and triggers 15-second cascading dispatch in Redis.
 
 - **Request Body**:
 ```json
 {
-  "quote_id": "q-8849-ab12",
-  "payment_method": "KBZPAY",
-  "enable_guardian_stream": true
+  "quote_id": "uuid",
+  "ride_type_id": "uuid",
+  "payment_method": "cash",
+  "notes": "Gate B"
 }
 ```
 

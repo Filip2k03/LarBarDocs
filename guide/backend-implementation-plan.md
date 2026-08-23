@@ -58,7 +58,7 @@ Exit criteria: no registrar can decide its own case and activation requires appr
 
 - Geocoding, saved places, pickup notes, waypoints, OSRM routes, and scheduled rides.
 - Versioned fare policies and authoritative quotes.
-- Cash rounding, digital totals, LaBar service fee, promo credits, and expiry.
+- Base/included distance, per-kilometre and low-speed rules, provider-backed digital totals, promotion validation, and quote expiry.
 - Quote snapshot stored with every booked ride.
 
 Exit criteria: estimates, payment authorization, and receipts reconcile to the same policy version.
@@ -125,4 +125,4 @@ Exit criteria: safety events remain available under retries, reconnects, and par
 
 ## Current implemented slice
 
-The repository currently implements the HTTP foundation, health probes, fare policy endpoint, fare quote endpoint, Passenger screen catalog, plugin manifest, unit tests, and transport contract tests in `codebase/backend`.
+The repository now implements the modular Go API and worker, migration-controlled PostgreSQL/PostGIS schema, Redis dispatch/GEO and realtime paths, OTP/session identity, passenger profile and booking, driver registration and approval, document upload verification, versioned fare quotes, atomic offers, pickup PIN and ride lifecycle, GPS meter aggregation, cash/payment and earnings records, wallet reads, push delivery, Live Activity updates, safety sharing/SOS, support, public content, admin metrics/audit, OpenAPI, Docker and local Compose. External map, SMS, payment, FCM, APNs, OCR and biometric providers require real credentials or deployments before their corresponding production integrations can be declared operational.

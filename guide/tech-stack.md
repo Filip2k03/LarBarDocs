@@ -8,12 +8,11 @@ The platform adopts an enterprise-grade, high-performance technology stack desig
 
 | Layer | Primary Technology | Version / Tooling | Purpose |
 |---|---|---|---|
-| **Backend Language** | **Go (Golang)** | `Go 1.22+` | Core high-concurrency microservices, dispatch engine, WebSockets |
+| **Backend Language** | **Go (Golang)** | `Go 1.24+` | Modular monolith, dispatch engine, REST, workers, WebSockets |
 | **API Gateway** | **Caddy / Go Gateway** | `v2.8+` | Reverse proxy, automatic TLS 1.3, rate limiting, token introspection |
 | **Primary Database** | **PostgreSQL + PostGIS** | `PostgreSQL 16` / `PostGIS 3.4` | Relational master data, transactional ledger, spatial GIST indexing |
 | **In-Memory Cache & Broker** | **Redis Cluster** | `Redis 7.2+` | `GEORADIUS` driver indexing, Pub/Sub telemetry, distributed Redlock |
-| **iOS Client** | **Swift / SwiftUI** | `iOS 17+` / `Combine` | Native Passenger & Driver app, AVFoundation CCTV, ODR Guardian plugin |
-| **Android Client** | **Kotlin / Jetpack Compose**| `Android 14 (API 34)` | Native Passenger & Driver app, CameraX CCTV, Play Feature Delivery |
+| **Mobile Clients** | **React Native** | Android and iOS | Passenger, Driver, and Driver Registration apps; native modules provide Live Activities and foreground notifications |
 | **Map & Routing Engine** | **OSRM / Mapbox** | `v5.27+` | Multi-stop matrix routing, duration estimation, polyline generation |
 | **Media & Vault Storage**| **MinIO / AWS S3** | `S3 API` | CCTV video chunk storage, SHA-256 integrity logs, plugin bundles |
 | **Documentation Portal** | **VitePress** | `v1.5+` | Static documentation portal, markdown rendering, instant search |

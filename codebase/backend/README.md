@@ -55,7 +55,7 @@ Passenger clients use `/passenger/profile`, `/passenger/places`, `/passenger/rid
 
 ## Push and production
 
-The worker sends FCM HTTP v1 messages when a Google service account is configured and APNs token-authenticated messages when the team, key, bundle and `.p8` settings are configured. Live Activity tokens are separate from ordinary device tokens. Swift ActivityKit UI and Android foreground services remain client responsibilities.
+The worker sends FCM HTTP v1 messages when a Google service account is configured and APNs token-authenticated messages when the team, key, bundle and `.p8` settings are configured. Live Activity tokens are separate from ordinary device tokens. Swift ActivityKit UI and Android foreground services remain client responsibilities. Production OTP and digital capture use configurable authenticated HTTPS provider endpoints; a missing or rejected provider response never becomes a successful OTP delivery or paid transaction.
 
 Build the non-root image with `make docker`. Terminate TLS at a trusted edge, use private object buckets, restrict `/metrics`, set explicit CORS origins, inject secrets at deployment, and run API, worker and migration tasks separately. No external provider should be considered operational until its real credentials and production callback behavior are verified.
 

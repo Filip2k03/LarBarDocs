@@ -21,6 +21,7 @@ import (
 	"github.com/Filip2k03/labar-backend/internal/driverreg"
 	"github.com/Filip2k03/labar-backend/internal/drivers"
 	"github.com/Filip2k03/labar-backend/internal/passengers"
+	"github.com/Filip2k03/labar-backend/internal/payments"
 	platformmaps "github.com/Filip2k03/labar-backend/internal/platform/maps"
 	"github.com/Filip2k03/labar-backend/internal/platform/storage"
 	"github.com/Filip2k03/labar-backend/internal/pricing"
@@ -29,6 +30,7 @@ import (
 	"github.com/Filip2k03/labar-backend/internal/safety"
 	"github.com/Filip2k03/labar-backend/internal/support"
 	"github.com/Filip2k03/labar-backend/internal/tracking"
+	"github.com/Filip2k03/labar-backend/internal/wallet"
 	"github.com/go-chi/chi/v5"
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -60,6 +62,8 @@ type Dependencies struct {
 	Realtime   *realtime.Gateway
 	Maps       platformmaps.Provider
 	Geocoder   platformmaps.Geocoder
+	Wallet     *wallet.Service
+	Payments   *payments.Service
 }
 type API struct{ deps Dependencies }
 
@@ -133,6 +137,11 @@ func (api API) authenticatedRoutes(r chi.Router) {
 	r.Route("/passenger", func(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("passenger", "admin", "super_admin"))
 		r.Get("/profile", api.passengerProfile)
+		r.Get("/wallet", api.passengerWallet)
+		r.Get("/wallet/transactions", api.passengerWalletTransactions)
+		r.Get("/payment-methods", api.paymentMethods)
+		r.Post("/payment-methods", api.registerPaymentMethod)
+		r.Delete("/payment-methods/{id}", api.deletePaymentMethod)
 		r.Patch("/profile", api.patchPassengerProfile)
 		r.Get("/places", api.passengerPlaces)
 		r.Post("/places", api.createPassengerPlace)
@@ -165,6 +174,7 @@ func (api API) authenticatedRoutes(r chi.Router) {
 		r.Post("/rides/{id}/pickup-pin", api.pickupConfirmed)
 		r.Post("/rides/{id}/start", api.startTrip)
 		r.Post("/rides/{id}/complete", api.completeTrip)
+		r.Post("/rides/{id}/cash-collected", api.cashCollected)
 		r.Post("/rides/{id}/cancel", api.cancelDriverRide)
 		r.Post("/rides/{id}/sos", api.sos)
 		r.Get("/earnings/today", api.earningsToday)
@@ -183,6 +193,7 @@ func (api API) authenticatedRoutes(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("super_admin", "admin", "operations_manager", "driver_verifier", "dispatcher"))
 		r.Get("/dashboard", api.adminDashboard)
 		r.Get("/driver-applications", api.adminApplications)
+		r.Get("/driver-applications/{id}", api.adminApplicationDetail)
 		r.Post("/driver-applications/{id}/request-documents", api.adminRequestDocuments)
 		r.Post("/driver-applications/{id}/documents/{document_id}/decision", api.adminDocumentDecision)
 		r.Post("/driver-applications/{id}/approve", api.adminApprove)
@@ -534,6 +545,57 @@ func (api API) passengerProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	response.JSON(w, r, http.StatusOK, profile)
 }
+func (api API) passengerWallet(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Wallet.Summary(r.Context(), principal(r).UserID)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+func (api API) passengerWalletTransactions(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Wallet.Transactions(r.Context(), principal(r).UserID, 50)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+func (api API) paymentMethods(w http.ResponseWriter, r *http.Request) {
+	data, err := api.deps.Payments.Methods(r.Context(), principal(r).UserID)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+func (api API) registerPaymentMethod(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Type              string `json:"type"`
+		ProviderReference string `json:"provider_reference"`
+	}
+	if err := validation.Decode(w, r, &body); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	method, err := api.deps.Payments.RegisterMethod(r.Context(), principal(r).UserID, body.Type, body.ProviderReference)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusCreated, method)
+}
+func (api API) deletePaymentMethod(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	if err := api.deps.Payments.DeleteMethod(r.Context(), principal(r).UserID, id); err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, map[string]bool{"deleted": true})
+}
 
 func (api API) patchPassengerProfile(w http.ResponseWriter, r *http.Request) {
 	var input passengers.ProfilePatch
@@ -826,12 +888,23 @@ func (api API) completeTrip(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	ride, err := api.deps.Rides.Complete(r.Context(), principal(r).UserID, id)
+	ride, err := api.deps.Rides.Complete(r.Context(), principal(r).UserID, id, r.Header.Get("Idempotency-Key"))
 	if err != nil {
 		handle(w, r, err)
 		return
 	}
 	response.JSON(w, r, 200, ride)
+}
+func (api API) cashCollected(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	if err := api.deps.Rides.ConfirmCashCollected(r.Context(), principal(r).UserID, id); err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, map[string]string{"payment_status": "paid"})
 }
 func (api API) earningsToday(w http.ResponseWriter, r *http.Request) {
 	now := time.Now().In(time.FixedZone("MMT", 6*3600+30*60))
@@ -916,6 +989,18 @@ func (api API) adminApplications(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	response.JSON(w, r, 200, data)
+}
+func (api API) adminApplicationDetail(w http.ResponseWriter, r *http.Request) {
+	id, ok := pathID(w, r)
+	if !ok {
+		return
+	}
+	data, err := api.deps.DriverReg.Detail(r.Context(), id)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
 }
 func (api API) adminRequestDocuments(w http.ResponseWriter, r *http.Request) {
 	id, ok := pathID(w, r)
@@ -1145,10 +1230,22 @@ func handle(w http.ResponseWriter, r *http.Request, err error) {
 		status = 409
 		code = "RIDE_STATE_INVALID"
 		message = err.Error()
+	case errors.Is(err, rides.ErrIdempotencyConflict):
+		status = http.StatusConflict
+		code = "IDEMPOTENCY_CONFLICT"
+		message = err.Error()
 	case errors.Is(err, rides.ErrRideNotFound), errors.Is(err, pgx.ErrNoRows):
 		status = 404
 		code = "NOT_FOUND"
 		message = "The resource was not found."
+	case errors.Is(err, passengers.ErrNotFound):
+		status = http.StatusNotFound
+		code = "NOT_FOUND"
+		message = "The resource was not found."
+	case errors.Is(err, platformmaps.ErrRouteUnavailable):
+		status = http.StatusServiceUnavailable
+		code = "SERVICE_UNAVAILABLE"
+		message = "Map routing is temporarily unavailable."
 	case errors.Is(err, driverreg.ErrDocumentsRequired):
 		status = 422
 		code = "DOCUMENT_REQUIRED"
@@ -1160,6 +1257,10 @@ func handle(w http.ResponseWriter, r *http.Request, err error) {
 	case strings.Contains(err.Error(), "required") || strings.Contains(err.Error(), "invalid") || strings.Contains(err.Error(), "unsupported"):
 		status = 422
 		code = "VALIDATION_ERROR"
+		message = err.Error()
+	case strings.Contains(err.Error(), "wallet balance") || strings.Contains(err.Error(), "payment provider"):
+		status = http.StatusPaymentRequired
+		code = "PAYMENT_FAILED"
 		message = err.Error()
 	}
 	if status == 500 {

@@ -17,6 +17,10 @@ type Worker struct {
 	apns push.Provider
 }
 
+type liveActivitySender interface {
+	SendLiveActivity(context.Context, push.LiveActivityUpdate) (string, error)
+}
+
 func NewWorker(db *pgxpool.Pool, fcm, apns push.Provider) *Worker {
 	return &Worker{db: db, fcm: fcm, apns: apns}
 }
@@ -27,9 +31,10 @@ func (w *Worker) ProcessOne(ctx context.Context) (bool, error) {
 	}
 	defer tx.Rollback(ctx)
 	var deliveryID uuid.UUID
-	var platform, token, category, title, body string
+	var platform, token, category, title, body, channel string
+	var liveSessionID *uuid.UUID
 	var raw json.RawMessage
-	err = tx.QueryRow(ctx, `SELECT nd.id,d.platform,d.push_token,n.category,n.title,n.body,n.data FROM notification_deliveries nd JOIN notifications n ON n.id=nd.notification_id JOIN devices d ON d.id=nd.device_id WHERE nd.status='pending' AND nd.next_attempt_at<=now() AND d.push_token IS NOT NULL ORDER BY nd.next_attempt_at FOR UPDATE OF nd SKIP LOCKED LIMIT 1`).Scan(&deliveryID, &platform, &token, &category, &title, &body, &raw)
+	err = tx.QueryRow(ctx, `SELECT nd.id,d.platform,CASE WHEN nd.channel='live_activity' THEN las.push_token ELSE d.push_token END,n.category,n.title,n.body,n.data,nd.channel,nd.live_activity_session_id FROM notification_deliveries nd JOIN notifications n ON n.id=nd.notification_id JOIN devices d ON d.id=nd.device_id LEFT JOIN live_activity_sessions las ON las.id=nd.live_activity_session_id WHERE nd.status='pending' AND nd.next_attempt_at<=now() AND (d.push_token IS NOT NULL OR las.push_token IS NOT NULL) ORDER BY nd.next_attempt_at FOR UPDATE OF nd SKIP LOCKED LIMIT 1`).Scan(&deliveryID, &platform, &token, &category, &title, &body, &raw, &channel, &liveSessionID)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return false, nil
 	}
@@ -51,6 +56,7 @@ func (w *Worker) ProcessOne(ctx context.Context) (bool, error) {
 			}
 		}
 	}
+	data["category"] = category
 	provider := w.fcm
 	if platform == "ios" {
 		provider = w.apns
@@ -58,11 +64,33 @@ func (w *Worker) ProcessOne(ctx context.Context) (bool, error) {
 	if provider == nil {
 		return true, w.fail(ctx, deliveryID, push.ErrNotConfigured)
 	}
-	reference, sendErr := provider.Send(ctx, push.Message{Token: token, Category: category, Title: title, Body: body, Data: data, HighPriority: category == "ride_request" || category == "safety"})
+	var reference string
+	var sendErr error
+	if channel == "live_activity" {
+		sender, ok := w.apns.(liveActivitySender)
+		if !ok {
+			return true, w.fail(ctx, deliveryID, push.ErrNotConfigured)
+		}
+		state := make(map[string]any, len(values)+1)
+		for key, value := range values {
+			state[key] = value
+		}
+		state["category"] = category
+		event := "update"
+		if category == "trip_completed" {
+			event = "end"
+		}
+		reference, sendErr = sender.SendLiveActivity(ctx, push.LiveActivityUpdate{Token: token, Event: event, State: state, AlertTitle: title, AlertBody: body})
+	} else {
+		reference, sendErr = provider.Send(ctx, push.Message{Token: token, Category: category, Title: title, Body: body, Data: data, HighPriority: category == "ride_request" || category == "safety"})
+	}
 	if sendErr != nil {
 		return true, w.fail(ctx, deliveryID, sendErr)
 	}
 	_, err = w.db.Exec(ctx, `UPDATE notification_deliveries SET status='delivered',provider_reference=$2,delivered_at=now(),last_error=NULL WHERE id=$1`, deliveryID, reference)
+	if err == nil && liveSessionID != nil && category == "trip_completed" {
+		_, err = w.db.Exec(ctx, `UPDATE live_activity_sessions SET status='ended' WHERE id=$1`, *liveSessionID)
+	}
 	return true, err
 }
 func (w *Worker) fail(ctx context.Context, id uuid.UUID, cause error) error {

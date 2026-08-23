@@ -1,6 +1,6 @@
 # Getting Started
 
-Welcome to the **LaBar Next-Generation Taxi Platform** technical documentation portal. This system is an enterprise-grade ride-hailing and real-time safety ecosystem built from the ground up to solve critical urban transportation challenges with **Clean Architecture in Go (Golang)**, **Native iOS (SwiftUI)**, **Native Android (Jetpack Compose)**, and an **On-Demand Guardian Safety Plugin Module**.
+Welcome to the **LaBar Next-Generation Taxi Platform** technical documentation portal. The platform uses one Go modular-monolith backend, three React Native applications for Passenger, Driver and Driver Registration on Android and iOS, an Astro public website, and web-based admin and operations clients.
 
 ---
 
@@ -25,7 +25,7 @@ Welcome to the **LaBar Next-Generation Taxi Platform** technical documentation p
 2. **15-Second Cascading Dispatch**: High-speed spatial indexing via Redis 7 `GEORADIUS` with ranked offers that automatically cascade to the next nearest driver upon rejection or timeout.
 3. **Hybrid Financial Engine**: Cash payments with driver receipt confirmation and Cashless e-wallets (KBZPay, AYAPay, WavePay) using OS deep-linking and SHA-256 HMAC webhook verification.
 4. **Red & Gold Design System**: High-contrast, accessibility-focused UI design language with 100-900 color scales, dynamic button hover states, and smooth physics-based animations.
-5. **Authoritative Fare Engine**: Integer-MMK calculations shared by the Go backend and Passenger frontend, including the 1,500 MMK service fee, 0.1 km distance steps, cash rounding, and LaBar promo credit.
+5. **Authoritative Fare Engine**: Integer-MMK calculations owned by the Go backend. The active reference version includes 3 km for 5,000 MMK, adds 1,500 MMK/km, and adds 150 MMK per low-speed minute at 10 km/h or below.
 6. **Separated Identity Operations**: DriverReg captures KYC evidence, Admin Control reviews it, and the Driver App activates only after approval.
 
 ---

@@ -254,6 +254,7 @@ components:
         quote_id: {type: string, format: uuid}
         ride_type_id: {type: string, format: uuid}
         payment_method: {type: string, enum: [cash, wallet, kbzpay, wavepay, ayapay]}
+        payment_method_id: {type: string, format: uuid, description: Required for non-cash payments.}
         notes: {type: string, maxLength: 1000}
     OTPRequest:
       type: object

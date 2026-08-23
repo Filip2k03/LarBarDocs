@@ -11,6 +11,7 @@ import (
 	"github.com/Filip2k03/labar-backend/internal/driverreg"
 	"github.com/Filip2k03/labar-backend/internal/drivers"
 	"github.com/Filip2k03/labar-backend/internal/passengers"
+	"github.com/Filip2k03/labar-backend/internal/payments"
 	"github.com/Filip2k03/labar-backend/internal/platform/config"
 	"github.com/Filip2k03/labar-backend/internal/platform/database"
 	"github.com/Filip2k03/labar-backend/internal/platform/maps"
@@ -24,6 +25,7 @@ import (
 	"github.com/Filip2k03/labar-backend/internal/support"
 	"github.com/Filip2k03/labar-backend/internal/tracking"
 	"github.com/Filip2k03/labar-backend/internal/transport/httpapi"
+	"github.com/Filip2k03/labar-backend/internal/wallet"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/rs/zerolog"
@@ -71,9 +73,18 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("object storage unavailable")
 	}
-	authService := auth.NewService(db, redisClient, sms.NewDevelopment(cfg.DevelopmentOTP), cfg.JWTSecret, cfg.OTPSecret, cfg.AccessTokenTTL, cfg.RefreshTokenTTL)
+	var smsProvider sms.Provider
+	if cfg.SMSProvider == "development" {
+		smsProvider = sms.NewDevelopment(cfg.DevelopmentOTP)
+	} else {
+		smsProvider, err = sms.NewHTTP(cfg.SMSEndpoint, cfg.SMSAPIKey, cfg.SMSSender)
+		if err != nil {
+			log.Fatal().Err(err).Msg("SMS provider configuration invalid")
+		}
+	}
+	authService := auth.NewService(db, redisClient, smsProvider, cfg.JWTSecret, cfg.OTPSecret, cfg.AccessTokenTTL, cfg.RefreshTokenTTL)
 	routeProvider := maps.NewOSRM(cfg.MapBaseURL)
-	deps := httpapi.Dependencies{DB: db, Redis: redisClient, Origins: cfg.PublicWebOrigins, Auth: authService, Devices: devices.NewService(db), Pricing: pricing.NewService(db, routeProvider), Rides: rides.NewService(db), Drivers: drivers.NewService(db), Passengers: passengers.NewService(db), Dispatch: dispatch.NewService(db, redisClient), Tracking: tracking.NewService(db, redisClient), DriverReg: driverreg.NewService(db), Storage: storageService, Safety: safety.NewService(db), Support: support.NewService(db), Content: content.NewService(db), Admin: admin.NewService(db), Realtime: realtime.NewGateway(db, redisClient), Maps: routeProvider, Geocoder: maps.NewNominatim(cfg.GeocodeBaseURL)}
+	deps := httpapi.Dependencies{DB: db, Redis: redisClient, Origins: cfg.PublicWebOrigins, Auth: authService, Devices: devices.NewService(db), Pricing: pricing.NewService(db, routeProvider), Rides: rides.NewService(db), Drivers: drivers.NewService(db), Passengers: passengers.NewService(db), Dispatch: dispatch.NewService(db, redisClient), Tracking: tracking.NewService(db, redisClient), DriverReg: driverreg.NewService(db), Storage: storageService, Safety: safety.NewService(db), Support: support.NewService(db), Content: content.NewService(db), Admin: admin.NewService(db), Realtime: realtime.NewGateway(db, redisClient), Maps: routeProvider, Geocoder: maps.NewNominatim(cfg.GeocodeBaseURL), Wallet: wallet.NewService(db), Payments: payments.NewService(db, nil)}
 	server := &http.Server{Addr: cfg.HTTPAddr, Handler: httpapi.NewRouter(deps), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 30 * time.Second, IdleTimeout: 75 * time.Second, MaxHeaderBytes: 1 << 20}
 	go func() {
 		log.Info().Str("addr", cfg.HTTPAddr).Str("environment", cfg.Environment).Msg("API listening")
