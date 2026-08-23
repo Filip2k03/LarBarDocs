@@ -1,5 +1,3 @@
-import type { RideOptionQuote } from './ride';
-
 export interface LocationPoint {
   address: string;
   name?: string;
@@ -8,65 +6,78 @@ export interface LocationPoint {
   place_id?: string;
 }
 
+export interface QuotePoint {
+  lat: number;
+  lng: number;
+}
+
 export interface BookingQuoteRequest {
-  pickup: LocationPoint;
-  destination: LocationPoint;
-  stops?: LocationPoint[];
-  passenger_count?: number;
+  pickup: QuotePoint;
+  destination: QuotePoint;
+  city?: string;
+  passengers?: number;
   promo_code?: string;
-  schedule_time?: string; // ISO date string if scheduled
+  scheduled_at?: string;
+  payment_method?: string;
+}
+
+export interface PricingBreakdown {
+  base_fare_mmk: number;
+  included_distance_meters: number;
+  extra_distance_meters: number;
+  distance_fare_mmk: number;
+  low_speed_fare_mmk: number;
+  booking_fee_mmk: number;
+  service_fee_mmk: number;
+  surcharge_mmk: number;
+  discount_mmk: number;
+  total_mmk: number;
+}
+
+export interface BookingRideOption {
+  ride_type_id: string;
+  code: string;
+  name: string;
+  capacity: number;
+  estimated_driver_arrival_seconds?: number | null;
+  fare: number;
+  currency: string;
+  pricing_breakdown: PricingBreakdown;
 }
 
 export interface BookingQuoteResponse {
   quote_id: string;
-  distance_km: number;
-  duration_minutes: number;
-  currency: string;
-  pickup: LocationPoint;
-  destination: LocationPoint;
-  stops: LocationPoint[];
-  ride_options: RideOptionQuote[];
+  pricing_version_id: string;
   expires_at: string;
-  created_at: string;
+  distance_meters: number;
+  duration_seconds: number;
+  route_geometry?: string;
+  ride_options: BookingRideOption[];
 }
 
 export interface CreateBookingRequest {
   quote_id: string;
   ride_type_id: string;
-  customer_name: string;
-  customer_phone: string;
-  customer_email?: string;
-  payment_method: 'KBZPAY' | 'WAVEPAY' | 'CB_PAY' | 'AYA_PAY' | 'CASH';
-  note_for_driver?: string;
-  guardian_phone?: string;
+  payment_method: 'cash' | 'wallet' | 'kbzpay' | 'wavepay' | 'ayapay';
+  payment_method_id?: string;
+  notes?: string;
 }
 
 export interface BookingRecord {
-  booking_id: string;
-  booking_reference: string;
-  status: 'PENDING_DISPATCH' | 'OFFERING' | 'ACCEPTED' | 'ARRIVING' | 'IN_TRIP' | 'COMPLETED' | 'CANCELLED';
-  customer_name: string;
-  customer_phone: string;
-  pickup: LocationPoint;
-  destination: LocationPoint;
-  ride_type_name: string;
-  fare_mmk: number;
-  currency: string;
+  id: string;
+  passenger_id: string;
+  driver_id?: string;
+  vehicle_id?: string;
+  quote_id: string;
+  ride_type_id: string;
+  status: string;
+  pickup_lat: number;
+  pickup_lng: number;
+  destination_lat: number;
+  destination_lng: number;
   payment_method: string;
-  payment_status: 'PENDING' | 'PAID' | 'REFUNDED';
-  assigned_driver?: {
-    driver_id: string;
-    name: string;
-    phone: string;
-    rating: number;
-    vehicle_plate: string;
-    vehicle_model: string;
-    vehicle_color: string;
-    current_location?: {
-      latitude: number;
-      longitude: number;
-    };
-  };
-  created_at: string;
-  estimated_arrival_at?: string;
+  estimated_total_mmk: number;
+  final_total_mmk?: number;
+  requested_at: string;
+  pickup_pin?: string;
 }

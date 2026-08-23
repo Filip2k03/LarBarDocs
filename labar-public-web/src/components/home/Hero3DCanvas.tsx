@@ -9,6 +9,10 @@ export const Hero3DCanvas: React.FC = () => {
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
+    const story = container.closest('[data-drive-scene]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let scrollProgress = 0;
+    let isVisible = true;
 
     // --- 1. Scene & Atmosphere ---
     const scene = new THREE.Scene();
@@ -28,7 +32,7 @@ export const Hero3DCanvas: React.FC = () => {
       powerPreference: 'high-performance',
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -141,6 +145,23 @@ export const Hero3DCanvas: React.FC = () => {
     const carGroup = new THREE.Group();
     scene.add(carGroup);
 
+    // LaBar taxi roof beacon and door-color accents turn the supplied vehicle
+    // into a branded mobility visual without changing the original model asset.
+    const beacon = new THREE.Mesh(
+      new THREE.BoxGeometry(0.72, 0.18, 0.25),
+      new THREE.MeshStandardMaterial({ color: 0xffd23f, emissive: 0x6b4300, emissiveIntensity: 0.35, roughness: 0.32 })
+    );
+    beacon.position.set(0, 1.1, 0.02);
+    beacon.castShadow = true;
+    carGroup.add(beacon);
+
+    const beaconCap = new THREE.Mesh(
+      new THREE.BoxGeometry(0.48, 0.035, 0.28),
+      new THREE.MeshStandardMaterial({ color: 0xe53935, roughness: 0.35 })
+    );
+    beaconCap.position.set(0, 1.205, 0.02);
+    carGroup.add(beaconCap);
+
     const loader = new GLTFLoader();
     loader.load(
       '/models/lamborghini3d.glb',
@@ -169,7 +190,7 @@ export const Hero3DCanvas: React.FC = () => {
           }
         });
 
-        // Set initial sleek dynamic driving angle
+        // Set initial welcoming pickup angle.
         carGroup.rotation.y = 0.48;
 
         carGroup.add(model);
@@ -185,12 +206,20 @@ export const Hero3DCanvas: React.FC = () => {
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
+    const updateScroll = () => {
+      if (!story || reduceMotion) return;
+      const rect = story.getBoundingClientRect();
+      const travel = Math.max(1, rect.height - window.innerHeight);
+      scrollProgress = THREE.MathUtils.clamp(-rect.top / travel, 0, 1);
+    };
+
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+      if (!isVisible || document.hidden) return;
       const elapsedTime = clock.getElapsedTime();
 
       // Move road lane dashes smoothly to simulate forward driving speed
-      const drivingSpeed = 4.5;
+      const drivingSpeed = reduceMotion ? 0.8 : 3.2 + scrollProgress * 10;
       dashes.forEach((dash, idx) => {
         let z = dash.position.z + drivingSpeed * 0.016;
         if (z > 12) {
@@ -200,14 +229,18 @@ export const Hero3DCanvas: React.FC = () => {
       });
 
       // Subtle dynamic camera drift for cinematic feeling
-      camera.position.x = 4.6 + Math.sin(elapsedTime * 0.4) * 0.15;
-      camera.position.y = 1.8 + Math.cos(elapsedTime * 0.5) * 0.08;
-      camera.lookAt(0, 0.4, 0);
+      camera.position.x = 4.6 + Math.sin(elapsedTime * 0.4) * 0.08 - scrollProgress * 0.75;
+      camera.position.y = 1.8 + Math.cos(elapsedTime * 0.5) * 0.05 + scrollProgress * 0.22;
+      camera.lookAt(scrollProgress * 1.4, 0.4, -scrollProgress * 1.2);
 
       // Realistic sports suspension engine vibration & road bumps
       if (carGroup) {
-        carGroup.position.y = Math.sin(elapsedTime * 8.0) * 0.005 + Math.cos(elapsedTime * 14.0) * 0.002;
-        carGroup.rotation.z = Math.sin(elapsedTime * 2.5) * 0.004; // subtle chassis roll
+        const eased = scrollProgress * scrollProgress * (3 - 2 * scrollProgress);
+        carGroup.position.x = eased * 7.2;
+        carGroup.position.z = -eased * 4.8;
+        carGroup.position.y = Math.sin(elapsedTime * 8.0) * 0.005;
+        carGroup.rotation.y = 0.48 - eased * 0.38;
+        carGroup.rotation.z = Math.sin(elapsedTime * 2.5) * 0.004;
       }
 
       renderer.render(scene, camera);
@@ -226,21 +259,35 @@ export const Hero3DCanvas: React.FC = () => {
       renderer.setSize(newWidth, newHeight);
     };
 
-    window.addEventListener('resize', handleResize);
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
+    const visibilityObserver = new IntersectionObserver(([entry]) => { isVisible = entry?.isIntersecting ?? true; }, { rootMargin: '200px' });
+    visibilityObserver.observe(container);
+    updateScroll();
+    window.addEventListener('scroll', updateScroll, { passive: true });
 
     // --- 8. Cleanup ---
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
+      visibilityObserver.disconnect();
+      window.removeEventListener('scroll', updateScroll);
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
+      scene.traverse((object) => {
+        if (!(object as THREE.Mesh).isMesh) return;
+        const mesh = object as THREE.Mesh;
+        mesh.geometry?.dispose();
+        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        materials.forEach((material) => material.dispose());
+      });
       renderer.dispose();
     };
   }, []);
 
   return (
-    <div className="relative w-full h-[320px] sm:h-[400px] lg:h-[450px] rounded-4xl overflow-hidden pointer-events-none select-none bg-gradient-to-b from-white/40 via-transparent to-white/60">
+    <div className="relative w-full h-[310px] sm:h-[420px] lg:h-[500px] overflow-hidden pointer-events-none select-none rounded-[2rem] bg-gradient-to-b from-white/35 via-transparent to-white/70">
       {/* 3D WebGL Canvas (Click-through background) */}
       <div ref={containerRef} className="w-full h-full" />
 
@@ -248,7 +295,7 @@ export const Hero3DCanvas: React.FC = () => {
       {isLoaded && (
         <div className="absolute bottom-3 left-4 flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 backdrop-blur-md border border-brand-border/70 text-[10px] sm:text-[11px] font-bold text-neutral-700 shadow-soft">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>LaBar VIP Fleet • Live Dynamic 3D</span>
+          <span>Your LaBar is ready to move</span>
         </div>
       )}
     </div>

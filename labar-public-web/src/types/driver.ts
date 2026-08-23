@@ -16,11 +16,7 @@ export interface DriverApplicationRequest {
 }
 
 export interface DriverApplicationResponse {
-  application_id: string;
-  reference_number: string;
-  status: 'SUBMITTED_PENDING_REGISTRAR_REVIEW';
-  next_step_instructions: string;
-  next_step_instructions_mm: string;
-  nearest_branch_address: string;
+  id: string;
+  status: string;
   created_at: string;
 }

@@ -7,6 +7,17 @@ interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
 }
 
+interface ApiFailureBody {
+  error?: {
+    code?: string;
+    message?: string;
+    fields?: Record<string, string>;
+  };
+  code?: string;
+  message?: string;
+  details?: ApiErrorResponse['details'];
+}
+
 export class ApiClient {
   private static baseUrl = API_CONFIG.baseUrl;
 
@@ -64,7 +75,7 @@ export class ApiClient {
       }
 
       // Handle error responses
-      let errorData: ApiErrorResponse | null = null;
+      let errorData: ApiFailureBody | null = null;
       try {
         errorData = await response.json();
       } catch {
@@ -72,10 +83,10 @@ export class ApiClient {
       }
 
       throw new ApiError({
-        message: errorData?.message || `HTTP error ${response.status}: ${response.statusText}`,
+        message: errorData?.error?.message || errorData?.message || `HTTP error ${response.status}: ${response.statusText}`,
         status: response.status,
-        code: errorData?.code || `HTTP_${response.status}`,
-        details: errorData?.details || [],
+        code: errorData?.error?.code || errorData?.code || `HTTP_${response.status}`,
+        details: errorData?.details || Object.entries(errorData?.error?.fields || {}).map(([field, message]) => ({ field, code: 'INVALID', message })),
       });
     } catch (err: unknown) {
       clearTimeout(timeoutId);
@@ -133,5 +144,9 @@ export class ApiClient {
 
   public static delete<T>(endpoint: string, options?: RequestOptions): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'DELETE' });
+  }
+
+  public static bearer(token: string): HeadersInit {
+    return { Authorization: `Bearer ${token}` };
   }
 }

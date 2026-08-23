@@ -9,11 +9,9 @@ export interface SupportTicketRequest {
 }
 
 export interface SupportTicketResponse {
-  ticket_id: string;
-  ticket_number: string;
-  status: 'RECEIVED' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
+  id: string;
+  status: string;
   created_at: string;
-  estimated_reply_hours: number;
 }
 
 export interface ContactInquiryRequest {

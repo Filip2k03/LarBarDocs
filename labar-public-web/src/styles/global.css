@@ -17,6 +17,33 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
+
+  :focus-visible {
+    outline: 3px solid rgba(229, 57, 53, 0.35);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: #E53935;
+    color: white;
+  }
+}
+
+.hero-road-grid {
+  background-image:
+    linear-gradient(rgba(23, 23, 23, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 23, 23, .035) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
 }
 
 @layer components {

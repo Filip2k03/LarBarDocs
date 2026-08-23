@@ -1,4 +1,10 @@
 export const API_ENDPOINTS = {
+  // Identity
+  requestOtp: '/auth/otp/request',
+  verifyOtp: '/auth/otp/verify',
+  refreshSession: '/auth/refresh',
+  currentUser: '/auth/me',
+  logout: '/auth/logout',
   // Public Configuration & System Status
   config: '/public/config',
   status: '/public/status',
@@ -22,12 +28,11 @@ export const API_ENDPOINTS = {
   locationSearch: (query: string, citySlug?: string) => {
     const params = new URLSearchParams({ q: query });
     if (citySlug) params.append('city', citySlug);
-    return `/public/locations/search?${params.toString()}`;
+    return `/locations/search?${params.toString()}`;
   },
 
   // Promotions
   promotions: '/public/promotions',
-  validatePromo: (code: string) => `/public/promotions/validate?code=${encodeURIComponent(code)}`,
 
   // Help Center & Knowledge Base
   helpCategories: '/public/help/categories',

@@ -1,70 +1,18 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/common/Icon.astro';
-import { getTranslation, defaultLocale } from '@/i18n';
-
-const locale = defaultLocale;
-const t = getTranslation(locale);
+const features = [
+  { icon: 'driver', title: 'Driver verification', text: 'Passenger-safe driver and vehicle details are shown for an assigned ride while private identity records stay protected.' },
+  { icon: 'guardian', title: 'Trusted contacts', text: 'Passengers can prepare trusted contacts and share relevant trip progress with a secure, expiring link.' },
+  { icon: 'route', title: 'Route monitoring', text: 'The platform can record route deviations, unexpected stops, or unavailable GPS as reviewable safety events.' },
+  { icon: 'support', title: 'Safety reporting', text: 'Passenger and driver reports create an auditable case for the operations team instead of making unverified emergency claims.' },
+  { icon: 'map', title: 'Trip-aware location privacy', text: 'Precise driver location is limited to operationally relevant ride states and authorized viewers.' },
+  { icon: 'notifications', title: 'SOS event routing', text: 'An SOS creates an immediate platform safety event and notifies configured contacts and operations integrations.' },
+];
 ---
-
-<BaseLayout
-  title="LaBar Guardian — Dual-Shield Safety Ecosystem for Myanmar"
-  description="Discover LaBar Guardian: 60fps route telemetry, 1km SOS mesh emergency intercept, family trip sharing, and in-cabin CCTV video sentinel protection."
-  locale={locale}
->
-  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
-    <div class="text-center max-w-3xl mx-auto space-y-3">
-      <span class="badge-red">DUAL-SHIELD SAFETY STANDARD</span>
-      <h1 class="text-3xl sm:text-5xl font-black text-neutral-900 tracking-tight leading-tight">
-        Safety for Passengers. <br />
-        <span class="text-brand-red">Protection for Drivers &amp; Families.</span>
-      </h1>
-      <p class="text-sm sm:text-base text-neutral-600 leading-relaxed max-w-2xl mx-auto">
-        LaBar Guardian is Myanmar’s first intelligent dual-shield safety architecture designed specifically for municipal road security and family peace of mind.
-      </p>
-    </div>
-
-    <!-- 4 Guardian Safety Modules with Vector SVG Icons -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
-        <div class="w-14 h-14 rounded-3xl bg-red-50 text-brand-red flex items-center justify-center border border-red-100">
-          <Icon name="sos" size={26} />
-        </div>
-        <h3 class="text-xl font-extrabold text-neutral-900">1.0 km SOS Distress Mesh Intercept</h3>
-        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-          When an emergency SOS is triggered by a passenger or driver, our server broadcasts high-priority distress alerts to the 5 nearest on-duty drivers within 1,000 meters while alerting our 24/7 central emergency operations room.
-        </p>
-      </div>
-
-      <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
-        <div class="w-14 h-14 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
-          <Icon name="telemetry" size={26} />
-        </div>
-        <h3 class="text-xl font-extrabold text-neutral-900">60fps Real-Time Route Telemetry</h3>
-        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-          Continuous low-latency GPS position streaming with automated cross-track deviation detection. If a vehicle veers more than 300 meters off the planned navigation route or stops unexpectedly, an automated safety check is initiated.
-        </p>
-      </div>
-
-      <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
-        <div class="w-14 h-14 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
-          <Icon name="family" size={26} />
-        </div>
-        <h3 class="text-xl font-extrabold text-neutral-900">Family QR Guardian Shield Pairing</h3>
-        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-          Spouses and parents can scan a private pairing QR code to track trips live on their own devices without needing an active account or entering card details. Remote siren triggers allow trusted contacts to alert in-cabin occupants.
-        </p>
-      </div>
-
-      <div class="bg-white rounded-4xl p-8 border border-brand-border shadow-soft space-y-4">
-        <div class="w-14 h-14 rounded-3xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
-          <Icon name="cctv" size={26} />
-        </div>
-        <h3 class="text-xl font-extrabold text-neutral-900">In-Cabin CCTV Sentinel Recording</h3>
-        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-          Continuous 1080p rolling loop video buffer stored securely in encrypted local device storage. Video evidence is only decrypted and transmitted to legal authorities if a safety incident or dispute is officially filed.
-        </p>
-      </div>
-    </div>
-  </div>
+<BaseLayout title="LaBar Guardian — Safety by design" description="Explore LaBar trip sharing, trusted contacts, driver verification, route monitoring, SOS events and safety reporting.">
+  <main class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="grid gap-8 lg:grid-cols-[1fr_.75fr] lg:items-end"><div><span class="badge-red">LABAR GUARDIAN</span><h1 class="mt-4 text-4xl font-black tracking-tight text-neutral-950 sm:text-6xl">Safer choices, built into every trip.</h1><p class="mt-5 max-w-2xl text-base leading-7 text-neutral-600">Guardian connects identity, trip context, location privacy and support workflows so passengers, drivers and operations can respond with clearer information.</p></div><div class="rounded-[2rem] bg-neutral-950 p-6 text-white"><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-yellow">Important</p><p class="mt-3 text-sm leading-6 text-neutral-300">LaBar never claims emergency services were contacted unless a real emergency integration confirms it.</p></div></div>
+    <section class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{features.map((feature) => <article class="rounded-[2rem] border border-neutral-200 bg-white p-6 shadow-soft"><div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-brand-red"><Icon name={feature.icon} size={22} /></div><h2 class="mt-5 text-lg font-black text-neutral-950">{feature.title}</h2><p class="mt-2 text-sm leading-6 text-neutral-600">{feature.text}</p></article>)}</section>
+  </main>
 </BaseLayout>

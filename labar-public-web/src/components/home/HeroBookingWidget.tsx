@@ -1,190 +1,28 @@
-import React, { useState } from 'react';
-import { Car, Package, Plane, ArrowRight, Clock, Users, Loader2 } from 'lucide-react';
-import { LocationAutocomplete } from '../booking/LocationAutocomplete';
-import { BookingService } from '@/services/booking.service';
-import type { LocationPoint } from '@/types/booking';
+import React from 'react';
+import { ArrowRight, Car, Clock3, MapPin, ShieldCheck, Smartphone } from 'lucide-react';
 
-export const HeroBookingWidget: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'ride' | 'delivery' | 'airport'>('ride');
-  const [pickup, setPickup] = useState<LocationPoint | null>({
-    name: 'Sule Square, Yangon',
-    address: 'Sule Pagoda Road, Kyauktada Township, Yangon',
-    latitude: 16.7794,
-    longitude: 96.1554,
-  });
-  const [destination, setDestination] = useState<LocationPoint | null>({
-    name: 'Junction City Mall',
-    address: 'Bogyoke Aung San Road, Pabedan Township, Yangon',
-    latitude: 16.7788,
-    longitude: 96.1528,
-  });
-  const [scheduleTime, setScheduleTime] = useState<string>('now');
-  const [passengers, setPassengers] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+export const HeroBookingWidget: React.FC = () => (
+  <aside className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/80 bg-white/88 p-5 shadow-[0_30px_80px_-32px_rgba(23,23,23,.45)] backdrop-blur-xl sm:p-6" aria-label="Book a LaBar ride">
+    <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-brand-yellow/25 blur-3xl" />
+    <div className="relative">
+      <div className="flex items-center justify-between">
+        <span className="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1.5 text-[11px] font-bold text-brand-red"><Car size={14} /> Ride with LaBar</span>
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-neutral-500"><ShieldCheck size={14} className="text-emerald-600" /> Account protected</span>
+      </div>
+      <h2 className="mt-5 text-2xl font-black tracking-tight text-neutral-950">Tell us where. We’ll handle the road.</h2>
+      <p className="mt-2 text-sm leading-6 text-neutral-600">Sign in with your passenger account, choose two real map locations, then see fare options returned by LaBar’s API.</p>
 
-  const handleSeePrices = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(null);
-
-    if (!pickup || !destination) {
-      setErrorMessage('Please specify both pickup and destination locations.');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      // Call Real Go API for Quote
-      const quote = await BookingService.getBookingQuote({
-        pickup,
-        destination,
-        passenger_count: passengers,
-      });
-
-      // Redirect to full booking page with active quote
-      window.location.href = `/ride?quote_id=${encodeURIComponent(quote.quote_id)}&service=${activeTab}`;
-    } catch (err: any) {
-      // If API server is starting or custom query, redirect with search query params
-      const params = new URLSearchParams({
-        pickup_addr: pickup.address,
-        pickup_lat: String(pickup.latitude),
-        pickup_lng: String(pickup.longitude),
-        dest_addr: destination.address,
-        dest_lat: String(destination.latitude),
-        dest_lng: String(destination.longitude),
-        service: activeTab,
-        passengers: String(passengers),
-      });
-      window.location.href = `/ride?${params.toString()}`;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="w-full max-w-md bg-white rounded-4xl p-5 md:p-6 shadow-soft-lg border border-brand-border/80 backdrop-blur-md">
-      {/* Service Type Tab Switcher */}
-      <div className="flex items-center justify-between p-1 bg-brand-bg rounded-2xl mb-4 border border-brand-border/60">
-        <button
-          type="button"
-          onClick={() => setActiveTab('ride')}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-            activeTab === 'ride'
-              ? 'bg-white text-brand-red shadow-sm'
-              : 'text-neutral-600 hover:text-neutral-900'
-          }`}
-        >
-          <Car size={15} />
-          <span>Ride</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('delivery')}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-            activeTab === 'delivery'
-              ? 'bg-white text-brand-red shadow-sm'
-              : 'text-neutral-600 hover:text-neutral-900'
-          }`}
-        >
-          <Package size={15} />
-          <span>Delivery</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('airport')}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
-            activeTab === 'airport'
-              ? 'bg-white text-brand-red shadow-sm'
-              : 'text-neutral-600 hover:text-neutral-900'
-          }`}
-        >
-          <Plane size={15} />
-          <span>Airport</span>
-        </button>
+      <div className="mt-6 space-y-2.5 rounded-3xl bg-neutral-50 p-4">
+        <div className="flex min-h-12 items-center rounded-2xl border border-neutral-200 bg-white px-4 text-sm text-neutral-500"><span className="mr-3 h-3 w-3 rounded-full bg-emerald-500 ring-4 ring-emerald-100" /><span>Your pickup</span></div>
+        <div className="ml-[21px] h-3 border-l-2 border-dotted border-neutral-300" />
+        <div className="flex min-h-12 items-center rounded-2xl border border-neutral-200 bg-white px-4 text-sm text-neutral-500"><MapPin size={17} className="mr-3 text-brand-red" /><span>Your destination</span></div>
       </div>
 
-      {/* Input Fields Form */}
-      <form onSubmit={handleSeePrices} className="space-y-3">
-        {/* Pickup Input */}
-        <LocationAutocomplete
-          label="From"
-          placeholder="Enter pickup location"
-          value={pickup}
-          onChange={setPickup}
-          iconColor="text-emerald-500"
-        />
-
-        {/* Destination Input */}
-        <LocationAutocomplete
-          label="To"
-          placeholder="Where are you going?"
-          value={destination}
-          onChange={setDestination}
-          iconColor="text-brand-red"
-        />
-
-        {/* Schedule & Passenger Dual Selectors */}
-        <div className="grid grid-cols-2 gap-2 pt-1">
-          {/* Time Picker */}
-          <div className="flex items-center bg-white border border-brand-border rounded-2xl px-3 py-2 text-xs font-semibold text-neutral-800">
-            <Clock size={15} className="text-neutral-400 mr-2 shrink-0" />
-            <select
-              value={scheduleTime}
-              onChange={(e) => setScheduleTime(e.target.value)}
-              className="w-full bg-transparent outline-none cursor-pointer text-xs font-semibold"
-            >
-              <option value="now">Now (ယခု)</option>
-              <option value="15m">In 15 mins</option>
-              <option value="30m">In 30 mins</option>
-              <option value="1h">In 1 hour</option>
-              <option value="schedule">Schedule later...</option>
-            </select>
-          </div>
-
-          {/* Passenger Count */}
-          <div className="flex items-center bg-white border border-brand-border rounded-2xl px-3 py-2 text-xs font-semibold text-neutral-800">
-            <Users size={15} className="text-neutral-400 mr-2 shrink-0" />
-            <select
-              value={passengers}
-              onChange={(e) => setPassengers(Number(e.target.value))}
-              className="w-full bg-transparent outline-none cursor-pointer text-xs font-semibold"
-            >
-              <option value={1}>1 Passenger</option>
-              <option value={2}>2 Passengers</option>
-              <option value={3}>3 Passengers</option>
-              <option value={4}>4 Passengers</option>
-              <option value={6}>6 Passengers (XL)</option>
-            </select>
-          </div>
-        </div>
-
-        {errorMessage && (
-          <div className="text-xs text-brand-red font-medium px-1">
-            {errorMessage}
-          </div>
-        )}
-
-        {/* See Prices Action Button */}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full mt-2 flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl bg-brand-red hover:bg-brand-deepRed active:scale-[0.98] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 size={18} className="animate-spin" />
-              <span>Calculating Route &amp; Fares...</span>
-            </>
-          ) : (
-            <>
-              <span>See Prices</span>
-              <ArrowRight size={16} />
-            </>
-          )}
-        </button>
-      </form>
+      <a href="/ride?intent=book" className="btn-primary mt-5 min-h-13 w-full text-sm">Book a ride <ArrowRight size={18} /></a>
+      <div className="mt-4 grid grid-cols-2 gap-3 text-[11px] font-semibold text-neutral-500">
+        <span className="flex items-center gap-2"><Clock3 size={14} /> Live API quote</span>
+        <span className="flex items-center justify-end gap-2"><Smartphone size={14} /> App handoff ready</span>
+      </div>
     </div>
-  );
-};
+  </aside>
+);

@@ -2,97 +2,23 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { HelpService } from '@/services/help.service';
 import { SupportTicketForm } from '@/components/help/SupportTicketForm';
-import { getTranslation, defaultLocale } from '@/i18n';
 import type { HelpArticle } from '@/types/help';
 
 export async function getStaticPaths() {
-  const defaultSlugs = [
-    { slug: 'how-to-pay-with-kbzpay', title: 'How to pay for your ride using KBZPay or WavePay' },
-    { slug: 'lost-item-in-taxi', title: 'What to do if you left an item in a LaBar taxi' },
-    { slug: 'rides', title: 'Rides and Booking Guide' },
-    { slug: 'payments', title: 'Payment Options & Wallets' },
-    { slug: 'driver', title: 'Driver Partner FAQ' },
-    { slug: 'safety', title: 'Guardian Safety Shield Information' },
-    { slug: 'lost-items', title: 'Lost & Found Support' },
-    { slug: 'business', title: 'Corporate Solutions Overview' },
-  ];
-
-  return defaultSlugs.map((s) => ({
-    params: { slug: s.slug },
-    props: { articleSummary: s },
-  }));
+  try {
+    const articles = await HelpService.getArticles();
+    return articles.map((summary) => ({ params: { slug: summary.slug }, props: { summary } }));
+  } catch { return []; }
 }
-
-const { slug } = Astro.params;
-const locale = defaultLocale;
-const t = getTranslation(locale);
-
-let article: HelpArticle | null = null;
-try {
-  article = await HelpService.getArticleBySlug(slug as string);
-} catch {
-  article = {
-    id: `art_${slug}`,
-    slug: slug as string,
-    category_slug: 'general',
-    title: (slug as string).split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-    title_mm: 'အကူအညီ ဆောင်းပါး',
-    content: 'LaBar provides 24/7 dedicated support for all passengers, drivers, and business corporate partners across Myanmar. For urgent issues during an active trip, please use the in-app emergency button or contact our 24/7 customer hotline directly.',
-    content_mm: 'LaBar သည် မြန်မာတစ်နိုင်ငံလုံးရှိ ခရီးသည်များနှင့် ယာဉ်မောင်းများအတွက် ၂၄ နာရီ ဝန်ဆောင်မှု ပေးနေပါသည်။',
-    tags: ['support', 'help'],
-    helpful_count: 54,
-    last_updated: '2026-08-23',
-  };
-}
+const { summary } = Astro.props as { summary: HelpArticle };
+let article = summary;
+try { article = await HelpService.getArticleBySlug(summary.slug); } catch { /* summary remains real API data */ }
+const body = typeof article.body === 'string' ? article.body : article.body ? JSON.stringify(article.body, null, 2) : '';
 ---
-
-<BaseLayout
-  title={`${article.title} — LaBar Help Center`}
-  description={article.content.slice(0, 150)}
-  locale={locale}
->
-  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-12">
-    <!-- Breadcrumbs -->
-    <div class="flex items-center gap-2 text-xs font-semibold text-neutral-500">
-      <a href="/help" class="hover:text-brand-red">Help Center</a>
-      <span>❯</span>
-      <span class="text-neutral-900">{article.title}</span>
-    </div>
-
-    <!-- Article Body Card -->
-    <div class="bg-white rounded-4xl p-6 sm:p-10 border border-brand-border shadow-soft space-y-6">
-      <div>
-        <span class="badge-red mb-2 uppercase">{article.category_slug}</span>
-        <h1 class="text-2xl sm:text-3xl font-black text-neutral-900 tracking-tight">
-          {article.title}
-        </h1>
-        <div class="text-xs text-neutral-400 font-semibold mt-2">
-          Last updated on {article.last_updated} • {article.helpful_count} people found this helpful
-        </div>
-      </div>
-
-      <div class="text-xs sm:text-sm text-neutral-700 leading-relaxed space-y-4 border-t border-neutral-100 pt-6">
-        <p>{article.content}</p>
-        <p class="bg-brand-bg p-4 rounded-2xl border border-brand-border text-neutral-600">
-          <b>Need further help?</b> If this article does not fully answer your inquiry, our customer operations team is available 24/7 via phone or instant support ticket submission.
-        </p>
-      </div>
-
-      <!-- Feedback -->
-      <div class="pt-6 border-t border-neutral-100 flex items-center justify-between">
-        <span class="text-xs font-bold text-neutral-600">Was this article helpful?</span>
-        <div class="flex gap-2">
-          <button onclick="alert('Thank you for your feedback!');" class="px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-emerald-50 hover:text-emerald-700 text-xs font-bold transition-colors">
-            👍 Yes
-          </button>
-          <button onclick="alert('Thank you! We will improve this article.');" class="px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-red-50 hover:text-brand-red text-xs font-bold transition-colors">
-            👎 No
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Support Form -->
-    <SupportTicketForm client:visible />
-  </div>
+<BaseLayout title={`${article.title} — LaBar Help`} description={`LaBar help article: ${article.title}`}>
+  <main class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
+    <nav aria-label="Breadcrumb" class="text-xs font-semibold text-neutral-500"><a href="/help" class="hover:text-brand-red">Help</a><span class="mx-2">/</span><span class="text-neutral-900">{article.title}</span></nav>
+    <article class="mt-7 rounded-[2rem] border border-neutral-200 bg-white p-6 shadow-soft sm:p-10"><span class="badge-red">{article.category}</span><h1 class="mt-4 text-3xl font-black tracking-tight text-neutral-950 sm:text-4xl">{article.title}</h1>{body ? <div class="mt-7 whitespace-pre-wrap border-t border-neutral-100 pt-7 text-sm leading-7 text-neutral-700">{body}</div> : <p class="mt-7 border-t border-neutral-100 pt-7 text-sm text-neutral-500">This article has no published body content.</p>}</article>
+    <section class="mt-12"><SupportTicketForm client:visible /></section>
+  </main>
 </BaseLayout>

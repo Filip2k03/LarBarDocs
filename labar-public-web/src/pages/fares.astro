@@ -1,81 +1,15 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { FareEstimator } from '@/components/booking/FareEstimator';
-import { getTranslation, defaultLocale } from '@/i18n';
-
-const locale = defaultLocale;
-const t = getTranslation(locale);
+import { FaresService } from '@/services/fares.service';
+import type { FareRule } from '@/types/fare';
+let rules: FareRule[] = [];
+let unavailable = false;
+try { rules = await FaresService.getFareRules(); } catch { unavailable = true; }
+const mmk = (value: number) => `${value.toLocaleString()} MMK`;
 ---
-
-<BaseLayout
-  title="Transparent Fares & Tariff Rules — LaBar Myanmar"
-  description="Explore LaBar's transparent taxi meter fares. Base rates, per-kilometer pricing, late-night surcharges, and instant fare simulator."
-  locale={locale}
->
-  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
-    <div class="text-center max-w-3xl mx-auto space-y-3">
-      <span class="badge-gold">TRANSPARENT MUNICIPAL PRICING</span>
-      <h1 class="text-3xl sm:text-5xl font-black text-neutral-900 tracking-tight leading-tight">
-        Zero Hidden Fees. <br />
-        <span class="text-brand-red">Guaranteed Upfront Transparent Fares.</span>
-      </h1>
-      <p class="text-sm sm:text-base text-neutral-600 leading-relaxed max-w-2xl mx-auto">
-        No unexpected price haggling or roadside negotiations. Fares are calculated dynamically based on distance, duration, and municipal transport tariffs.
-      </p>
-    </div>
-
-    <!-- Fare Rules Table -->
-    <div class="bg-white rounded-4xl p-6 sm:p-8 border border-brand-border shadow-soft max-w-4xl mx-auto space-y-6">
-      <h3 class="text-lg font-extrabold text-neutral-900">
-        Standard Tariff Structure (Yangon Municipal Region)
-      </h3>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr class="border-b border-neutral-200 text-neutral-500 uppercase tracking-wider text-[10px]">
-              <th class="py-3 px-4 font-bold">Vehicle Tier</th>
-              <th class="py-3 px-4 font-bold">Base Fare</th>
-              <th class="py-3 px-4 font-bold">Rate / KM</th>
-              <th class="py-3 px-4 font-bold">Rate / Min</th>
-              <th class="py-3 px-4 font-bold">Minimum Fare</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-neutral-100 font-semibold text-neutral-800">
-            <tr>
-              <td class="py-3.5 px-4 font-extrabold text-neutral-900">Standard Taxi (Probox)</td>
-              <td class="py-3.5 px-4">5,800 MMK</td>
-              <td class="py-3.5 px-4">850 MMK</td>
-              <td class="py-3.5 px-4">120 MMK</td>
-              <td class="py-3.5 px-4">5,800 MMK</td>
-            </tr>
-            <tr>
-              <td class="py-3.5 px-4 font-extrabold text-neutral-900">Comfort Sedan (Axio/Premio)</td>
-              <td class="py-3.5 px-4">7,800 MMK</td>
-              <td class="py-3.5 px-4">1,100 MMK</td>
-              <td class="py-3.5 px-4">150 MMK</td>
-              <td class="py-3.5 px-4">7,800 MMK</td>
-            </tr>
-            <tr>
-              <td class="py-3.5 px-4 font-extrabold text-neutral-900">Royal Gold VIP (Crown/Alphard)</td>
-              <td class="py-3.5 px-4">12,500 MMK</td>
-              <td class="py-3.5 px-4">1,800 MMK</td>
-              <td class="py-3.5 px-4">250 MMK</td>
-              <td class="py-3.5 px-4">12,500 MMK</td>
-            </tr>
-            <tr>
-              <td class="py-3.5 px-4 font-extrabold text-neutral-900">XL Family Van (7 Seats)</td>
-              <td class="py-3.5 px-4">15,800 MMK</td>
-              <td class="py-3.5 px-4">2,200 MMK</td>
-              <td class="py-3.5 px-4">300 MMK</td>
-              <td class="py-3.5 px-4">15,800 MMK</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Live Interactive Fare Estimator Island -->
-    <FareEstimator client:visible />
-  </div>
+<BaseLayout title="Fares — LaBar Myanmar" description="Review active LaBar fare rules published by the Go pricing API.">
+  <main class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl text-center"><span class="badge-red">VERSIONED PRICING</span><h1 class="mt-4 text-4xl font-black tracking-tight text-neutral-950 sm:text-5xl">Clear before you confirm.</h1><p class="mt-4 text-sm leading-6 text-neutral-600">These are the active fare rules returned by the backend. Your route total is calculated from a live quote, not in the browser.</p><a href="/ride?intent=quote" class="btn-primary mt-6 min-h-12">Get a route quote →</a></div>
+    {unavailable ? <p class="mx-auto mt-10 max-w-2xl rounded-3xl border border-amber-200 bg-amber-50 p-7 text-center text-sm text-amber-900">Fare rules could not be reached. No prices have been filled in locally.</p> : rules.length === 0 ? <p class="mx-auto mt-10 max-w-2xl rounded-3xl border border-neutral-200 bg-white p-7 text-center text-sm text-neutral-600">No active fare rules were returned.</p> : <div class="mt-12 grid gap-5 md:grid-cols-2">{rules.map((rule) => <article class="rounded-[2rem] border border-neutral-200 bg-white p-6 shadow-soft"><div class="flex items-center justify-between"><span class="rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-brand-red">{rule.city}</span><span class="text-[10px] font-semibold text-neutral-400">Version {rule.version}</span></div><h2 class="mt-4 text-xl font-black capitalize text-neutral-950">{rule.ride_type}</h2><dl class="mt-5 grid grid-cols-2 gap-4 text-xs"><div><dt class="text-neutral-500">Base fare</dt><dd class="mt-1 font-extrabold text-neutral-950">{mmk(rule.base_fare_mmk)}</dd></div><div><dt class="text-neutral-500">Included distance</dt><dd class="mt-1 font-extrabold text-neutral-950">{(rule.included_distance_meters / 1000).toFixed(1)} km</dd></div><div><dt class="text-neutral-500">Additional kilometre</dt><dd class="mt-1 font-extrabold text-neutral-950">{mmk(rule.per_km_mmk)}</dd></div><div><dt class="text-neutral-500">Low-speed minute</dt><dd class="mt-1 font-extrabold text-neutral-950">{mmk(rule.low_speed_per_minute_mmk)}</dd></div><div><dt class="text-neutral-500">Booking fee</dt><dd class="mt-1 font-extrabold text-neutral-950">{mmk(rule.booking_fee_mmk)}</dd></div><div><dt class="text-neutral-500">Service fee</dt><dd class="mt-1 font-extrabold text-neutral-950">{mmk(rule.service_fee_mmk)}</dd></div></dl></article>)}</div>}
+  </main>
 </BaseLayout>

@@ -1,159 +1,33 @@
 ---
-import Icon from '@/components/common/Icon.astro';
 import { getTranslation, defaultLocale } from '@/i18n';
-
-interface Props {
-  locale?: 'en' | 'my';
-}
-
+interface Props { locale?: 'en' | 'my'; }
 const { locale = defaultLocale } = Astro.props;
 const t = getTranslation(locale);
 ---
 
-<!-- Unique Myanmar Live Fleet Highway Ticker -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 mb-4">
-  <div class="bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 rounded-3xl p-4 sm:p-5 text-white shadow-soft-lg flex flex-col md:flex-row items-center justify-between gap-4 overflow-hidden relative border border-neutral-700/60">
-    <div class="flex items-center gap-3 z-10">
-      <div class="w-10 h-10 rounded-2xl bg-brand-red text-white flex items-center justify-center shadow-sm">
-        <Icon name="taxi" size={20} />
-      </div>
-      <div>
-        <div class="text-xs font-black tracking-wide flex items-center gap-2">
-          <span>LaBar High-Speed Mesh Telemetry</span>
-          <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">● Active 24/7</span>
-        </div>
-        <div class="text-[11px] text-neutral-400 font-medium">
-          Connecting Yangon ➔ Mandalay ➔ Naypyidaw ➔ Taunggyi ➔ Inle Lake
-        </div>
-      </div>
+<div class="mx-auto mt-20 max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="relative overflow-hidden rounded-[2rem] bg-neutral-950 px-6 py-8 text-white shadow-2xl sm:px-9 sm:py-10">
+    <div class="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-brand-red/30 blur-3xl"></div>
+    <div class="relative flex flex-col justify-between gap-6 md:flex-row md:items-center">
+      <div><p class="text-[11px] font-bold uppercase tracking-[.2em] text-brand-yellow">A ride that respects your day</p><h2 class="mt-2 text-2xl font-black tracking-tight sm:text-3xl">Ready when you are.</h2><p class="mt-2 max-w-xl text-sm leading-6 text-neutral-400">Plan a route on the web, then continue with the same passenger account in the LaBar app.</p></div>
+      <a href="/ride?intent=book" class="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-white px-6 text-sm font-bold text-neutral-950 transition hover:bg-brand-yellow">Book a ride <span class="ml-2" aria-hidden="true">→</span></a>
     </div>
-
-    <!-- Animated Road Waypoints Track -->
-    <div class="w-full md:w-80 h-2 bg-neutral-700/80 rounded-full overflow-hidden relative">
-      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-brand-red to-transparent w-24 animate-[marquee_3s_linear_infinite]" />
-    </div>
-
-    <a
-      href="/status"
-      class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1.5 z-10 shrink-0"
-    >
-      <span>Live Fleet Radar</span>
-      <span>❯</span>
-    </a>
   </div>
 </div>
 
-<footer class="bg-white border-t border-brand-border/80 pt-16 pb-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 pb-12 border-b border-neutral-200">
-      <!-- Brand & Mission Column (Col 1-2) -->
-      <div class="lg:col-span-2 space-y-4">
-        <a href="/" class="flex items-center gap-3">
-          <img src="/logo.png" alt="LaBar Logo" class="h-9 w-auto object-contain" />
-          <span class="text-2xl font-black tracking-tight text-neutral-900">
-            La<span class="text-brand-red">Bar</span>
-          </span>
-        </a>
-        <p class="text-xs text-neutral-500 font-medium leading-relaxed max-w-sm">
-          {t.footer.tagline} Safe, reliable, and transparent mobility across Myanmar with verified drivers and live safety guardian mesh.
-        </p>
-
-        <!-- Social Icons -->
-        <div class="flex items-center gap-3 pt-2 text-neutral-400">
-          <a href="https://facebook.com" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-brand-red hover:text-white flex items-center justify-center transition-colors">
-            <span class="text-xs font-black">f</span>
-          </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-brand-red hover:text-white flex items-center justify-center transition-colors">
-            <span class="text-xs font-black">ig</span>
-          </a>
-          <a href="https://tiktok.com" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-brand-red hover:text-white flex items-center justify-center transition-colors">
-            <span class="text-xs font-black">tk</span>
-          </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-brand-red hover:text-white flex items-center justify-center transition-colors">
-            <span class="text-xs font-black">in</span>
-          </a>
-        </div>
+<footer class="mt-4 border-t border-neutral-200 bg-white pb-10 pt-14">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-10 border-b border-neutral-200 pb-12 md:grid-cols-2 lg:grid-cols-6">
+      <div class="space-y-4 lg:col-span-2">
+        <a href="/" class="flex w-fit items-center gap-3"><img src="/logo.png" alt="LaBar" class="h-9 w-auto" /><span class="text-2xl font-black tracking-tight">La<span class="text-brand-red">Bar</span></span></a>
+        <p class="max-w-sm text-sm leading-6 text-neutral-500">{t.footer.tagline} Thoughtful mobility for the people and places that make Myanmar home.</p>
+        <a href="/status" class="inline-flex min-h-11 items-center text-xs font-bold text-neutral-700 underline decoration-neutral-300 underline-offset-4 hover:text-brand-red">View API-supplied service status</a>
       </div>
-
-      <!-- Services Column -->
-      <div class="space-y-3">
-        <h4 class="text-xs font-extrabold uppercase tracking-wider text-neutral-900">
-          {t.footer.servicesTitle}
-        </h4>
-        <ul class="space-y-2 text-xs font-medium text-neutral-600">
-          <li><a href="/ride" class="hover:text-brand-red transition-colors">Ride</a></li>
-          <li><a href="/drive" class="hover:text-brand-red transition-colors">Drive</a></li>
-          <li><a href="/delivery" class="hover:text-brand-red transition-colors">Delivery</a></li>
-          <li><a href="/airport" class="hover:text-brand-red transition-colors">Airport Transfer</a></li>
-          <li><a href="/schedule" class="hover:text-brand-red transition-colors">Schedule Ride</a></li>
-          <li><a href="/business" class="hover:text-brand-red transition-colors">Business Fleet</a></li>
-        </ul>
-      </div>
-
-      <!-- Company Column -->
-      <div class="space-y-3">
-        <h4 class="text-xs font-extrabold uppercase tracking-wider text-neutral-900">
-          {t.footer.companyTitle}
-        </h4>
-        <ul class="space-y-2 text-xs font-medium text-neutral-600">
-          <li><a href="/about" class="hover:text-brand-red transition-colors">About LaBar</a></li>
-          <li><a href="/careers" class="hover:text-brand-red transition-colors">Careers</a></li>
-          <li><a href="/cities" class="hover:text-brand-red transition-colors">Cities &amp; Coverage</a></li>
-          <li><a href="/fares" class="hover:text-brand-red transition-colors">Fare Structure</a></li>
-          <li><a href="/contact" class="hover:text-brand-red transition-colors">Contact Us</a></li>
-          <li><a href="/status" class="hover:text-brand-red transition-colors">Platform Status</a></li>
-        </ul>
-      </div>
-
-      <!-- Support & Safety Column -->
-      <div class="space-y-3">
-        <h4 class="text-xs font-extrabold uppercase tracking-wider text-neutral-900">
-          {t.footer.supportTitle}
-        </h4>
-        <ul class="space-y-2 text-xs font-medium text-neutral-600">
-          <li><a href="/help" class="hover:text-brand-red transition-colors">Help Center</a></li>
-          <li><a href="/safety" class="hover:text-brand-red transition-colors">LaBar Guardian</a></li>
-          <li><a href="/legal/terms" class="hover:text-brand-red transition-colors">{t.footer.terms}</a></li>
-          <li><a href="/legal/privacy" class="hover:text-brand-red transition-colors">{t.footer.privacy}</a></li>
-          <li><a href="/legal/cookies" class="hover:text-brand-red transition-colors">{t.footer.cookies}</a></li>
-        </ul>
-      </div>
-
-      <!-- Newsletter Column -->
-      <div class="space-y-3">
-        <h4 class="text-xs font-extrabold uppercase tracking-wider text-neutral-900">
-          {t.footer.newsletterTitle}
-        </h4>
-        <p class="text-[11px] text-neutral-500 font-medium">
-          {t.footer.newsletterSub}
-        </p>
-        <form onsubmit="event.preventDefault(); alert('Subscribed to LaBar Myanmar news and promotion updates!');" class="space-y-2">
-          <input
-            type="email"
-            required
-            placeholder="Enter your email"
-            class="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2 text-xs text-neutral-900 outline-none focus:border-brand-red"
-          />
-          <button
-            type="submit"
-            class="w-full py-2 px-4 rounded-xl bg-brand-red hover:bg-brand-deepRed text-white text-xs font-bold transition-all cursor-pointer"
-          >
-            {t.footer.subscribe}
-          </button>
-        </form>
-      </div>
+      <div><h3 class="text-xs font-extrabold uppercase tracking-wider">Services</h3><ul class="mt-4 space-y-3 text-sm text-neutral-600"><li><a href="/ride">Ride</a></li><li><a href="/delivery">Delivery</a></li><li><a href="/airport">Airport</a></li><li><a href="/schedule">Schedule</a></li><li><a href="/business">Business</a></li></ul></div>
+      <div><h3 class="text-xs font-extrabold uppercase tracking-wider">Partners</h3><ul class="mt-4 space-y-3 text-sm text-neutral-600"><li><a href="/drive">Drive with LaBar</a></li><li><a href="/cities">Cities</a></li><li><a href="/fares">Fares</a></li><li><a href="/promotions">Promotions</a></li><li><a href="/download">Download apps</a></li></ul></div>
+      <div><h3 class="text-xs font-extrabold uppercase tracking-wider">Company</h3><ul class="mt-4 space-y-3 text-sm text-neutral-600"><li><a href="/about">About</a></li><li><a href="/careers">Careers</a></li><li><a href="/safety">Safety</a></li><li><a href="/contact">Contact</a></li></ul></div>
+      <div><h3 class="text-xs font-extrabold uppercase tracking-wider">Support</h3><ul class="mt-4 space-y-3 text-sm text-neutral-600"><li><a href="/help">Help Center</a></li><li><a href="/legal/privacy">Privacy</a></li><li><a href="/legal/terms">Terms</a></li><li><a href="/legal/cookies">Cookies</a></li></ul></div>
     </div>
-
-    <!-- Bottom Bar -->
-    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-neutral-500">
-      <div>
-        © 2026 LaBar Taxi Technologies Co., Ltd. {t.footer.rights}
-      </div>
-      <div class="flex items-center gap-1.5 text-neutral-600">
-        <span>Made with</span>
-        <Icon name="heart" size={13} color="#E53935" class="text-brand-red" />
-        <span>in Myanmar</span>
-      </div>
-    </div>
+    <div class="flex flex-col gap-2 pt-7 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between"><p>© 2026 LaBar Taxi Technologies Co., Ltd. {t.footer.rights}</p><p>Designed for Myanmar journeys.</p></div>
   </div>
 </footer>

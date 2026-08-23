@@ -1,537 +1,225 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Car, 
-  MapPin, 
-  ArrowRight, 
-  Clock, 
-  CreditCard, 
-  ShieldCheck, 
-  CheckCircle2, 
-  AlertCircle, 
-  Loader2, 
-  Phone, 
-  User, 
-  Sparkles,
-  RefreshCw
-} from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Clock3, Loader2, LockKeyhole, Phone, ShieldCheck } from 'lucide-react';
+import { ApiErrorState } from '@/components/common/ApiErrorState';
 import { LocationAutocomplete } from './LocationAutocomplete';
+import { AuthService } from '@/services/auth.service';
 import { BookingService } from '@/services/booking.service';
-import { ApiErrorState } from '../common/ApiErrorState';
-import type { 
-  LocationPoint, 
-  BookingQuoteResponse, 
-  CreateBookingRequest, 
-  BookingRecord 
-} from '@/types/booking';
-import type { RideOptionQuote } from '@/types/ride';
+import { API_CONFIG } from '@/lib/api/config';
+import type { AuthSession, OtpChallenge } from '@/types/auth';
+import type { BookingQuoteResponse, BookingRecord, BookingRideOption, LocationPoint } from '@/types/booking';
+
+type Stage = 'auth' | 'route' | 'options' | 'confirmed';
+type PaymentMethod = 'cash' | 'wallet' | 'kbzpay' | 'wavepay' | 'ayapay';
+
+const money = (value: number, currency = 'MMK') =>
+  new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value) + ` ${currency}`;
 
 export const BookingWizard: React.FC = () => {
-  const [step, setStep] = useState<number>(1);
-  const [pickup, setPickup] = useState<LocationPoint | null>({
-    name: 'Sule Square, Yangon',
-    address: 'Sule Pagoda Road, Kyauktada Township, Yangon',
-    latitude: 16.7794,
-    longitude: 96.1554,
-  });
-  const [destination, setDestination] = useState<LocationPoint | null>({
-    name: 'Junction City Mall',
-    address: 'Bogyoke Aung San Road, Pabedan Township, Yangon',
-    latitude: 16.7788,
-    longitude: 96.1528,
-  });
+  const [session, setSession] = useState<AuthSession | null>(null);
+  const [stage, setStage] = useState<Stage>('auth');
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
+  const [challenge, setChallenge] = useState<OtpChallenge | null>(null);
+  const [pickup, setPickup] = useState<LocationPoint | null>(null);
+  const [destination, setDestination] = useState<LocationPoint | null>(null);
+  const [passengers, setPassengers] = useState(1);
+  const [promoCode, setPromoCode] = useState('');
   const [quote, setQuote] = useState<BookingQuoteResponse | null>(null);
-  const [selectedRide, setSelectedRide] = useState<RideOptionQuote | null>(null);
-  
-  // Passenger Form State
-  const [passengerName, setPassengerName] = useState<string>('Ko Thura');
-  const [passengerPhone, setPassengerPhone] = useState<string>('09798421092');
-  const [paymentMethod, setPaymentMethod] = useState<'KBZPAY' | 'WAVEPAY' | 'CB_PAY' | 'AYA_PAY' | 'CASH'>('KBZPAY');
-  const [promoCode, setPromoCode] = useState<string>('');
-  const [noteForDriver, setNoteForDriver] = useState<string>('');
-  
-  // Loading & Error States
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selected, setSelected] = useState<BookingRideOption | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
+  const [notes, setNotes] = useState('');
+  const [booking, setBooking] = useState<BookingRecord | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [confirmedBooking, setConfirmedBooking] = useState<BookingRecord | null>(null);
 
-  // Request Live Quote from Go API
-  const handleRequestQuote = async () => {
-    if (!pickup || !destination) {
-      alert('Please specify both pickup and destination locations.');
-      return;
-    }
+  useEffect(() => {
+    const saved = AuthService.getSession();
+    if (!saved) return;
+    setSession(saved);
+    setStage('route');
+    AuthService.me(saved.access_token).catch(() => {
+      AuthService.clearSession();
+      setSession(null);
+      setStage('auth');
+    });
+  }, []);
 
-    setIsLoading(true);
+  const quoteExpired = useMemo(
+    () => Boolean(quote && new Date(quote.expires_at).getTime() <= Date.now()),
+    [quote]
+  );
+
+  const requestOtp = async (event: React.FormEvent) => {
+    event.preventDefault();
     setError(null);
+    setIsLoading(true);
     try {
-      const result = await BookingService.getBookingQuote({
-        pickup,
-        destination,
-        promo_code: promoCode || undefined,
-      });
-      setQuote(result);
-      if (result.ride_options && result.ride_options.length > 0) {
-        setSelectedRide(result.ride_options[0]);
-      }
-      setStep(2);
-    } catch (err: any) {
-      setError(err);
-      // Fallback quote calculation based on municipal distance if API is connecting
-      const dist = 3.8;
-      const dur = 14;
-      const fallbackQuote: BookingQuoteResponse = {
-        quote_id: 'QUOTE-' + Date.now(),
-        distance_km: dist,
-        duration_minutes: dur,
-        currency: 'MMK',
-        pickup,
-        destination,
-        stops: [],
-        expires_at: new Date(Date.now() + 900000).toISOString(),
-        created_at: new Date().toISOString(),
-        ride_options: [
-          {
-            ride_type: {
-              id: 'rt_standard',
-              code: 'standard',
-              name: 'Standard Taxi',
-              name_mm: 'စံပြ တက္ကစီ',
-              description: 'Toyota Probox / Fielder',
-              description_mm: 'တက္ကစီ',
-              capacity_passengers: 4,
-              capacity_luggage: 2,
-              base_fare_mmk: 5800,
-              rate_per_km_mmk: 850,
-              rate_per_minute_mmk: 120,
-              minimum_fare_mmk: 5800,
-              icon_name: 'car',
-              image_url: '',
-              is_available: true,
-              estimated_eta_minutes: 3,
-              features: ['AC Aircon', 'GPS Tracking'],
-              features_mm: ['လေအေးပေးစက်'],
-            },
-            estimated_fare_mmk: 5800,
-            currency: 'MMK',
-            final_fare_mmk: 5800,
-            surge_multiplier: 1.0,
-            eta_pickup_minutes: 3,
-          },
-          {
-            ride_type: {
-              id: 'rt_comfort',
-              code: 'comfort',
-              name: 'Comfort Sedan',
-              name_mm: 'သက်တောင့်သက်သာ ဆလွန်း',
-              description: 'Toyota Axio / Premio',
-              description_mm: 'ဆလွန်း',
-              capacity_passengers: 4,
-              capacity_luggage: 3,
-              base_fare_mmk: 7800,
-              rate_per_km_mmk: 1100,
-              rate_per_minute_mmk: 150,
-              minimum_fare_mmk: 7800,
-              icon_name: 'car',
-              image_url: '',
-              is_available: true,
-              estimated_eta_minutes: 4,
-              features: ['Extra Legroom', 'Bottled Water'],
-              features_mm: ['ကျယ်ဝန်းသော နေရာ'],
-            },
-            estimated_fare_mmk: 7800,
-            currency: 'MMK',
-            final_fare_mmk: 7800,
-            surge_multiplier: 1.0,
-            eta_pickup_minutes: 4,
-          },
-        ],
-      };
-      setQuote(fallbackQuote);
-      setSelectedRide(fallbackQuote.ride_options[0]);
-      setStep(2);
+      setChallenge(await AuthService.requestOtp(phone.trim()));
+    } catch (err) {
+      setError(err as Error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Submit Booking to Real Go API
-  const handleConfirmBooking = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!quote || !selectedRide) return;
-
-    setIsLoading(true);
+  const verifyOtp = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!challenge) return;
     setError(null);
-
-    const bookingPayload: CreateBookingRequest = {
-      quote_id: quote.quote_id,
-      ride_type_id: selectedRide.ride_type.id,
-      customer_name: passengerName,
-      customer_phone: passengerPhone,
-      payment_method: paymentMethod,
-      note_for_driver: noteForDriver || undefined,
-    };
-
+    setIsLoading(true);
     try {
-      const record = await BookingService.createBooking(bookingPayload);
-      setConfirmedBooking(record);
-      setStep(3);
-    } catch (err: any) {
-      // Create local confirmed record if local dev offline fallback
-      setConfirmedBooking({
-        booking_id: 'BK-' + Date.now().toString().slice(-6),
-        booking_reference: 'LB-YGN-' + Math.floor(100000 + Math.random() * 900000),
-        status: 'OFFERING',
-        customer_name: passengerName,
-        customer_phone: passengerPhone,
-        pickup: quote.pickup,
-        destination: quote.destination,
-        ride_type_name: selectedRide.ride_type.name,
-        fare_mmk: selectedRide.final_fare_mmk,
-        currency: 'MMK',
-        payment_method: paymentMethod,
-        payment_status: 'PENDING',
-        assigned_driver: {
-          driver_id: 'DRV-9842',
-          name: 'U Myint Kyaw (ဦးမြင့်ကျော်)',
-          phone: '09450012948',
-          rating: 4.95,
-          vehicle_plate: '4B-9102',
-          vehicle_model: 'Toyota Probox (White)',
-          vehicle_color: 'Daylight White',
-        },
-        created_at: new Date().toISOString(),
-        estimated_arrival_at: '3 minutes',
-      });
-      setStep(3);
+      const next = await AuthService.verifyOtp(challenge.challenge_id, phone.trim(), code.trim());
+      AuthService.saveSession(next);
+      setSession(next);
+      setStage('route');
+    } catch (err) {
+      setError(err as Error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const requestQuote = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!pickup || !destination) return;
+    setError(null);
+    setIsLoading(true);
+    try {
+      const next = await BookingService.getBookingQuote({
+        pickup: { lat: pickup.latitude, lng: pickup.longitude },
+        destination: { lat: destination.latitude, lng: destination.longitude },
+        city: 'yangon',
+        passengers,
+        promo_code: promoCode.trim() || undefined,
+        payment_method: paymentMethod,
+      });
+      setQuote(next);
+      setSelected(next.ride_options[0] || null);
+      setStage('options');
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const confirmBooking = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!session || !quote || !selected || quoteExpired) return;
+    setError(null);
+    setIsLoading(true);
+    try {
+      const key = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${quote.quote_id}`;
+      const result = await BookingService.createBooking(
+        {
+          quote_id: quote.quote_id,
+          ride_type_id: selected.ride_type_id,
+          payment_method: paymentMethod,
+          notes: notes.trim() || undefined,
+        },
+        session.access_token,
+        key
+      );
+      setBooking(result);
+      setStage('confirmed');
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = () => {
+    AuthService.clearSession();
+    setSession(null);
+    setStage('auth');
+    setQuote(null);
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-white rounded-4xl p-6 md:p-8 border border-brand-border shadow-soft-lg">
-      {/* Step Indicator Header */}
-      <div className="flex items-center justify-between border-b border-neutral-100 pb-5 mb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-brand-lightRed text-brand-red flex items-center justify-center font-extrabold text-sm">
-            {step}
-          </div>
-          <div>
-            <h3 className="text-base font-extrabold text-neutral-900">
-              {step === 1 && 'Plan Your Route & Destination'}
-              {step === 2 && 'Select Ride & Passenger Details'}
-              {step === 3 && 'Booking Dispatched & Active Telemetry'}
-            </h3>
-            <p className="text-xs text-neutral-500">
-              {step === 1 && 'Instant high-precision route quote with guaranteed fares.'}
-              {step === 2 && 'Choose your preferred vehicle tier and cashless payment method.'}
-              {step === 3 && 'Connecting with nearest verified LaBar driver in Yangon.'}
-            </p>
-          </div>
+    <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-[2rem] border border-neutral-200 bg-white shadow-[0_24px_70px_-30px_rgba(23,23,23,.35)]">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-5 py-4 sm:px-8">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-[.18em] text-brand-red">Real Go API booking</p>
+          <h2 className="mt-1 text-lg font-extrabold text-neutral-950">{stage === 'auth' ? 'Sign in to start' : stage === 'route' ? 'Where can we take you?' : stage === 'options' ? 'Choose your ride' : 'Your request is live'}</h2>
         </div>
-
-        <span className="text-xs font-bold px-3 py-1 rounded-full bg-brand-bg text-neutral-600 border border-brand-border">
-          Step {step} of 3
-        </span>
+        {session && stage !== 'confirmed' && (
+          <button type="button" onClick={logout} className="min-h-11 rounded-full border border-neutral-200 px-4 text-xs font-bold text-neutral-600 hover:bg-neutral-50">Change account</button>
+        )}
       </div>
 
-      {error && <ApiErrorState error={error} onRetry={() => setError(null)} className="mb-6" />}
+      <div className="p-5 sm:p-8">
+        {error && <ApiErrorState error={error} onRetry={() => setError(null)} className="mb-6" />}
 
-      {/* STEP 1: ROUTE SELECTION */}
-      {step === 1 && (
-        <div className="space-y-4">
-          <LocationAutocomplete
-            label="Pickup Location (စတင်မည့်နေရာ)"
-            placeholder="Search pickup address..."
-            value={pickup}
-            onChange={setPickup}
-            iconColor="text-emerald-500"
-          />
-
-          <LocationAutocomplete
-            label="Destination (သွားရောက်မည့်နေရာ)"
-            placeholder="Search destination..."
-            value={destination}
-            onChange={setDestination}
-            iconColor="text-brand-red"
-          />
-
-          <div>
-            <label className="block text-[11px] font-bold text-neutral-500 uppercase tracking-wider mb-1">
-              Promo Code (ပရိုမိုးရှင်းကုဒ်ရှိပါက)
-            </label>
-            <div className="flex items-center bg-white border border-brand-border rounded-2xl px-3.5 py-2.5">
-              <Sparkles size={16} className="text-amber-500 mr-2 shrink-0" />
-              <input
-                type="text"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                placeholder="e.g. LABARSAFE, WELCOME50"
-                className="w-full text-xs font-bold text-neutral-900 outline-none uppercase placeholder:normal-case placeholder:font-normal"
-              />
+        {stage === 'auth' && (
+          <div className="grid gap-7 md:grid-cols-[1fr_.85fr] md:items-center">
+            <div>
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-brand-red"><LockKeyhole size={22} /></div>
+              <h3 className="text-2xl font-black tracking-tight text-neutral-950">Your account keeps the ride connected.</h3>
+              <p className="mt-3 text-sm leading-6 text-neutral-600">We use LaBar phone verification before showing location results or confirming a ride. The same passenger account works in the mobile app.</p>
+              <div className="mt-5 flex items-start gap-3 rounded-2xl bg-neutral-50 p-4 text-xs leading-5 text-neutral-600">
+                <ShieldCheck size={18} className="mt-0.5 shrink-0 text-emerald-600" />
+                <span>No ride, fare, driver, or confirmation is created unless the Go API returns it.</span>
+              </div>
             </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleRequestQuote}
-            disabled={isLoading || !pickup || !destination}
-            className="w-full mt-4 flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-brand-red hover:bg-brand-deepRed text-white text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 size={18} className="animate-spin" />
-                <span>Calculating Live Quote...</span>
-              </>
+            {!challenge ? (
+              <form onSubmit={requestOtp} className="space-y-4 rounded-3xl border border-neutral-200 bg-neutral-50/70 p-5">
+                <label className="block text-xs font-bold text-neutral-700" htmlFor="booking-phone">Myanmar phone number</label>
+                <div className="flex min-h-12 items-center rounded-2xl border border-neutral-200 bg-white px-4 focus-within:border-brand-red focus-within:ring-2 focus-within:ring-red-100">
+                  <Phone size={17} className="mr-3 text-neutral-400" />
+                  <input id="booking-phone" type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="09xxxxxxxxx" className="w-full bg-transparent text-sm font-semibold outline-none" />
+                </div>
+                <button disabled={isLoading} className="btn-primary min-h-12 w-full">{isLoading ? <Loader2 className="animate-spin" size={18} /> : <>Send verification code <ArrowRight size={17} /></>}</button>
+                <a href={API_CONFIG.passengerAppUrl} className="flex min-h-11 items-center justify-center text-xs font-bold text-neutral-600 underline decoration-neutral-300 underline-offset-4">Open the Passenger app instead</a>
+              </form>
             ) : (
-              <>
-                <span>Get Guaranteed Fare Quote</span>
-                <ArrowRight size={16} />
-              </>
+              <form onSubmit={verifyOtp} className="space-y-4 rounded-3xl border border-neutral-200 bg-neutral-50/70 p-5">
+                <p className="text-xs leading-5 text-neutral-600">Enter the one-time code sent to <strong>{phone}</strong>.</p>
+                <label className="sr-only" htmlFor="booking-otp">Verification code</label>
+                <input id="booking-otp" inputMode="numeric" autoComplete="one-time-code" required value={code} onChange={(e) => setCode(e.target.value)} placeholder="6-digit code" className="min-h-12 w-full rounded-2xl border border-neutral-200 bg-white px-4 text-center text-lg font-black tracking-[.3em] outline-none focus:border-brand-red focus:ring-2 focus:ring-red-100" />
+                <button disabled={isLoading} className="btn-primary min-h-12 w-full">{isLoading ? <Loader2 className="animate-spin" size={18} /> : 'Verify and continue'}</button>
+                <button type="button" onClick={() => { setChallenge(null); setCode(''); }} className="min-h-11 w-full text-xs font-bold text-neutral-600">Use another number</button>
+              </form>
             )}
-          </button>
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* STEP 2: SELECT VEHICLE TIER & PASSENGER INFORMATION */}
-      {step === 2 && quote && (
-        <form onSubmit={handleConfirmBooking} className="space-y-6">
-          {/* Route Summary Pill */}
-          <div className="p-4 rounded-2xl bg-brand-bg border border-brand-border flex items-center justify-between text-xs font-semibold">
-            <div>
-              <span className="text-neutral-500">Route: </span>
-              <span className="font-bold text-neutral-900">{quote.distance_km} km</span>
-              <span className="text-neutral-400 mx-2">•</span>
-              <span className="text-neutral-500">Est. Duration: </span>
-              <span className="font-bold text-neutral-900">{quote.duration_minutes} mins</span>
+        {stage === 'route' && session && (
+          <form onSubmit={requestQuote} className="space-y-5">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <LocationAutocomplete accessToken={session.access_token} required type="pickup" label="Pickup" placeholder="Search your pickup" value={pickup} onChange={setPickup} />
+              <LocationAutocomplete accessToken={session.access_token} required type="dropoff" label="Destination" placeholder="Where are you going?" value={destination} onChange={setDestination} />
             </div>
-            <button
-              type="button"
-              onClick={() => setStep(1)}
-              className="text-xs font-bold text-brand-red hover:underline"
-            >
-              Change Route
-            </button>
-          </div>
-
-          {/* Ride Options List */}
-          <div>
-            <label className="block text-xs font-bold text-neutral-700 mb-2">
-              Select Vehicle Tier:
-            </label>
-            <div className="space-y-2.5">
-              {quote.ride_options.map((opt) => {
-                const isSelected = selectedRide?.ride_type.id === opt.ride_type.id;
-                return (
-                  <div
-                    key={opt.ride_type.id}
-                    onClick={() => setSelectedRide(opt)}
-                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                      isSelected
-                        ? 'border-brand-red bg-brand-lightRed/30 ring-2 ring-brand-red/20'
-                        : 'border-brand-border hover:border-neutral-300 bg-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold ${
-                        isSelected ? 'bg-brand-red text-white' : 'bg-neutral-100 text-neutral-700'
-                      }`}>
-                        <Car size={20} />
-                      </div>
-                      <div>
-                        <div className="text-sm font-extrabold text-neutral-900">
-                          {opt.ride_type.name}
-                        </div>
-                        <div className="text-[11px] text-neutral-500">
-                          {opt.ride_type.description} • {opt.eta_pickup_minutes} min ETA
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <div className="text-base font-extrabold text-neutral-900">
-                        {opt.final_fare_mmk.toLocaleString()} MMK
-                      </div>
-                      <div className="text-[10px] font-bold text-emerald-600">
-                        Guaranteed Fare
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="grid gap-4 sm:grid-cols-3">
+              <label className="text-xs font-bold text-neutral-700">Passengers<select value={passengers} onChange={(e) => setPassengers(Number(e.target.value))} className="mt-2 min-h-12 w-full rounded-2xl border border-neutral-200 bg-white px-4 text-sm outline-none focus:border-brand-red">{[1,2,3,4,5,6,7,8].map((count) => <option key={count} value={count}>{count}</option>)}</select></label>
+              <label className="text-xs font-bold text-neutral-700">Payment preference<select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)} className="mt-2 min-h-12 w-full rounded-2xl border border-neutral-200 bg-white px-4 text-sm outline-none focus:border-brand-red"><option value="cash">Cash</option><option value="wallet">LaBar Wallet</option><option value="kbzpay">KBZPay</option><option value="wavepay">WavePay</option><option value="ayapay">AYA Pay</option></select></label>
+              <label className="text-xs font-bold text-neutral-700">Promo code <span className="font-normal text-neutral-400">optional</span><input value={promoCode} onChange={(e) => setPromoCode(e.target.value.toUpperCase())} className="mt-2 min-h-12 w-full rounded-2xl border border-neutral-200 px-4 text-sm font-semibold uppercase outline-none focus:border-brand-red" /></label>
             </div>
+            <button disabled={isLoading || !pickup || !destination} className="btn-primary min-h-13 w-full sm:w-auto">{isLoading ? <><Loader2 size={18} className="animate-spin" /> Getting live options</> : <>See live ride options <ArrowRight size={17} /></>}</button>
+          </form>
+        )}
+
+        {stage === 'options' && quote && (
+          <form onSubmit={confirmBooking} className="space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-neutral-50 p-4 text-xs text-neutral-600"><span><strong className="text-neutral-950">{(quote.distance_meters / 1000).toFixed(1)} km</strong> · about {Math.ceil(quote.duration_seconds / 60)} min</span><span className="flex items-center gap-1.5"><Clock3 size={14} /> Quote expires {new Date(quote.expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span></div>
+            {quote.ride_options.length ? <div className="grid gap-3">{quote.ride_options.map((option) => <button key={option.ride_type_id} type="button" onClick={() => setSelected(option)} className={`flex min-h-20 items-center justify-between rounded-2xl border p-4 text-left transition ${selected?.ride_type_id === option.ride_type_id ? 'border-brand-red bg-red-50 ring-2 ring-red-100' : 'border-neutral-200 hover:border-neutral-300'}`}><span><span className="block text-sm font-extrabold text-neutral-950">{option.name}</span><span className="mt-1 block text-xs text-neutral-500">Up to {option.capacity} passengers{option.estimated_driver_arrival_seconds ? ` · about ${Math.ceil(option.estimated_driver_arrival_seconds / 60)} min away` : ''}</span></span><strong className="ml-4 text-sm text-neutral-950">{money(option.fare, option.currency)}</strong></button>)}</div> : <p className="rounded-2xl bg-neutral-50 p-5 text-sm text-neutral-600">The API returned no ride types for this route.</p>}
+            <label className="block text-xs font-bold text-neutral-700">Note for your driver <span className="font-normal text-neutral-400">optional</span><textarea value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={200} rows={3} className="mt-2 w-full rounded-2xl border border-neutral-200 p-4 text-sm outline-none focus:border-brand-red" /></label>
+            {quoteExpired && <p className="rounded-2xl bg-amber-50 p-4 text-xs font-semibold text-amber-900">This quote has expired. Return to the route step for a fresh price.</p>}
+            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between"><button type="button" onClick={() => setStage('route')} className="btn-secondary min-h-12"><ArrowLeft size={17} /> Change route</button><button disabled={isLoading || !selected || quoteExpired} className="btn-primary min-h-12">{isLoading ? <><Loader2 size={18} className="animate-spin" /> Sending request</> : <>Confirm {selected ? money(selected.fare, selected.currency) : ''} <ArrowRight size={17} /></>}</button></div>
+          </form>
+        )}
+
+        {stage === 'confirmed' && booking && (
+          <div className="py-4 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-700"><CheckCircle2 size={34} /></div>
+            <p className="mt-5 text-xs font-bold uppercase tracking-[.18em] text-emerald-700">Accepted by LaBar API</p>
+            <h3 className="mt-2 text-2xl font-black text-neutral-950">Your ride request is searching.</h3>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-neutral-600">Ride ID <strong>{booking.id}</strong>. Open the passenger app to follow dispatch, driver location, and trip updates in real time.</p>
+            <div className="mx-auto mt-6 grid max-w-md grid-cols-2 gap-3 rounded-2xl bg-neutral-50 p-4 text-left text-xs"><span className="text-neutral-500">Status<strong className="mt-1 block text-neutral-950">{booking.status}</strong></span><span className="text-neutral-500">Estimated total<strong className="mt-1 block text-neutral-950">{money(booking.estimated_total_mmk)}</strong></span></div>
+            <a href={API_CONFIG.passengerAppUrl} className="btn-primary mt-6 min-h-12">Continue in Passenger app <ArrowRight size={17} /></a>
           </div>
-
-          {/* Passenger Details Form */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-[11px] font-bold text-neutral-500 uppercase tracking-wider mb-1">
-                Passenger Name
-              </label>
-              <div className="flex items-center bg-white border border-brand-border rounded-2xl px-3.5 py-2.5">
-                <User size={16} className="text-neutral-400 mr-2 shrink-0" />
-                <input
-                  type="text"
-                  required
-                  value={passengerName}
-                  onChange={(e) => setPassengerName(e.target.value)}
-                  className="w-full text-xs font-bold text-neutral-900 outline-none"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-bold text-neutral-500 uppercase tracking-wider mb-1">
-                Myanmar Phone Number
-              </label>
-              <div className="flex items-center bg-white border border-brand-border rounded-2xl px-3.5 py-2.5">
-                <Phone size={16} className="text-neutral-400 mr-2 shrink-0" />
-                <input
-                  type="tel"
-                  required
-                  value={passengerPhone}
-                  onChange={(e) => setPassengerPhone(e.target.value)}
-                  placeholder="09123456789"
-                  className="w-full text-xs font-bold text-neutral-900 outline-none"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Payment Method Selector */}
-          <div>
-            <label className="block text-xs font-bold text-neutral-700 mb-2">
-              Payment Method:
-            </label>
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-              {[
-                { id: 'KBZPAY', label: 'KBZPay' },
-                { id: 'WAVEPAY', label: 'WavePay' },
-                { id: 'CB_PAY', label: 'CB Pay' },
-                { id: 'AYA_PAY', label: 'AYA Pay' },
-                { id: 'CASH', label: 'Cash (ငွေသား)' },
-              ].map((pm) => (
-                <button
-                  key={pm.id}
-                  type="button"
-                  onClick={() => setPaymentMethod(pm.id as any)}
-                  className={`py-2.5 px-2 rounded-xl text-xs font-bold border transition-all ${
-                    paymentMethod === pm.id
-                      ? 'border-brand-red bg-brand-lightRed text-brand-red font-extrabold'
-                      : 'border-brand-border bg-white text-neutral-600 hover:bg-neutral-50'
-                  }`}
-                >
-                  {pm.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Confirm Button */}
-          <button
-            type="submit"
-            disabled={isLoading || !selectedRide}
-            className="w-full py-4 px-6 rounded-2xl bg-brand-red hover:bg-brand-deepRed text-white text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 size={18} className="animate-spin" />
-                <span>Confirming Booking with Go Dispatch API...</span>
-              </>
-            ) : (
-              <>
-                <span>Confirm &amp; Book ({selectedRide?.final_fare_mmk.toLocaleString()} MMK)</span>
-                <ArrowRight size={16} />
-              </>
-            )}
-          </button>
-        </form>
-      )}
-
-      {/* STEP 3: BOOKING CONFIRMED & ACTIVE TELEMETRY */}
-      {step === 3 && confirmedBooking && (
-        <div className="text-center py-4 space-y-6">
-          <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
-            <CheckCircle2 size={36} />
-          </div>
-
-          <div>
-            <span className="badge-green mb-2">DISPATCH ACTIVE</span>
-            <h3 className="text-xl font-extrabold text-neutral-900">
-              Trip Confirmed! Booking Ref #{confirmedBooking.booking_reference}
-            </h3>
-            <p className="text-xs text-neutral-500 mt-1">
-              Your driver has been notified and is proceeding toward your pickup location.
-            </p>
-          </div>
-
-          {/* Driver Card */}
-          {confirmedBooking.assigned_driver && (
-            <div className="bg-brand-bg rounded-3xl p-5 border border-brand-border text-left space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-xs text-neutral-500 font-semibold">Assigned Driver</div>
-                  <div className="text-base font-extrabold text-neutral-900">
-                    {confirmedBooking.assigned_driver.name}
-                  </div>
-                </div>
-                <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold">
-                  ★ {confirmedBooking.assigned_driver.rating}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-neutral-200/60 text-xs">
-                <div>
-                  <span className="text-neutral-500">Vehicle: </span>
-                  <b className="text-neutral-900">{confirmedBooking.assigned_driver.vehicle_model}</b>
-                </div>
-                <div>
-                  <span className="text-neutral-500">License Plate: </span>
-                  <b className="text-neutral-900 font-mono px-2 py-0.5 rounded bg-white border border-neutral-300">{confirmedBooking.assigned_driver.vehicle_plate}</b>
-                </div>
-                <div>
-                  <span className="text-neutral-500">Fare: </span>
-                  <b className="text-neutral-900">{confirmedBooking.fare_mmk.toLocaleString()} MMK</b>
-                </div>
-                <div>
-                  <span className="text-neutral-500">Payment: </span>
-                  <b className="text-emerald-700">{confirmedBooking.payment_method}</b>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={() => alert(`Connecting encrypted VoIP call to driver ${confirmedBooking.assigned_driver?.phone}...`)}
-              className="flex-1 py-3 px-4 rounded-2xl bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-2"
-            >
-              <Phone size={14} />
-              <span>Call Driver</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => alert('Opening in-app encrypted instant chat...')}
-              className="flex-1 py-3 px-4 rounded-2xl bg-brand-red hover:bg-brand-deepRed text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2"
-            >
-              <Sparkles size={14} />
-              <span>In-App Chat</span>
-            </button>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              setStep(1);
-              setConfirmedBooking(null);
-            }}
-            className="text-xs text-neutral-500 hover:text-neutral-800 font-bold hover:underline"
-          >
-            Book Another Trip
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

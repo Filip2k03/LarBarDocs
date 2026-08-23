@@ -35,14 +35,8 @@ export const BusinessInquiryForm: React.FC = () => {
     try {
       const resp = await BusinessService.submitInquiry(payload);
       setResult(resp);
-    } catch (err: any) {
-      setResult({
-        inquiry_id: 'BIZ-' + Date.now(),
-        company_name: companyName,
-        status: 'RECEIVED',
-        assigned_account_manager: 'Daw Aye Aye Thant (Senior Corporate Lead)',
-        created_at: new Date().toISOString(),
-      });
+    } catch (err) {
+      setError(err as Error);
     } finally {
       setIsLoading(false);
     }
@@ -56,10 +50,10 @@ export const BusinessInquiryForm: React.FC = () => {
         </div>
         <span className="badge-green">INQUIRY RECEIVED</span>
         <h3 className="text-xl font-extrabold text-neutral-900">
-          Thank you, {result.company_name}!
+          Thank you, {companyName}.
         </h3>
         <p className="text-xs text-neutral-600 leading-relaxed">
-          Your corporate mobility inquiry has been assigned to <b>{result.assigned_account_manager}</b>. Our enterprise team will contact you within 24 business hours.
+          The LaBar API accepted your inquiry with status <b>{result.status}</b>. Reference: {result.id}.
         </p>
         <button
           type="button"

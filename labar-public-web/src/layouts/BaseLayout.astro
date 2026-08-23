@@ -3,7 +3,7 @@ import '@/styles/global.css';
 import Header from '@/components/common/Header.astro';
 import Footer from '@/components/common/Footer.astro';
 import { ChatbotIsland } from '@/components/help/ChatbotIsland';
-import { getTranslation, defaultLocale } from '@/i18n';
+import { defaultLocale } from '@/i18n';
 
 interface Props {
   title?: string;
@@ -15,13 +15,19 @@ interface Props {
 
 const {
   title = 'LaBar — Your ride. Our care. | Premium Myanmar Taxi & Delivery',
-  description = 'Safe, reliable and transparent taxi, ride-hailing and parcel delivery platform across Myanmar. Background-verified drivers, 1km SOS mesh protection, and guaranteed upfront fares.',
+  description = 'Safe, reliable and transparent taxi, ride-hailing and parcel delivery experiences designed for Myanmar.',
   image = '/logo.png',
-  canonical = 'https://labar.com.mm',
+  canonical = new URL(Astro.url.pathname, import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321').toString(),
   locale = defaultLocale,
 } = Astro.props;
 
-const t = getTranslation(locale);
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'LaBar',
+  url: import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321',
+  logo: new URL('/logo.png', import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321').toString(),
+};
 ---
 
 <!DOCTYPE html>
@@ -56,28 +62,7 @@ const t = getTranslation(locale);
       rel="stylesheet"
     />
 
-    <!-- Organization Structured Data -->
-    <script type="application/ld+json" is:inline>
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "LaBar Taxi & Mobility Myanmar",
-        "url": "https://labar.com.mm",
-        "logo": "https://labar.com.mm/logo.png",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+95-9-798-421092",
-          "contactType": "customer service",
-          "areaServed": "MM",
-          "availableLanguage": ["en", "my"]
-        },
-        "sameAs": [
-          "https://facebook.com/labartaxi",
-          "https://instagram.com/labartaxi",
-          "https://tiktok.com/@labartaxi"
-        ]
-      }
-    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
   </head>
   <body class="bg-brand-bg text-brand-text font-sans antialiased min-h-screen flex flex-col selection:bg-brand-red selection:text-white">
     <Header locale={locale} />

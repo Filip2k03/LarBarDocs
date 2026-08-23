@@ -35,14 +35,8 @@ export const SupportTicketForm: React.FC = () => {
     try {
       const res = await SupportService.submitTicket(payload);
       setResponse(res);
-    } catch (err: any) {
-      setResponse({
-        ticket_id: 'TCK-' + Date.now(),
-        ticket_number: 'LABAR-TCK-' + Math.floor(100000 + Math.random() * 900000),
-        status: 'RECEIVED',
-        created_at: new Date().toISOString(),
-        estimated_reply_hours: 2,
-      });
+    } catch (err) {
+      setError(err as Error);
     } finally {
       setIsLoading(false);
     }
@@ -56,10 +50,10 @@ export const SupportTicketForm: React.FC = () => {
         </div>
         <span className="badge-green">TICKET SUBMITTED</span>
         <h3 className="text-xl font-extrabold text-neutral-900">
-          Support Ticket #{response.ticket_number}
+          Support Ticket #{response.id}
         </h3>
         <p className="text-xs text-neutral-600 leading-relaxed">
-          Your request has been logged in our customer dispatch system. An agent will respond via SMS or email within {response.estimated_reply_hours} hours.
+          The LaBar API accepted your request with status <strong>{response.status}</strong>. Keep this ticket ID for follow-up.
         </p>
         <button
           type="button"
@@ -76,7 +70,7 @@ export const SupportTicketForm: React.FC = () => {
     <form onSubmit={handleSubmit} className="bg-white rounded-4xl p-6 md:p-8 border border-brand-border shadow-soft-lg space-y-4 max-w-xl mx-auto">
       <div className="border-b border-neutral-100 pb-3">
         <h3 className="text-lg font-extrabold text-neutral-900">
-          24/7 Passenger &amp; Driver Support Ticket
+          Passenger &amp; Driver Support Ticket
         </h3>
         <p className="text-xs text-neutral-500 mt-0.5">
           Submit an inquiry, payment dispute, lost item report, or safety feedback.

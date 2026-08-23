@@ -41,17 +41,8 @@ export const DriverApplicationForm: React.FC = () => {
     try {
       const response = await DriverService.submitApplication(payload);
       setSubmittedResult(response);
-    } catch (err: any) {
-      // Fallback structured success if local demo mode
-      setSubmittedResult({
-        application_id: 'APP-' + Date.now(),
-        reference_number: 'DRV-REF-' + Math.floor(100000 + Math.random() * 900000),
-        status: 'SUBMITTED_PENDING_REGISTRAR_REVIEW',
-        next_step_instructions: 'Please visit your nearest LaBar branch office with your original NRC and Driving Licence for physical camera verification and quick vehicle onboarding.',
-        next_step_instructions_mm: 'သင့်မူရင်း မှတ်ပုံတင်နှင့် ယာဉ်မောင်းလိုင်စင် ယူဆောင်၍ အနီးဆုံး LaBar ရုံးခွဲသို့ လာရောက် အတည်ပြုပေးပါရန်။',
-        nearest_branch_address: 'Yangon Central HQ: No. 142, Sule Pagoda Road, Kyauktada Township, Yangon',
-        created_at: new Date().toISOString(),
-      });
+    } catch (err) {
+      setError(err as Error);
     } finally {
       setIsLoading(false);
     }
@@ -67,20 +58,12 @@ export const DriverApplicationForm: React.FC = () => {
         <span className="badge-green">APPLICATION RECEIVED</span>
 
         <h3 className="text-xl font-extrabold text-neutral-900">
-          Application Submitted! Reference #{submittedResult.reference_number}
+          Application received. Reference #{submittedResult.id}
         </h3>
 
         <p className="text-xs text-neutral-600 leading-relaxed">
-          {submittedResult.next_step_instructions}
+          The LaBar API accepted the application with status <strong>{submittedResult.status}</strong>.
         </p>
-
-        <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200 text-left text-xs space-y-1.5">
-          <div className="font-bold text-neutral-900">📍 Nearest Onboarding Branch:</div>
-          <div className="text-neutral-600">{submittedResult.nearest_branch_address}</div>
-          <div className="text-[11px] text-neutral-500 pt-1">
-            Office Hours: Monday – Saturday (8:30 AM – 5:30 PM)
-          </div>
-        </div>
 
         <button
           type="button"

@@ -4,6 +4,7 @@ export const API_CONFIG = {
   appEnv: (import.meta.env.PUBLIC_APP_ENV as string) || 'local',
   defaultLocale: (import.meta.env.PUBLIC_DEFAULT_LOCALE as string) || 'en',
   timeoutMs: 12000,
+  passengerAppUrl: (import.meta.env.PUBLIC_PASSENGER_APP_URL as string) || '/download',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

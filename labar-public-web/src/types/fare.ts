@@ -1,14 +1,15 @@
 export interface FareRule {
-  city_slug: string;
-  ride_type_code: string;
+  city: string;
+  pricing_version_id: string;
+  version: number;
+  ride_type: string;
   base_fare_mmk: number;
-  rate_per_km_mmk: number;
-  rate_per_minute_mmk: number;
-  minimum_fare_mmk: number;
-  night_surcharge_percent: number; // e.g. 15% (11 PM - 5 AM)
-  airport_toll_fee_mmk: number;
-  cancellation_fee_mmk: number;
-  effective_date: string;
+  included_distance_meters: number;
+  per_km_mmk: number;
+  low_speed_threshold_kph: number;
+  low_speed_per_minute_mmk: number;
+  booking_fee_mmk: number;
+  service_fee_mmk: number;
 }
 
 export interface FareEstimateRequest {

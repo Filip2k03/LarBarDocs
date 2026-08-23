@@ -10,9 +10,7 @@ export interface BusinessInquiryRequest {
 }
 
 export interface BusinessInquiryResponse {
-  inquiry_id: string;
-  company_name: string;
-  status: 'RECEIVED';
-  assigned_account_manager: string;
+  id: string;
+  status: string;
   created_at: string;
 }
