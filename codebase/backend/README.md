@@ -41,6 +41,16 @@ make docker
 
 Migrations are never run by API startup.
 
+After applying migrations, provision a registration center and its first staff account without putting the password in shell history:
+
+```bash
+export LABAR_STAFF_PASSWORD='replace-with-a-long-unique-password'
+make staff-create ARGS="--staff-id MKT-0001 --phone +959123456789 --display-name 'Registration Staff' --role marketer --center-code YGN-01 --center-name 'Yangon Registration Center'"
+unset LABAR_STAFF_PASSWORD
+```
+
+Allowed provisioning roles are `marketer`, `driver_registrar`, and `registration_manager`. DriverReg uses password-based staff authentication at `POST /api/v1/auth/staff/login`; applicant OTP is not part of registration. The Driver app retains phone OTP only for an already approved driver account.
+
 ## Architecture and pricing
 
 HTTP handlers decode and authorize. Module services own rules and transactions. Explicit SQL through `pgx` owns persistence. Provider packages isolate maps, SMS, object storage, FCM and APNs. PostgreSQL durable jobs are claimed with row locks; Redis provides driver GEO search, presence, rate limits and WebSocket fan-out.
@@ -49,9 +59,9 @@ The active seed fare is versioned in PostgreSQL: 5,000 MMK includes 3 km, additi
 
 ## Client integration
 
-All routes are under `/api/v1`. Phone OTP is shared across apps. Send `Authorization: Bearer <token>`, register installations through `POST /devices/register`, and connect authenticated clients to `GET /realtime`. Persist each `Idempotency-Key` until its command succeeds.
+All routes are under `/api/v1`. Passenger and approved Driver accounts use phone OTP; DriverReg uses scoped staff credentials. Send `Authorization: Bearer <token>`, register installations through `POST /devices/register`, and connect authenticated clients to `GET /realtime`. Persist each `Idempotency-Key` until its command succeeds.
 
-Passenger clients use `/passenger/profile`, `/passenger/places`, `/passenger/rides/quote`, `/passenger/rides`, ride receipt/rating/share/SOS routes, Live Activities and widget data. Driver clients use dashboard, availability, heartbeat, location, offers and arrived/PIN/start/complete/cancel commands. Driver Registration uses its application, step, upload and submit endpoints. Astro uses `/public/*`; admin and operations use role-protected `/admin/*` and `/operations/*`.
+Passenger clients use `/passenger/profile`, `/passenger/places`, `/passenger/rides/quote`, `/passenger/rides`, ride receipt/rating/share/SOS routes, Live Activities and widget data. Driver clients use dashboard, availability, heartbeat, location, offers and arrived/PIN/start/complete/cancel commands. DriverReg uses `/driver-registration/staff/cases/*`; the backend derives the staff actor from the session and stores a separate applicant identity. Astro uses `/public/*`; admin and operations use role-protected `/admin/*` and `/operations/*`.
 
 ## Push and production
 

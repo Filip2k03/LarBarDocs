@@ -1,57 +1,13 @@
 ---
-import { getTranslation, defaultLocale } from '@/i18n';
-
-interface Props {
-  locale?: 'en' | 'my';
-}
-
-const { locale = defaultLocale } = Astro.props;
-const t = getTranslation(locale);
-
-const cities = [
-  { slug: 'yangon', name: 'Yangon', name_mm: 'ရန်ကုန်' },
-  { slug: 'mandalay', name: 'Mandalay', name_mm: 'မန္တလေး' },
-  { slug: 'naypyidaw', name: 'Naypyidaw', name_mm: 'နေပြည်တော်' },
-  { slug: 'mawlamyine', name: 'Mawlamyine', name_mm: 'မော်လမြိုင်' },
-  { slug: 'pathein', name: 'Pathein', name_mm: 'ပုသိမ်' },
-  { slug: 'bago', name: 'Bago', name_mm: 'ပဲခူး' },
-  { slug: 'taunggyi', name: 'Taunggyi', name_mm: 'တောင်ကြီး' },
-];
-
-const isMyanmar = locale === 'my';
+import { CitiesService } from '@/services/cities.service';
+import type { City } from '@/types/city';
+let cities: City[] = [];
+let unavailable = false;
+try { cities = await CitiesService.getAllCities(); } catch { unavailable = true; }
 ---
-
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  <div class="bg-white rounded-4xl p-6 sm:p-8 border border-brand-border/80 shadow-soft">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-      <div>
-        <span class="text-[11px] font-bold text-brand-red uppercase tracking-wider">
-          {t.cities.tag}
-        </span>
-        <h3 class="text-xl font-extrabold text-neutral-900 mt-1">
-          {isMyanmar ? 'မြန်မာနိုင်ငံ အဓိကမြို့ကြီးများတွင် ရရှိနိုင်သော ဝန်ဆောင်မှုများ' : 'Available in Major Hubs & Townships Across Myanmar'}
-        </h3>
-      </div>
-
-      <a
-        href="/cities"
-        class="inline-flex items-center gap-1 text-xs font-bold text-brand-red hover:text-brand-deepRed transition-colors shrink-0"
-      >
-        <span>{t.cities.moreCities}</span>
-        <span>❯</span>
-      </a>
-    </div>
-
-    <!-- City Pills -->
-    <div class="flex flex-wrap gap-2 sm:gap-3">
-      {cities.map((c) => (
-        <a
-          href={`/cities/${c.slug}`}
-          class="px-4 py-2.5 rounded-2xl bg-neutral-50 hover:bg-brand-red hover:text-white border border-brand-border/80 text-xs font-bold text-neutral-800 transition-all duration-200"
-        >
-          {isMyanmar ? c.name_mm : c.name}
-        </a>
-      ))}
-    </div>
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+  <div class="rounded-[2rem] border border-neutral-200 bg-white p-6 shadow-soft sm:p-8">
+    <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="text-[11px] font-bold uppercase tracking-[.18em] text-brand-red">API-PUBLISHED COVERAGE</p><h2 class="mt-2 text-2xl font-black tracking-tight text-neutral-950">Meet LaBar where service is active.</h2></div><a href="/cities" class="min-h-11 text-xs font-bold text-brand-red">View service areas →</a></div>
+    {unavailable ? <p class="mt-6 rounded-2xl bg-amber-50 p-4 text-xs text-amber-900">City coverage is unavailable; no cities were substituted.</p> : cities.length === 0 ? <p class="mt-6 rounded-2xl bg-neutral-50 p-4 text-xs text-neutral-500">No active cities were returned.</p> : <div class="mt-6 flex flex-wrap gap-2">{cities.map((city) => <a href={`/cities/${city.slug}`} class="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-xs font-bold text-neutral-800 transition hover:border-brand-red hover:bg-red-50 hover:text-brand-red">{city.name}</a>)}</div>}
   </div>
 </section>

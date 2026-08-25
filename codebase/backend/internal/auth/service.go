@@ -18,6 +18,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	redisv9 "github.com/redis/go-redis/v9"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
@@ -26,6 +27,8 @@ var (
 	ErrOTPInvalid     = errors.New("OTP invalid")
 	ErrOTPExpired     = errors.New("OTP expired")
 	ErrSessionInvalid = errors.New("session invalid")
+	ErrStaffLogin     = errors.New("staff credentials invalid")
+	ErrStaffLocked    = errors.New("staff account temporarily locked")
 )
 
 type Service struct {
@@ -58,6 +61,8 @@ type Claims struct {
 	Roles     []string `json:"roles"`
 	jwt.RegisteredClaims
 }
+
+const dummyStaffPasswordHash = "$2y$12$dnPZtozrCzqg9Vym9.APruJRImDStMn8W25drFJnZUqvBYzCHVqA2"
 
 func NewService(db *pgxpool.Pool, redis *redisv9.Client, provider sms.Provider, jwtSecret, otpSecret string, accessTTL, refreshTTL time.Duration) *Service {
 	return &Service{db: db, redis: redis, sms: provider, jwtSecret: []byte(jwtSecret), otpSecret: []byte(otpSecret), accessTTL: accessTTL, refreshTTL: refreshTTL, now: time.Now}
@@ -199,6 +204,101 @@ func (s *Service) VerifyOTP(ctx context.Context, challengeID uuid.UUID, phone, c
 		return Tokens{}, err
 	}
 	return Tokens{AccessToken: access, RefreshToken: refresh, TokenType: "Bearer", ExpiresIn: int64(s.accessTTL.Seconds()), User: user}, nil
+}
+
+func (s *Service) StaffLogin(ctx context.Context, staffID, password, deviceName string) (Tokens, error) {
+	staffID = strings.TrimSpace(staffID)
+	if len(staffID) < 3 || len(staffID) > 64 || len(password) < 10 || len(password) > 256 {
+		return Tokens{}, ErrStaffLogin
+	}
+	var user User
+	var passwordHash string
+	var lockedUntil *time.Time
+	err := s.db.QueryRow(ctx, `SELECT u.id,coalesce(u.phone,''),u.display_name,u.locale,u.status,sc.password_hash,sc.locked_until
+		FROM staff_credentials sc JOIN users u ON u.id=sc.user_id WHERE lower(sc.staff_id)=lower($1)`, staffID).Scan(&user.ID, &user.Phone, &user.DisplayName, &user.Locale, &user.Status, &passwordHash, &lockedUntil)
+	if errors.Is(err, pgx.ErrNoRows) {
+		_ = bcrypt.CompareHashAndPassword([]byte(dummyStaffPasswordHash), []byte(password))
+		return Tokens{}, ErrStaffLogin
+	}
+	if err != nil {
+		return Tokens{}, err
+	}
+	if lockedUntil != nil && s.now().Before(*lockedUntil) {
+		return Tokens{}, ErrStaffLocked
+	}
+	if user.Status != "active" || bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password)) != nil {
+		_, _ = s.db.Exec(ctx, `UPDATE staff_credentials SET failed_attempts=failed_attempts+1,locked_until=CASE WHEN failed_attempts+1>=5 THEN now()+interval '15 minutes' ELSE locked_until END,updated_at=now() WHERE user_id=$1`, user.ID)
+		return Tokens{}, ErrStaffLogin
+	}
+	rows, err := s.db.Query(ctx, `SELECT r.name FROM user_roles ur JOIN roles r ON r.id=ur.role_id WHERE ur.user_id=$1 ORDER BY r.name`, user.ID)
+	if err != nil {
+		return Tokens{}, err
+	}
+	for rows.Next() {
+		var role string
+		if err = rows.Scan(&role); err != nil {
+			rows.Close()
+			return Tokens{}, err
+		}
+		user.Roles = append(user.Roles, role)
+	}
+	if err = rows.Err(); err != nil {
+		rows.Close()
+		return Tokens{}, err
+	}
+	rows.Close()
+	if !hasStaffRole(user.Roles) {
+		return Tokens{}, ErrStaffLogin
+	}
+
+	refresh, refreshHash, err := randomToken()
+	if err != nil {
+		return Tokens{}, err
+	}
+	tx, err := s.db.BeginTx(ctx, pgx.TxOptions{})
+	if err != nil {
+		return Tokens{}, err
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+	sessionID := uuid.New()
+	expires := s.now().UTC().Add(s.refreshTTL)
+	if _, err = tx.Exec(ctx, `INSERT INTO sessions(id,user_id,refresh_token_hash,device_name,expires_at) VALUES($1,$2,$3,$4,$5)`, sessionID, user.ID, refreshHash, deviceName, expires); err != nil {
+		return Tokens{}, err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE staff_credentials SET failed_attempts=0,locked_until=NULL,updated_at=now() WHERE user_id=$1`, user.ID); err != nil {
+		return Tokens{}, err
+	}
+	if _, err = tx.Exec(ctx, `UPDATE users SET last_login_at=now(),updated_at=now() WHERE id=$1`, user.ID); err != nil {
+		return Tokens{}, err
+	}
+	if _, err = tx.Exec(ctx, `INSERT INTO security_logs(user_id,event_type,metadata) VALUES($1,'staff_login',jsonb_build_object('staff_id',$2,'device_name',$3))`, user.ID, staffID, deviceName); err != nil {
+		return Tokens{}, err
+	}
+	access, err := s.signAccess(user, sessionID)
+	if err != nil {
+		return Tokens{}, err
+	}
+	if err = tx.Commit(ctx); err != nil {
+		return Tokens{}, err
+	}
+	return Tokens{AccessToken: access, RefreshToken: refresh, TokenType: "Bearer", ExpiresIn: int64(s.accessTTL.Seconds()), User: user}, nil
+}
+
+func HashStaffPassword(password string) (string, error) {
+	if len(password) < 12 || len(password) > 256 {
+		return "", errors.New("staff password must contain between 12 and 256 characters")
+	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
+	return string(hash), err
+}
+
+func hasStaffRole(roles []string) bool {
+	for _, role := range roles {
+		if role == "marketer" || role == "driver_registrar" || role == "registration_manager" {
+			return true
+		}
+	}
+	return false
 }
 func (s *Service) Refresh(ctx context.Context, token string) (Tokens, error) {
 	hash := sha256.Sum256([]byte(token))

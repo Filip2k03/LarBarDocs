@@ -27,10 +27,12 @@ type Service struct {
 	bucket string
 }
 type PresignRequest struct {
-	MimeType       string `json:"mime_type"`
-	SizeBytes      int64  `json:"size_bytes"`
-	ChecksumSHA256 string `json:"checksum_sha256"`
-	DocumentType   string `json:"document_type"`
+	MimeType       string     `json:"mime_type"`
+	SizeBytes      int64      `json:"size_bytes"`
+	ChecksumSHA256 string     `json:"checksum_sha256"`
+	DocumentType   string     `json:"document_type"`
+	ApplicationID  *uuid.UUID `json:"application_id,omitempty"`
+	SourceMode     string     `json:"source_mode,omitempty"`
 }
 type PresignResult struct {
 	UploadID  uuid.UUID `json:"upload_id"`
@@ -71,7 +73,7 @@ func (s *Service) Presign(ctx context.Context, userID uuid.UUID, request Presign
 	if err != nil {
 		return PresignResult{}, err
 	}
-	_, err = s.db.Exec(ctx, `INSERT INTO uploads(id,owner_user_id,object_key,mime_type,size_bytes,checksum_sha256,document_type) VALUES($1,$2,$3,$4,$5,$6,$7)`, id, userID, key, request.MimeType, request.SizeBytes, strings.ToLower(request.ChecksumSHA256), request.DocumentType)
+	_, err = s.db.Exec(ctx, `INSERT INTO uploads(id,owner_user_id,object_key,mime_type,size_bytes,checksum_sha256,document_type,application_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`, id, userID, key, request.MimeType, request.SizeBytes, strings.ToLower(request.ChecksumSHA256), request.DocumentType, request.ApplicationID)
 	if err != nil {
 		return PresignResult{}, err
 	}
@@ -79,8 +81,9 @@ func (s *Service) Presign(ctx context.Context, userID uuid.UUID, request Presign
 }
 func (s *Service) Complete(ctx context.Context, userID, uploadID uuid.UUID) (string, error) {
 	var key, mime, checksum, status, docType string
+	var applicationID *uuid.UUID
 	var expectedSize int64
-	err := s.db.QueryRow(ctx, `SELECT object_key,mime_type,size_bytes,checksum_sha256,status,document_type FROM uploads WHERE id=$1 AND owner_user_id=$2`, uploadID, userID).Scan(&key, &mime, &expectedSize, &checksum, &status, &docType)
+	err := s.db.QueryRow(ctx, `SELECT object_key,mime_type,size_bytes,checksum_sha256,status,document_type,application_id FROM uploads WHERE id=$1 AND owner_user_id=$2`, uploadID, userID).Scan(&key, &mime, &expectedSize, &checksum, &status, &docType, &applicationID)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return "", ErrUploadNotFound
 	}
@@ -121,7 +124,11 @@ func (s *Service) Complete(ctx context.Context, userID, uploadID uuid.UUID) (str
 	if tag.RowsAffected() == 0 {
 		return "", ErrUploadInvalid
 	}
-	_, err = tx.Exec(ctx, `INSERT INTO driver_documents(application_id,upload_id,type) SELECT id,$1,$2 FROM driver_applications WHERE user_id=$3 ORDER BY created_at DESC LIMIT 1 ON CONFLICT DO NOTHING`, uploadID, docType, userID)
+	if applicationID != nil {
+		_, err = tx.Exec(ctx, `INSERT INTO driver_documents(application_id,upload_id,type) VALUES($1,$2,$3) ON CONFLICT DO NOTHING`, applicationID, uploadID, docType)
+	} else {
+		_, err = tx.Exec(ctx, `INSERT INTO driver_documents(application_id,upload_id,type) SELECT id,$1,$2 FROM driver_applications WHERE user_id=$3 ORDER BY created_at DESC LIMIT 1 ON CONFLICT DO NOTHING`, uploadID, docType, userID)
+	}
 	if err != nil {
 		return "", err
 	}
@@ -129,4 +136,16 @@ func (s *Service) Complete(ctx context.Context, userID, uploadID uuid.UUID) (str
 		return "", err
 	}
 	return filepath.Clean(key), nil
+}
+
+func (s *Service) ApplicationForUpload(ctx context.Context, userID, uploadID uuid.UUID) (uuid.UUID, error) {
+	var applicationID *uuid.UUID
+	err := s.db.QueryRow(ctx, `SELECT application_id FROM uploads WHERE id=$1 AND owner_user_id=$2`, uploadID, userID).Scan(&applicationID)
+	if errors.Is(err, pgx.ErrNoRows) || applicationID == nil {
+		return uuid.Nil, ErrUploadNotFound
+	}
+	if err != nil {
+		return uuid.Nil, err
+	}
+	return *applicationID, nil
 }

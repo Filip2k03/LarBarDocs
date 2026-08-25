@@ -118,6 +118,7 @@ func (api API) authRoutes(r chi.Router) {
 	r.Route("/auth", func(r chi.Router) {
 		r.Post("/otp/request", api.requestOTP)
 		r.Post("/otp/verify", api.verifyOTP)
+		r.With(api.rateLimit("staff_login", 10, 15*time.Minute)).Post("/staff/login", api.staffLogin)
 		r.Post("/refresh", api.refresh)
 		r.Group(func(r chi.Router) {
 			r.Use(apimiddleware.Authenticate(api.deps.Auth))
@@ -190,11 +191,16 @@ func (api API) authenticatedRoutes(r chi.Router) {
 		r.Post("/live-activities/register", api.liveActivity)
 	})
 	r.Route("/driver-registration", func(r chi.Router) {
-		r.Get("/application", api.driverApplication)
-		r.Put("/steps/{step}", api.saveDriverStep)
-		r.Post("/submit", api.submitDriverApplication)
-		r.Post("/uploads/presign", api.presignUpload)
-		r.Post("/uploads/{id}/complete", api.completeUpload)
+		r.Use(apimiddleware.RequireRoles("marketer", "driver_registrar", "registration_manager"))
+		r.Route("/staff/cases", func(r chi.Router) {
+			r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.registration.read")).Get("/", api.staffCases)
+			r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.registration.create")).Post("/", api.createStaffCase)
+			r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.registration.read")).Get("/{case_id}", api.staffCase)
+			r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.registration.edit")).Put("/{case_id}/steps/{step}", api.saveStaffCaseStep)
+			r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.registration.submit")).Post("/{case_id}/submit", api.submitStaffCase)
+		})
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.registration.edit")).Post("/uploads/presign", api.presignStaffUpload)
+		r.With(apimiddleware.RequirePermission(api.deps.DB, "driver.registration.edit")).Post("/uploads/{id}/complete", api.completeUpload)
 	})
 	r.Route("/admin", func(r chi.Router) {
 		r.Use(apimiddleware.RequireRoles("super_admin", "admin", "operations_manager", "driver_verifier", "dispatcher"))
@@ -364,6 +370,28 @@ func (api API) verifyOTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	response.JSON(w, r, 200, tokens)
+}
+func (api API) staffLogin(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		StaffID    string `json:"staff_id"`
+		Password   string `json:"password"`
+		AppType    string `json:"app_type"`
+		DeviceName string `json:"device_name"`
+	}
+	if err := validation.Decode(w, r, &body); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	if body.AppType != "driverreg" {
+		response.Error(w, r, http.StatusUnprocessableEntity, "VALIDATION_ERROR", "The staff application type is invalid.")
+		return
+	}
+	tokens, err := api.deps.Auth.StaffLogin(r.Context(), body.StaffID, body.Password, body.DeviceName)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, tokens)
 }
 func (api API) refresh(w http.ResponseWriter, r *http.Request) {
 	var body struct {
@@ -961,46 +989,106 @@ func (api API) earningsToday(w http.ResponseWriter, r *http.Request) {
 	}
 	response.JSON(w, r, 200, items)
 }
-func (api API) driverApplication(w http.ResponseWriter, r *http.Request) {
-	data, err := api.deps.DriverReg.GetOrCreate(r.Context(), principal(r).UserID)
+func (api API) staffCases(w http.ResponseWriter, r *http.Request) {
+	p := principal(r)
+	data, err := api.deps.DriverReg.StaffCases(r.Context(), p.UserID, hasRole(p.Roles, "registration_manager"))
 	if err != nil {
 		handle(w, r, err)
 		return
 	}
 	response.JSON(w, r, 200, data)
 }
-func (api API) saveDriverStep(w http.ResponseWriter, r *http.Request) {
+func (api API) createStaffCase(w http.ResponseWriter, r *http.Request) {
 	var body struct {
-		Data     map[string]any `json:"data"`
-		Complete bool           `json:"complete"`
+		ApplicantName  string     `json:"applicant_name"`
+		ApplicantPhone string     `json:"applicant_phone"`
+		BranchID       *uuid.UUID `json:"branch_id"`
 	}
 	if err := validation.Decode(w, r, &body); err != nil {
 		badJSON(w, r, err)
 		return
 	}
+	data, err := api.deps.DriverReg.CreateStaffCase(r.Context(), principal(r).UserID, body.ApplicantName, body.ApplicantPhone, body.BranchID, chimiddleware.GetReqID(r.Context()))
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusCreated, data)
+}
+func (api API) staffCase(w http.ResponseWriter, r *http.Request) {
+	id, ok := namedPathID(w, r, "case_id")
+	if !ok {
+		return
+	}
+	p := principal(r)
+	data, err := api.deps.DriverReg.StaffApplication(r.Context(), p.UserID, id, hasRole(p.Roles, "registration_manager"))
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	response.JSON(w, r, http.StatusOK, data)
+}
+func (api API) saveStaffCaseStep(w http.ResponseWriter, r *http.Request) {
+	id, ok := namedPathID(w, r, "case_id")
+	if !ok {
+		return
+	}
+	var body struct {
+		Data       map[string]any `json:"data"`
+		Complete   bool           `json:"complete"`
+		SourceMode string         `json:"source_mode"`
+	}
+	if err := validation.Decode(w, r, &body); err != nil {
+		badJSON(w, r, err)
+		return
+	}
+	if body.SourceMode != "staff_assisted" {
+		response.Error(w, r, http.StatusUnprocessableEntity, "VALIDATION_ERROR", "The registration source mode is invalid.")
+		return
+	}
 	raw, _ := jsonMarshal(body.Data)
-	data, err := api.deps.DriverReg.SaveStep(r.Context(), principal(r).UserID, chi.URLParam(r, "step"), raw, body.Complete)
+	p := principal(r)
+	data, err := api.deps.DriverReg.SaveStaffStep(r.Context(), p.UserID, id, hasRole(p.Roles, "registration_manager"), chi.URLParam(r, "step"), raw, body.Complete, chimiddleware.GetReqID(r.Context()))
 	if err != nil {
 		handle(w, r, err)
 		return
 	}
 	response.JSON(w, r, 200, data)
 }
-func (api API) submitDriverApplication(w http.ResponseWriter, r *http.Request) {
-	data, err := api.deps.DriverReg.Submit(r.Context(), principal(r).UserID)
+func (api API) submitStaffCase(w http.ResponseWriter, r *http.Request) {
+	id, ok := namedPathID(w, r, "case_id")
+	if !ok {
+		return
+	}
+	idempotencyKey := strings.TrimSpace(r.Header.Get("Idempotency-Key"))
+	if len(idempotencyKey) < 8 || len(idempotencyKey) > 255 {
+		response.Error(w, r, http.StatusUnprocessableEntity, "VALIDATION_ERROR", "A valid Idempotency-Key header is required.")
+		return
+	}
+	p := principal(r)
+	data, err := api.deps.DriverReg.SubmitStaffCase(r.Context(), p.UserID, id, hasRole(p.Roles, "registration_manager"), idempotencyKey, chimiddleware.GetReqID(r.Context()))
 	if err != nil {
 		handle(w, r, err)
 		return
 	}
 	response.JSON(w, r, 200, data)
 }
-func (api API) presignUpload(w http.ResponseWriter, r *http.Request) {
+func (api API) presignStaffUpload(w http.ResponseWriter, r *http.Request) {
 	var body storage.PresignRequest
 	if err := validation.Decode(w, r, &body); err != nil {
 		badJSON(w, r, err)
 		return
 	}
-	data, err := api.deps.Storage.Presign(r.Context(), principal(r).UserID, body)
+	if body.ApplicationID == nil || body.SourceMode != "staff_assisted" {
+		response.Error(w, r, http.StatusUnprocessableEntity, "VALIDATION_ERROR", "A staff-assisted application ID is required.")
+		return
+	}
+	p := principal(r)
+	if err := api.deps.DriverReg.CanAccessCase(r.Context(), p.UserID, *body.ApplicationID, hasRole(p.Roles, "registration_manager")); err != nil {
+		handle(w, r, err)
+		return
+	}
+	data, err := api.deps.Storage.Presign(r.Context(), p.UserID, body)
 	if err != nil {
 		handle(w, r, err)
 		return
@@ -1012,7 +1100,17 @@ func (api API) completeUpload(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	key, err := api.deps.Storage.Complete(r.Context(), principal(r).UserID, id)
+	p := principal(r)
+	applicationID, err := api.deps.Storage.ApplicationForUpload(r.Context(), p.UserID, id)
+	if err != nil {
+		handle(w, r, err)
+		return
+	}
+	if err = api.deps.DriverReg.CanAccessCase(r.Context(), p.UserID, applicationID, hasRole(p.Roles, "registration_manager")); err != nil {
+		handle(w, r, err)
+		return
+	}
+	key, err := api.deps.Storage.Complete(r.Context(), p.UserID, id)
 	if err != nil {
 		handle(w, r, err)
 		return
@@ -1233,12 +1331,23 @@ func principal(r *http.Request) apimiddleware.Principal {
 	return p
 }
 func pathID(w http.ResponseWriter, r *http.Request) (uuid.UUID, bool) {
-	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	return namedPathID(w, r, "id")
+}
+func namedPathID(w http.ResponseWriter, r *http.Request, name string) (uuid.UUID, bool) {
+	id, err := uuid.Parse(chi.URLParam(r, name))
 	if err != nil {
 		response.Error(w, r, 400, "VALIDATION_ERROR", "The resource ID is invalid.")
 		return uuid.Nil, false
 	}
 	return id, true
+}
+func hasRole(roles []string, wanted string) bool {
+	for _, role := range roles {
+		if role == wanted {
+			return true
+		}
+	}
+	return false
 }
 func parseInt(value string) int64 { parsed, _ := strconv.ParseInt(value, 10, 64); return parsed }
 func badJSON(w http.ResponseWriter, r *http.Request, err error) {
@@ -1269,6 +1378,26 @@ func handle(w http.ResponseWriter, r *http.Request, err error) {
 		status = 401
 		code = "UNAUTHORIZED"
 		message = "The session is invalid or expired."
+	case errors.Is(err, auth.ErrStaffLogin):
+		status = http.StatusUnauthorized
+		code = "STAFF_CREDENTIALS_INVALID"
+		message = "The staff ID or password is invalid."
+	case errors.Is(err, auth.ErrStaffLocked):
+		status = http.StatusTooManyRequests
+		code = "STAFF_ACCOUNT_LOCKED"
+		message = "This staff account is temporarily locked. Try again later."
+	case errors.Is(err, driverreg.ErrCaseAccess):
+		status = http.StatusForbidden
+		code = "CASE_ACCESS_DENIED"
+		message = "You do not have access to this registration case."
+	case errors.Is(err, driverreg.ErrCaseConflict):
+		status = http.StatusConflict
+		code = "APPLICATION_ALREADY_EXISTS"
+		message = "This applicant already has a registration case."
+	case errors.Is(err, driverreg.ErrRegistrationCenter):
+		status = http.StatusForbidden
+		code = "REGISTRATION_CENTER_REQUIRED"
+		message = "An active registration-center assignment is required."
 	case errors.Is(err, pricing.ErrCityNotSupported):
 		status = 422
 		code = "CITY_NOT_SUPPORTED"

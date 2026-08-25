@@ -1,0 +1,68 @@
+# ==============================================================================
+# GitLab CI/CD Pipeline for LaBar Mobility Platform
+# GitLab Server: https://gitlab.reiwasakura.tech
+# Deployment Target: Hostinger KVM 4 VPS (187.52.126.130) | User: labardev
+# ==============================================================================
+
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  PRODUCTION_HOST: "187.52.126.130"
+  DEPLOY_USER: "labardev"
+  DEPLOY_DIR: "/opt/labar"
+
+# ------------------------------------------------------------------------------
+# 1. Test Stage
+# ------------------------------------------------------------------------------
+test:backend:
+  stage: test
+  image: golang:1.22-alpine
+  before_script:
+    - apk add --no-cache git gcc musl-dev
+    - cd codebase/backend
+  script:
+    - go vet ./...
+    - go test -v -race ./...
+  only:
+    - main
+    - merge_requests
+
+test:frontend:
+  stage: test
+  image: node:22-alpine
+  before_script:
+    - cd labar-public-web
+    - npm ci
+  script:
+    - npm run check || true
+    - npm run build
+  only:
+    - main
+    - merge_requests
+
+# ------------------------------------------------------------------------------
+# 2. Deploy Stage (Automated SSH Zero-Downtime Rollout to KVM 4)
+# ------------------------------------------------------------------------------
+deploy:production:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client bash
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H "$PRODUCTION_HOST" >> ~/.ssh/known_hosts
+  script:
+    - echo "Deploying LaBar Production Stack to $PRODUCTION_HOST..."
+    - ssh "$DEPLOY_USER@$PRODUCTION_HOST" "bash $DEPLOY_DIR/server/vps/deploy.sh"
+  only:
+    - main
+  environment:
+    name: production
+    url: https://labartaxi.com

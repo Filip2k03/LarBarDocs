@@ -1,0 +1,210 @@
+# ==============================================================================
+# LaBar Production Caddyfile — Reverse Proxy & Auto-TLS (Let's Encrypt / ZeroSSL)
+# Primary Domain: labartaxi.com | Host IP: 187.52.126.130 (KVM 4 VPS, Malaysia)
+# ==============================================================================
+
+{
+  email admin@labartaxi.com
+  admin off
+  # Enable HTTP/3 (QUIC) over UDP 443
+  servers {
+    protocol {
+      experimental_http3
+    }
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 1. Main Public Website (Astro.js SSR/Static)
+# ------------------------------------------------------------------------------
+labartaxi.com, www.labartaxi.com {
+  encode zstd gzip
+
+  # Canonical redirect: www to apex
+  @www host www.labartaxi.com
+  handle @www {
+    redir https://labartaxi.com{uri} permanent
+  }
+
+  handle {
+    reverse_proxy labar-public-web:8080 {
+      header_up Host {host}
+      header_up X-Real-IP {remote_host}
+      header_up X-Forwarded-For {remote_host}
+      header_up X-Forwarded-Proto {scheme}
+    }
+  }
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
+  }
+
+  log {
+    output file /var/log/caddy/labartaxi_access.log {
+      roll_size 50mb
+      roll_keep 7
+    }
+    format json
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 2. Central Go REST & WebSocket API
+# ------------------------------------------------------------------------------
+api.labartaxi.com {
+  encode zstd gzip
+
+  # WebSocket Realtime Gateway Route
+  @websockets {
+    header Connection *Upgrade*
+    header Upgrade websocket
+  }
+  handle @websockets {
+    reverse_proxy labar-api:8080 {
+      header_up Host {host}
+      header_up X-Real-IP {remote_host}
+      header_up X-Forwarded-For {remote_host}
+      header_up X-Forwarded-Proto {scheme}
+    }
+  }
+
+  # REST API Routes
+  handle {
+    reverse_proxy labar-api:8080 {
+      header_up Host {host}
+      header_up X-Real-IP {remote_host}
+      header_up X-Forwarded-For {remote_host}
+      header_up X-Forwarded-Proto {scheme}
+    }
+  }
+
+  # Global CORS & Security Headers
+  header {
+    Access-Control-Allow-Origin "https://labartaxi.com"
+    Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    Access-Control-Allow-Headers "Authorization, Content-Type, X-Client-Platform, X-Client-Version, X-Request-ID, Idempotency-Key"
+    Access-Control-Allow-Credentials "true"
+    Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    X-Content-Type-Options "nosniff"
+  }
+
+  log {
+    output file /var/log/caddy/api_access.log {
+      roll_size 50mb
+      roll_keep 7
+    }
+    format json
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 3. Static CDN & Media Cache
+# ------------------------------------------------------------------------------
+cdn.labartaxi.com {
+  encode zstd gzip
+
+  root * /opt/labar/storage/cdn
+  file_server
+
+  header {
+    Cache-Control "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin "*"
+    X-Content-Type-Options "nosniff"
+  }
+
+  log {
+    output file /var/log/caddy/cdn_access.log
+    format json
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 4. S3 Object Storage (MinIO S3 API & Console)
+# Supports both storage.labartaxi.com and stroage.labartaxi.com
+# ------------------------------------------------------------------------------
+storage.labartaxi.com, stroage.labartaxi.com {
+  encode zstd gzip
+
+  # MinIO S3 API
+  reverse_proxy minio:9000 {
+    header_up Host {host}
+    header_up X-Real-IP {remote_host}
+    header_up X-Forwarded-For {remote_host}
+    header_up X-Forwarded-Proto {scheme}
+  }
+
+  header {
+    Strict-Transport-Security "max-age=31536000"
+    X-Content-Type-Options "nosniff"
+  }
+}
+
+# MinIO Web Console (Internal Management)
+minio-admin.labartaxi.com {
+  reverse_proxy minio:9001 {
+    header_up Host {host}
+    header_up X-Real-IP {remote_host}
+    header_up X-Forwarded-For {remote_host}
+    header_up X-Forwarded-Proto {scheme}
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 5. Internal Executive & Staff Admin Control Center
+# ------------------------------------------------------------------------------
+admin.labartaxi.com {
+  encode zstd gzip
+
+  handle {
+    reverse_proxy labar-admin-portal:80 {
+      header_up Host {host}
+      header_up X-Real-IP {remote_host}
+      header_up X-Forwarded-For {remote_host}
+      header_up X-Forwarded-Proto {scheme}
+    }
+  }
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    X-Frame-Options "DENY"
+    X-Content-Type-Options "nosniff"
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 6. Assisted Driver Registration Web Portal
+# ------------------------------------------------------------------------------
+driverreg.labartaxi.com {
+  encode zstd gzip
+
+  handle {
+    reverse_proxy labar-driverreg:80 {
+      header_up Host {host}
+      header_up X-Real-IP {remote_host}
+      header_up X-Forwarded-For {remote_host}
+      header_up X-Forwarded-Proto {scheme}
+    }
+  }
+
+  header {
+    Strict-Transport-Security "max-age=31536000"
+    X-Content-Type-Options "nosniff"
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 7. Documentation & System Status Subdomains
+# ------------------------------------------------------------------------------
+docs.labartaxi.com {
+  encode zstd gzip
+  reverse_proxy labar-docs:5173
+}
+
+status.labartaxi.com {
+  encode zstd gzip
+  redir https://labartaxi.com/status permanent
+}

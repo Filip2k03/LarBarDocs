@@ -1,0 +1,1 @@
+export type RootParams={StaffLogin:undefined;Cases:undefined;NewCase:undefined;Home:undefined;Personal:undefined;Requirements:{kind:'identity'|'ocr'|'liveness'|'payout'};Capture:{title:string;documentType:string};Review:undefined;Submit:undefined;Status:undefined;Activation:undefined;Support:undefined;Privacy:undefined};

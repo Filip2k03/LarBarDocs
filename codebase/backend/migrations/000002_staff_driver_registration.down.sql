@@ -1,0 +1,10 @@
+DELETE FROM role_permissions WHERE permission_id IN (SELECT id FROM permissions WHERE name LIKE 'driver.registration.%');
+DELETE FROM permissions WHERE name LIKE 'driver.registration.%';
+DELETE FROM roles WHERE name IN ('marketer','driver_registrar','registration_manager');
+DROP INDEX IF EXISTS driver_applications_assigned_idx;
+DROP INDEX IF EXISTS driver_applications_created_by_idx;
+DROP INDEX IF EXISTS driver_applications_staff_queue_idx;
+ALTER TABLE uploads DROP COLUMN IF EXISTS application_id;
+ALTER TABLE driver_applications DROP COLUMN IF EXISTS submission_idempotency_key, DROP COLUMN IF EXISTS revision, DROP COLUMN IF EXISTS source_mode, DROP COLUMN IF EXISTS registration_center_id, DROP COLUMN IF EXISTS assigned_to, DROP COLUMN IF EXISTS created_by;
+DROP TABLE IF EXISTS staff_credentials;
+DROP TABLE IF EXISTS registration_centers;

@@ -1,13 +1,13 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/common/Icon.astro';
-const features = [
+const features: { icon: 'driver' | 'guardian' | 'tracking' | 'support' | 'location' | 'sos'; title: string; text: string }[] = [
   { icon: 'driver', title: 'Driver verification', text: 'Passenger-safe driver and vehicle details are shown for an assigned ride while private identity records stay protected.' },
   { icon: 'guardian', title: 'Trusted contacts', text: 'Passengers can prepare trusted contacts and share relevant trip progress with a secure, expiring link.' },
-  { icon: 'route', title: 'Route monitoring', text: 'The platform can record route deviations, unexpected stops, or unavailable GPS as reviewable safety events.' },
+  { icon: 'tracking', title: 'Route monitoring', text: 'The platform can record route deviations, unexpected stops, or unavailable GPS as reviewable safety events.' },
   { icon: 'support', title: 'Safety reporting', text: 'Passenger and driver reports create an auditable case for the operations team instead of making unverified emergency claims.' },
-  { icon: 'map', title: 'Trip-aware location privacy', text: 'Precise driver location is limited to operationally relevant ride states and authorized viewers.' },
-  { icon: 'notifications', title: 'SOS event routing', text: 'An SOS creates an immediate platform safety event and notifies configured contacts and operations integrations.' },
+  { icon: 'location', title: 'Trip-aware location privacy', text: 'Precise driver location is limited to operationally relevant ride states and authorized viewers.' },
+  { icon: 'sos', title: 'SOS event routing', text: 'An SOS creates an immediate platform safety event and notifies configured contacts and operations integrations.' },
 ];
 ---
 <BaseLayout title="LaBar Guardian — Safety by design" description="Explore LaBar trip sharing, trusted contacts, driver verification, route monitoring, SOS events and safety reporting.">

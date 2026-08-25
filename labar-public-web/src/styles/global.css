@@ -37,6 +37,23 @@
   mask-image: linear-gradient(to bottom, black, transparent 82%);
 }
 
+.app-map-grid {
+  background-color: #eef0eb;
+  background-image:
+    linear-gradient(rgba(107, 107, 107, .08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107, 107, 107, .08) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+@keyframes taxi-route {
+  from { transform: translate3d(-45px, 45px, 0) rotate(-12deg); }
+  to { transform: translate3d(265px, -40px, 0) rotate(-7deg); }
+}
+
+.taxi-run {
+  animation: taxi-route 4.5s cubic-bezier(.45, 0, .2, 1) infinite alternate;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

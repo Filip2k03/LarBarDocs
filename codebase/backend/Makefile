@@ -1,4 +1,4 @@
-.PHONY: dev api worker migrate-up migrate-down test test-race vet build docker
+.PHONY: dev api worker migrate-up migrate-down test test-race vet build staff-create docker
 dev:
 	docker compose up -d
 api:
@@ -17,5 +17,8 @@ vet:
 	go vet ./...
 build:
 	go build ./...
+
+staff-create:
+	go run ./cmd/staff $(ARGS)
 docker:
 	docker build -t labar/backend:local .

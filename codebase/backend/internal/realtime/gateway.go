@@ -32,7 +32,7 @@ type Event struct {
 }
 
 func (g *Gateway) ServeHTTP(w http.ResponseWriter, r *http.Request, userID uuid.UUID) {
-	connection, err := websocket.Accept(w, r, &websocket.AcceptOptions{OriginPatterns: []string{"localhost:*", "127.0.0.1:*", "*.labar.com.mm"}})
+	connection, err := websocket.Accept(w, r, &websocket.AcceptOptions{OriginPatterns: []string{"localhost:*", "127.0.0.1:*", "*.labartaxi.com", "labartaxi.com", "*.labar.com.mm"}})
 	if err != nil {
 		return
 	}

@@ -8,8 +8,10 @@ This document defines the strict, production-ready REST & WebSocket API integrat
 
 | Variable | Local Development | Production | Purpose |
 |---|---|---|---|
-| `PUBLIC_SITE_URL` | `http://localhost:4321` | `https://labar.com.mm` | Canonical base URL |
-| `PUBLIC_API_BASE_URL` | `http://localhost:8080/api/v1` | `https://api.labar.com.mm/api/v1` | Go REST API Root |
+| `PUBLIC_SITE_URL` | `http://localhost:4321` | `https://labartaxi.com` | Canonical base URL |
+| `PUBLIC_API_BASE_URL` | `http://localhost:8080/api/v1` | `https://api.labartaxi.com/api/v1` | Go REST API Root |
+| `PUBLIC_CDN_URL` | `http://localhost:8080/cdn` | `https://cdn.labartaxi.com` | Edge CDN Assets |
+| `PUBLIC_STORAGE_URL` | `http://localhost:9000` | `https://storage.labartaxi.com` | MinIO S3 Object Storage |
 | `PUBLIC_APP_ENV` | `local` | `production` | Environment flag |
 | `PUBLIC_DEFAULT_LOCALE` | `en` | `en` | Default UI language |
 | `PUBLIC_SUPPORTED_LOCALES` | `en,my` | `en,my` | Supported i18n locales |

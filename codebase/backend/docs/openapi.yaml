@@ -72,6 +72,17 @@ paths:
           application/json:
             schema: {$ref: '#/components/schemas/OTPVerify'}
       responses: {'200': {$ref: '#/components/responses/Success'}, '401': {$ref: '#/components/responses/Error'}}
+  /auth/staff/login:
+    post:
+      tags: [Auth]
+      security: []
+      operationId: staffLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/StaffLogin'}
+      responses: {'200': {$ref: '#/components/responses/Success'}, '401': {$ref: '#/components/responses/Error'}, '429': {$ref: '#/components/responses/Error'}}
   /auth/refresh:
     post: {tags: [Auth], security: [], operationId: refreshSession, responses: {'200': {$ref: '#/components/responses/Success'}}}
   /auth/logout:
@@ -158,17 +169,37 @@ paths:
       operationId: completeRide
       parameters: [{$ref: '#/components/parameters/ID'}, {$ref: '#/components/parameters/IdempotencyKey'}]
       responses: {'200': {$ref: '#/components/responses/Success'}, '409': {$ref: '#/components/responses/Error'}}
-  /driver-registration/application:
-    get: {tags: [Driver Registration], operationId: driverApplication, responses: {'200': {$ref: '#/components/responses/Success'}}}
-  /driver-registration/steps/{step}:
+  /driver-registration/staff/cases:
+    get: {tags: [Driver Registration], operationId: staffRegistrationCases, responses: {'200': {$ref: '#/components/responses/Success'}, '403': {$ref: '#/components/responses/Error'}}}
+    post:
+      tags: [Driver Registration]
+      operationId: createStaffRegistrationCase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CreateRegistrationCase'}
+      responses: {'201': {$ref: '#/components/responses/Success'}, '403': {$ref: '#/components/responses/Error'}, '409': {$ref: '#/components/responses/Error'}}
+  /driver-registration/staff/cases/{case_id}:
+    get:
+      tags: [Driver Registration]
+      operationId: staffRegistrationCase
+      parameters: [{$ref: '#/components/parameters/CaseID'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}, '403': {$ref: '#/components/responses/Error'}}
+  /driver-registration/staff/cases/{case_id}/steps/{step}:
     put:
       tags: [Driver Registration]
-      operationId: saveApplicationStep
+      operationId: saveStaffApplicationStep
       parameters:
+        - {$ref: '#/components/parameters/CaseID'}
         - {name: step, in: path, required: true, schema: {type: string}}
-      responses: {'200': {$ref: '#/components/responses/Success'}}
-  /driver-registration/submit:
-    post: {tags: [Driver Registration], operationId: submitDriverApplication, responses: {'200': {$ref: '#/components/responses/Success'}}}
+      responses: {'200': {$ref: '#/components/responses/Success'}, '403': {$ref: '#/components/responses/Error'}, '409': {$ref: '#/components/responses/Error'}}
+  /driver-registration/staff/cases/{case_id}/submit:
+    post:
+      tags: [Driver Registration]
+      operationId: submitStaffDriverApplication
+      parameters: [{$ref: '#/components/parameters/CaseID'}, {$ref: '#/components/parameters/IdempotencyKey'}]
+      responses: {'200': {$ref: '#/components/responses/Success'}, '403': {$ref: '#/components/responses/Error'}, '409': {$ref: '#/components/responses/Error'}}
   /driver-registration/uploads/presign:
     post: {tags: [Driver Registration], operationId: presignDriverUpload, responses: {'201': {$ref: '#/components/responses/Success'}}}
   /admin/dashboard:
@@ -186,6 +217,7 @@ components:
     bearerAuth: {type: http, scheme: bearer, bearerFormat: JWT}
   parameters:
     ID: {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+    CaseID: {name: case_id, in: path, required: true, schema: {type: string, format: uuid}}
     Slug: {name: slug, in: path, required: true, schema: {type: string}}
     IdempotencyKey: {name: Idempotency-Key, in: header, required: true, schema: {type: string, minLength: 8, maxLength: 255}}
   requestBodies:
@@ -270,3 +302,18 @@ components:
         phone: {type: string}
         code: {type: string, pattern: '^[0-9]{6}$'}
         device_name: {type: string}
+    StaffLogin:
+      type: object
+      required: [staff_id, password, app_type]
+      properties:
+        staff_id: {type: string, minLength: 3, maxLength: 64}
+        password: {type: string, minLength: 10, maxLength: 256}
+        app_type: {const: driverreg}
+        device_name: {type: string, maxLength: 160}
+    CreateRegistrationCase:
+      type: object
+      required: [applicant_name, applicant_phone]
+      properties:
+        applicant_name: {type: string, minLength: 1, maxLength: 160}
+        applicant_phone: {type: string, examples: ['+959123456789']}
+        branch_id: {type: string, format: uuid}

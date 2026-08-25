@@ -6,7 +6,7 @@ import (
 )
 
 func TestProductionRejectsDevelopmentOTP(t *testing.T) {
-	cfg := Config{Environment: "production", HTTPAddr: ":8080", DatabaseURL: "postgres://db", RedisURL: "redis://cache", PublicWebOrigins: []string{"https://labar.com.mm"}, JWTSecret: strings.Repeat("j", 32), OTPSecret: strings.Repeat("o", 32), EncryptionKey: strings.Repeat("e", 32), SMSProvider: "development", DevelopmentOTP: true}
+	cfg := Config{Environment: "production", HTTPAddr: ":8080", DatabaseURL: "postgres://db", RedisURL: "redis://cache", PublicWebOrigins: []string{"https://labartaxi.com", "https://www.labartaxi.com"}, JWTSecret: strings.Repeat("j", 32), OTPSecret: strings.Repeat("o", 32), EncryptionKey: strings.Repeat("e", 32), SMSProvider: "development", DevelopmentOTP: true}
 	if err := cfg.Validate(); err == nil {
 		t.Fatal("expected production development OTP rejection")
 	}

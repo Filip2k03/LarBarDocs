@@ -24,6 +24,7 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
   citySlug,
   type = 'pickup',
   accessToken,
+  required = false,
 }) => {
   const [query, setQuery] = useState(value?.name || value?.address || '');
   const [suggestions, setSuggestions] = useState<LocationPoint[]>([]);
@@ -35,7 +36,7 @@ export const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (value) {

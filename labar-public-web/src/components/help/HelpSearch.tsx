@@ -59,7 +59,7 @@ export const HelpSearch: React.FC = () => {
 
           {results.length === 0 ? (
             <div className="p-6 text-center text-xs text-neutral-500">
-              No matching help articles found for "{query}". Please contact our 24/7 support team.
+              No matching help articles found for "{query}". You can submit a support ticket below.
             </div>
           ) : (
             <div className="space-y-2">

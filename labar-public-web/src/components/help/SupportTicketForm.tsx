@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, User, MessageSquare, CheckCircle2, Loader2 } from 'lucide-react';
+import { CheckCircle2, Loader2 } from 'lucide-react';
 import { SupportService } from '@/services/support.service';
 import { ApiErrorState } from '../common/ApiErrorState';
 import type { SupportTicketRequest, SupportTicketResponse } from '@/types/support';

@@ -1,0 +1,40 @@
+<div class="app-vision relative mx-auto min-h-[360px] w-full max-w-3xl overflow-hidden rounded-[2rem] border border-white/80 bg-white/70 p-4 shadow-[0_28px_80px_-38px_rgba(23,23,23,.45)] backdrop-blur-xl sm:min-h-[430px] sm:p-7">
+  <div class="absolute inset-0 app-map-grid opacity-60"></div>
+  <svg class="absolute inset-0 h-full w-full" viewBox="0 0 760 430" fill="none" aria-hidden="true">
+    <path d="M-30 338C89 294 103 170 228 178c119 8 144 129 270 100 95-22 114-115 295-125" stroke="#fff" stroke-width="38" stroke-linecap="round"/>
+    <path d="M-30 338C89 294 103 170 228 178c119 8 144 129 270 100 95-22 114-115 295-125" stroke="#D4D4D4" stroke-width="2" stroke-dasharray="8 10"/>
+    <path d="M74 34c77 72 111 127 99 220-8 65-58 120-43 210M526-40c-55 72-69 160-35 226 31 61 97 91 112 202" stroke="#E5E5E5" stroke-width="18" stroke-linecap="round"/>
+  </svg>
+
+  <div class="absolute left-[13%] top-[34%] flex items-center gap-2 rounded-full border border-emerald-200 bg-white/90 px-3 py-2 text-[10px] font-bold text-neutral-700 shadow-md backdrop-blur">
+    <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100"></span> Pickup
+  </div>
+  <div class="absolute right-[10%] top-[22%] flex items-center gap-2 rounded-full border border-red-200 bg-white/90 px-3 py-2 text-[10px] font-bold text-neutral-700 shadow-md backdrop-blur">
+    <span class="h-2.5 w-2.5 rounded-full bg-brand-red ring-4 ring-red-100"></span> Destination
+  </div>
+
+  <div class="taxi-run absolute left-[27%] top-[48%] z-10 flex h-11 w-[74px] items-center justify-center rounded-[18px_22px_14px_14px] bg-brand-red shadow-[0_12px_20px_-10px_rgba(198,40,40,.7)]">
+    <span class="absolute -top-2 h-3 w-8 rounded-t-md bg-brand-yellow"></span>
+    <span class="absolute left-3 top-2 h-4 w-5 rounded-md bg-white/85"></span>
+    <span class="absolute bottom-[-4px] left-3 h-3 w-3 rounded-full border-2 border-white bg-neutral-900"></span>
+    <span class="absolute bottom-[-4px] right-3 h-3 w-3 rounded-full border-2 border-white bg-neutral-900"></span>
+    <span class="ml-5 text-[9px] font-black text-white">LaBar</span>
+  </div>
+
+  <div class="absolute bottom-4 right-4 z-20 w-[218px] rounded-[2rem] border-[5px] border-neutral-950 bg-white p-3 shadow-2xl sm:bottom-6 sm:right-8 sm:w-[246px]">
+    <div class="mx-auto mb-3 h-1.5 w-14 rounded-full bg-neutral-900"></div>
+    <div class="relative h-32 overflow-hidden rounded-2xl bg-[#eef0eb] app-map-grid">
+      <div class="absolute left-5 top-8 h-3 w-3 rounded-full bg-emerald-500 ring-4 ring-white"></div>
+      <div class="absolute bottom-8 right-7 h-3 w-3 rounded-full bg-brand-red ring-4 ring-white"></div>
+      <div class="absolute left-8 top-10 h-20 w-28 rotate-12 rounded-[50%] border-b-2 border-r-2 border-dashed border-brand-red"></div>
+    </div>
+    <p class="mt-3 text-[10px] font-bold uppercase tracking-[.15em] text-brand-red">Ride progress</p>
+    <div class="mt-2 flex items-center gap-3"><div class="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-sm">L</div><div><p class="text-xs font-black text-neutral-950">Your driver is on the way</p><p class="mt-0.5 text-[9px] text-neutral-500">Live state from your confirmed ride</p></div></div>
+    <div class="mt-3 grid grid-cols-2 gap-2"><div class="rounded-xl bg-neutral-100 px-2 py-2 text-center text-[9px] font-bold text-neutral-700">Share trip</div><div class="rounded-xl bg-neutral-950 px-2 py-2 text-center text-[9px] font-bold text-white">View driver</div></div>
+  </div>
+
+  <div class="absolute left-4 top-4 max-w-[190px] rounded-2xl border border-white bg-white/85 p-3 shadow-sm backdrop-blur sm:left-7 sm:top-7 sm:max-w-[230px] sm:p-4">
+    <p class="text-[10px] font-bold uppercase tracking-[.16em] text-brand-red">One calm journey</p>
+    <p class="mt-1 text-sm font-black leading-5 text-neutral-950 sm:text-base">Pickup, driver, trip and receipt—kept in one place.</p>
+  </div>
+</div>

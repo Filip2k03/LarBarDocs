@@ -9,7 +9,4 @@ export class PromotionsService {
     });
   }
 
-  public static async validatePromoCode(code: string): Promise<Promotion> {
-    return ApiClient.get<Promotion>(API_ENDPOINTS.validatePromo(code));
-  }
 }

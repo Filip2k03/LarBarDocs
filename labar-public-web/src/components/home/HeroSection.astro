@@ -1,13 +1,13 @@
 ---
 import { HeroBookingWidget } from './HeroBookingWidget';
-import { Hero3DCanvas } from './Hero3DCanvas';
+import TaxiAppPreview from './TaxiAppPreview.astro';
 import { defaultLocale } from '@/i18n';
 
 interface Props { locale?: 'en' | 'my'; }
 const { locale = defaultLocale } = Astro.props;
 ---
 
-<section data-drive-scene class="hero-drive-story relative min-h-[118svh] overflow-clip border-b border-neutral-200 bg-[#f7f7f5]">
+<section class="relative overflow-clip border-b border-neutral-200 bg-[#f7f7f5]">
   <div class="pointer-events-none absolute inset-0 hero-road-grid opacity-60"></div>
   <div class="pointer-events-none absolute -left-36 top-16 h-80 w-80 rounded-full bg-brand-yellow/25 blur-3xl"></div>
   <div class="pointer-events-none absolute -right-32 top-1/3 h-96 w-96 rounded-full bg-red-200/30 blur-3xl"></div>
@@ -33,13 +33,7 @@ const { locale = defaultLocale } = Astro.props;
           <a href="/drive" class="btn-secondary min-h-13 px-7 text-sm">Drive with LaBar</a>
         </div>
 
-        <div class="relative mt-8 lg:-ml-10 lg:mt-4">
-          <Hero3DCanvas client:visible />
-          <div class="pointer-events-none absolute left-3 top-5 rounded-2xl border border-white/80 bg-white/75 px-3 py-2 shadow-sm backdrop-blur-lg sm:left-8">
-            <p class="text-[10px] font-bold uppercase tracking-[.16em] text-neutral-400">Scroll to begin</p>
-            <p class="mt-0.5 text-xs font-bold text-neutral-800">Watch your ride head out</p>
-          </div>
-        </div>
+        <div class="relative mt-8 lg:-ml-10 lg:mt-5"><TaxiAppPreview /></div>
       </div>
 
       <div class="lg:sticky lg:top-28 lg:pt-8">
@@ -52,9 +46,5 @@ const { locale = defaultLocale } = Astro.props;
       </div>
     </div>
 
-    <div class="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2 text-[10px] font-bold uppercase tracking-[.18em] text-neutral-400">
-      <span class="block h-8 w-px bg-gradient-to-b from-brand-red to-transparent"></span>
-      A smoother way forward
-    </div>
   </div>
 </section>
